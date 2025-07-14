@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Log;
 
 class AuthController extends Controller
 {
@@ -39,7 +40,7 @@ class AuthController extends Controller
                 $request->session()->regenerate();
             } catch (\Exception $e) {
                 // Log error but continue
-                \Log::error('Session regeneration error: ' . $e->getMessage());
+                Log::error('Session regeneration error: ' . $e->getMessage());
             }
 
             $user = Auth::user();
@@ -47,9 +48,9 @@ class AuthController extends Controller
             // Jika request AJAX, return JSON
             if ($request->expectsJson() || $request->ajax() || $request->header('X-Requested-With') === 'XMLHttpRequest') {
                 $redirectUrl = $this->getRedirectUrlByRole($user);
-                \Log::info('Login successful via AJAX. User: ' . $user->email . ', Redirect URL: ' . $redirectUrl);
-                \Log::info('Request headers: ' . json_encode($request->headers->all()));
-                
+                Log::info('Login successful via AJAX. User: ' . $user->email . ', Redirect URL: ' . $redirectUrl);
+                Log::info('Request headers: ' . json_encode($request->headers->all()));
+
                 $response = response()->json([
                     'success' => true,
                     'message' => 'Login successful',
@@ -58,8 +59,8 @@ class AuthController extends Controller
                         'redirect_url' => $redirectUrl
                     ]
                 ]);
-                
-                \Log::info('Response headers: ' . json_encode($response->headers->all()));
+
+                Log::info('Response headers: ' . json_encode($response->headers->all()));
                 return $response;
             }
 
@@ -84,15 +85,15 @@ class AuthController extends Controller
 
         // Jika request AJAX, return JSON error
         if ($request->expectsJson() || $request->ajax() || $request->header('X-Requested-With') === 'XMLHttpRequest') {
-            \Log::info('Login failed via AJAX. Email: ' . $request->email);
-            \Log::info('Request headers: ' . json_encode($request->headers->all()));
-            
+            Log::info('Login failed via AJAX. Email: ' . $request->email);
+            Log::info('Request headers: ' . json_encode($request->headers->all()));
+
             $response = response()->json([
                 'success' => false,
                 'message' => 'Invalid email or password'
             ], 401);
-            
-            \Log::info('Response headers: ' . json_encode($response->headers->all()));
+
+            Log::info('Response headers: ' . json_encode($response->headers->all()));
             return $response;
         }
 
@@ -432,30 +433,30 @@ class AuthController extends Controller
     {
         // Cek jika ada intended URL di session
         $intendedUrl = session()->pull('url.intended');
-        \Log::info('getRedirectUrlByRole - User: ' . $user->email . ', Intended URL: ' . ($intendedUrl ?: 'tidak ada'));
-        \Log::info('getRedirectUrlByRole - User roles: ' . implode(', ', $user->getRoleNames()->toArray()));
-        
+        Log::info('getRedirectUrlByRole - User: ' . $user->email . ', Intended URL: ' . ($intendedUrl ?: 'tidak ada'));
+        Log::info('getRedirectUrlByRole - User roles: ' . implode(', ', $user->getRoleNames()->toArray()));
+
         // Jika ada intended URL dan user adalah customer, gunakan intended URL
         if ($intendedUrl && $user->hasRole('customer')) {
-            \Log::info('getRedirectUrlByRole - Menggunakan intended URL: ' . $intendedUrl);
+            Log::info('getRedirectUrlByRole - Menggunakan intended URL: ' . $intendedUrl);
             return $intendedUrl;
         }
-        
+
         // Jika user adalah super_admin atau admin, redirect ke dashboard filament
         if ($user->hasRole(['admin', 'super_admin'])) {
-            \Log::info('getRedirectUrlByRole - User adalah admin, redirect ke /admin');
+            Log::info('getRedirectUrlByRole - User adalah admin, redirect ke /admin');
             return '/admin';
         }
 
         // Jika user adalah customer, redirect ke user/bookings
         if ($user->hasRole('customer')) {
-            \Log::info('getRedirectUrlByRole - User adalah customer, redirect ke /user/bookings');
+            Log::info('getRedirectUrlByRole - User adalah customer, redirect ke /user/bookings');
             return '/user/bookings';
         }
 
         // Default redirect
         $defaultUrl = $intendedUrl ?: '/';
-        \Log::info('getRedirectUrlByRole - Menggunakan default URL: ' . $defaultUrl);
+        Log::info('getRedirectUrlByRole - Menggunakan default URL: ' . $defaultUrl);
         return $defaultUrl;
     }
 }

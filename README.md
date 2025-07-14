@@ -22,10 +22,13 @@ This is a **Travel Booking System** built with Laravel, featuring:
 
 - 🏝️ **Travel Packages** - Detailed package information with galleries
 - 💳 **Secure Payments** - Midtrans Snap integration for secure transactions
+- 💰 **Smart Refund System V2** - Automated refund processing with time-based policies
 - 👥 **User Management** - Customer and admin role management
 - 📊 **Admin Dashboard** - Comprehensive admin panel with Filament
 - 📱 **Responsive Design** - Mobile-friendly interface
 - 🔒 **Security** - CSRF protection, input validation, and secure authentication
+- 🔔 **Notifications** - Email and database notifications for refunds
+- ⚡ **Automation** - Scheduled refund processing with CLI commands
 
 ## Quick Start
 
@@ -123,6 +126,7 @@ backend/
 
 ## Available Documentation
 
+- [Refund System V2 Guide](REFUND_SYSTEM_V2.md) - **NEW!** Complete refund system documentation
 - [Midtrans Integration Guide](docs/midtrans-integration.md)
 - [Production Deployment Guide](docs/midtrans-production-deployment.md)
 - [Laragon SSL Configuration Guide](docs/laragon-ssl-configuration.md)
@@ -192,6 +196,43 @@ See detailed instructions in [Laragon SSL Configuration Guide](docs/laragon-ssl-
    ```bash
    php D:\laragon\www\test-ssl.php
    ```
+
+## Refund System V2 🆕
+
+Our advanced refund system provides automated processing with time-based policies:
+
+### Refund Policies
+- **30+ days before departure**: 100% refund
+- **15-29 days before departure**: 50% refund  
+- **7-14 days before departure**: 25% refund
+- **Less than 7 days**: No refund
+
+### Key Features
+- ✅ **Automatic Validation** - Status and eligibility checks
+- 🔄 **Payment Gateway Integration** - Direct Midtrans refund processing
+- 📧 **Smart Notifications** - Email and database notifications
+- 🤖 **CLI Automation** - Scheduled and manual refund processing
+- 🛡️ **Security** - User authorization and audit logging
+
+### Quick Commands
+```bash
+# Test refund processing (dry-run)
+php artisan refund:process-automatic --dry-run
+
+# Process actual refunds with limit
+php artisan refund:process-automatic --limit=50
+
+# Access refund page
+http://localhost:8000/refund
+```
+
+### API Endpoints
+- `GET /api/refund/policy/{booking}` - Get refund policy details
+- `POST /api/refund/process` - Process refund request
+- `GET /api/refund/eligible` - List eligible bookings
+- `GET /api/refund/history` - View refund history
+
+For complete documentation, see [Refund System V2 Guide](REFUND_SYSTEM_V2.md).
 
 ## Security Considerations
 

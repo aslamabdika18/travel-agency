@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PublicTravelPackageController;
+use App\Http\Controllers\RefundController;
 
 /*
 |--------------------------------------------------------------------------
@@ -51,7 +52,10 @@ Route::prefix('travel-packages')->group(function () {
 // Public Payment Routes (for webhook notifications and status checks)
 Route::prefix('payment')->middleware('throttle:10,1')->group(function () {
     // Payment gateway notification webhook (public access)
-    Route::post('/notification', [PaymentController::class, 'handleNotification']);
+    Route::post('/notification', [PaymentController::class, 'handleNotification'])
+        ->name('payment.notification')
+        ->middleware(['midtrans.webhook'])
+        ->withoutMiddleware(['throttle:api']);
     // Payment status check (public access for callback page)
     Route::get('/status', [PaymentController::class, 'getStatus']);
     // Get payment by reference (public access)
@@ -82,5 +86,13 @@ Route::middleware('auth:web')->group(function () {
         Route::post('/validate', [PaymentController::class, 'validatePaymentData']); // Validate payment data
         // Only Snap redirect method is used
         Route::post('/create-snap-redirect/{bookingId}', [PaymentController::class, 'createSnapRedirectUrl']);
+    });
+
+    // Refund routes
+    Route::prefix('refund')->group(function () {
+        Route::get('/policy', [RefundController::class, 'getRefundPolicy']); // Get refund policy for booking
+        Route::post('/process', [RefundController::class, 'processRefund']); // Process refund request
+        Route::get('/eligible-bookings', [RefundController::class, 'getEligibleBookings']); // Get bookings eligible for refund
+        Route::get('/history', [RefundController::class, 'getRefundHistory']); // Get refund history
     });
 });

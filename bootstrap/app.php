@@ -21,14 +21,13 @@ return Application::configure(basePath: dirname(__DIR__))
 
         // Enable session middleware for API routes to support cookie-based auth
         $middleware->api([
-            \Illuminate\Session\Middleware\StartSession::class,
-            \Illuminate\View\Middleware\ShareErrorsFromSession::class,
-            \App\Http\Middleware\CorsMiddleware::class,
+            \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
         ]);
-        
-        // Register middleware aliases
+
+        // Register custom middleware aliases
         $middleware->alias([
-            'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
+            'environment' => \App\Http\Middleware\EnvironmentMiddleware::class,
+            'midtrans.webhook' => \App\Http\Middleware\MidtransWebhookMiddleware::class,
         ]);
         
         // Configure authentication redirect

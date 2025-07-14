@@ -236,8 +236,25 @@ class MidtransService
             $transactionStatus = $notification->transaction_status;
             $fraudStatus = $notification->fraud_status ?? null;
 
+            Log::info('Received Midtrans notification', [
+                'order_id' => $orderId,
+                'transaction_status' => $transactionStatus,
+                'fraud_status' => $fraudStatus
+            ]);
+
+            // Validasi order ID format
+            if (!$orderId) {
+                Log::error('Missing order_id in Midtrans notification');
+                throw new Exception('Missing order_id in notification');
+            }
+
             // Extract booking ID from order ID
             $bookingId = $this->extractBookingIdFromOrderId($orderId);
+
+            Log::info('Extracted booking ID from order ID', [
+                'order_id' => $orderId,
+                'booking_id' => $bookingId
+            ]);
 
             // Cari payment berdasarkan booking_id dan gateway_transaction_id
             $payment = Payment::where('booking_id', $bookingId)
@@ -250,21 +267,38 @@ class MidtransService
             }
 
             if (!$payment) {
+                Log::error('Payment not found for booking', [
+                    'booking_id' => $bookingId,
+                    'order_id' => $orderId
+                ]);
                 throw new Exception('Payment not found for order: ' . $orderId);
+            }
+
+            // Cek apakah payment sudah diproses sebelumnya untuk menghindari duplikasi
+            if ($payment->gateway_transaction_id && $payment->gateway_transaction_id !== $orderId) {
+                Log::warning('Transaction ID mismatch', [
+                    'payment_id' => $payment->id,
+                    'stored_transaction_id' => $payment->gateway_transaction_id,
+                    'notification_transaction_id' => $orderId
+                ]);
             }
 
             // Update payment status based on transaction status
             $this->updatePaymentStatus($payment, $transactionStatus, $fraudStatus, (array) $notification);
 
-            Log::info('Midtrans notification processed', [
+            Log::info('Midtrans notification processed successfully', [
                 'order_id' => $orderId,
                 'transaction_status' => $transactionStatus,
-                'payment_id' => $payment->id
+                'payment_id' => $payment->id,
+                'booking_id' => $bookingId
             ]);
 
             return (array) $notification;
         } catch (Exception $e) {
-            Log::error('Midtrans Notification Error: ' . $e->getMessage());
+            Log::error('Error processing Midtrans notification', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
             throw $e;
         }
     }
@@ -288,6 +322,19 @@ class MidtransService
      */
     private function updatePaymentStatus(Payment $payment, string $transactionStatus, ?string $fraudStatus, array $notification): void
     {
+        // Log notification untuk debugging
+        Log::info('Processing Midtrans notification', [
+            'payment_id' => $payment->id,
+            'transaction_status' => $transactionStatus,
+            'fraud_status' => $fraudStatus,
+            'order_id' => $notification['order_id'] ?? null
+        ]);
+
+        // Simpan gateway response untuk audit trail
+        $payment->update([
+            'gateway_response' => $notification
+        ]);
+
         // Mapping sesuai dokumentasi resmi Midtrans
         switch ($transactionStatus) {
             case 'capture':
@@ -297,18 +344,28 @@ class MidtransService
                         'payment_status' => 'Unpaid',
                         'gateway_status' => 'challenge'
                     ]);
+                    Log::warning('Payment marked as challenge due to fraud detection', [
+                        'payment_id' => $payment->id,
+                        'fraud_status' => $fraudStatus
+                    ]);
                 } elseif ($fraudStatus === 'accept') {
                     $payment->markAsPaid();
                     $payment->update([
                         'gateway_status' => 'capture',
                         'payment_date' => now()
                     ]);
+                    Log::info('Payment marked as paid (capture with fraud accept)', [
+                        'payment_id' => $payment->id
+                    ]);
                 } else {
-                    // Default untuk capture
+                    // Default untuk capture (non-credit card atau fraud status null)
                     $payment->markAsPaid();
                     $payment->update([
                         'gateway_status' => 'capture',
                         'payment_date' => now()
+                    ]);
+                    Log::info('Payment marked as paid (capture)', [
+                        'payment_id' => $payment->id
                     ]);
                 }
                 break;
@@ -319,12 +376,18 @@ class MidtransService
                     'gateway_status' => 'settlement',
                     'payment_date' => now()
                 ]);
+                Log::info('Payment marked as paid (settlement)', [
+                    'payment_id' => $payment->id
+                ]);
                 break;
 
             case 'pending':
                 $payment->update([
                     'payment_status' => 'Unpaid',
                     'gateway_status' => 'pending'
+                ]);
+                Log::info('Payment status updated to pending', [
+                    'payment_id' => $payment->id
                 ]);
                 break;
 
@@ -336,21 +399,32 @@ class MidtransService
                 $payment->update([
                     'gateway_status' => $transactionStatus
                 ]);
+                Log::info('Payment marked as failed', [
+                    'payment_id' => $payment->id,
+                    'reason' => $transactionStatus
+                ]);
                 break;
 
             case 'refund':
             case 'partial_refund':
+                $payment->markAsRefunded();
                 $payment->update([
-                    'payment_status' => 'Refunded',
                     'gateway_status' => $transactionStatus
+                ]);
+                Log::info('Payment marked as refunded', [
+                    'payment_id' => $payment->id,
+                    'type' => $transactionStatus
                 ]);
                 break;
 
             default:
-                Log::warning('Unknown Midtrans transaction status: ' . $transactionStatus, [
+                Log::warning('Unknown Midtrans transaction status', [
                     'payment_id' => $payment->id,
+                    'transaction_status' => $transactionStatus,
                     'notification' => $notification
                 ]);
+                // Jangan update status untuk status yang tidak dikenal
+                break;
         }
     }
 

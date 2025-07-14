@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\RefundProcessedNotification;
 
 class Booking extends Model
 {
@@ -383,6 +385,225 @@ class Booking extends Model
     public function getFormattedTotalPriceAttribute()
     {
         return $this->getFormattedTotalPrice();
+    }
+
+    /**
+     * Check if booking can be refunded based on departure date
+     *
+     * @return bool
+     */
+    public function canBeRefunded(): bool
+    {
+        // Check if refund system is globally enabled
+        if (!config('app.refund_enabled', env('REFUND_ENABLED', true))) {
+            return false;
+        }
+
+        // Only paid bookings can be refunded
+        if (!$this->isPaid() || $this->status === 'cancelled' || $this->status === 'refunded') {
+            return false;
+        }
+
+        // Check if travel package has departure date (booking_date)
+        if (!$this->booking_date) {
+            return false;
+        }
+
+        // Calculate days until departure
+        $daysUntilDeparture = now()->diffInDays($this->booking_date, false);
+        
+        // Can refund if departure is in the future
+        return $daysUntilDeparture > 0;
+    }
+
+    /**
+     * Get refund percentage based on cancellation policy v2
+     * 30+ days: 100%, 15-29 days: 50%, 7-14 days: 25%, <7 days: 0%
+     *
+     * @return int
+     */
+    public function getRefundPercentage(): int
+    {
+        if (!$this->canBeRefunded()) {
+            return 0;
+        }
+
+        $daysUntilDeparture = now()->diffInDays($this->booking_date, false);
+
+        if ($daysUntilDeparture >= 30) {
+            return 100; // Full refund
+        } elseif ($daysUntilDeparture >= 15) {
+            return 50;  // 50% refund
+        } elseif ($daysUntilDeparture >= 7) {
+            return 25;  // 25% refund
+        } else {
+            return 0;   // No refund
+        }
+    }
+
+    /**
+     * Calculate refund amount based on current policy
+     *
+     * @return float
+     */
+    public function calculateRefundAmount(): float
+    {
+        $refundPercentage = $this->getRefundPercentage();
+        
+        if ($refundPercentage === 0) {
+            return 0;
+        }
+
+        return ($this->total_price * $refundPercentage) / 100;
+    }
+
+    /**
+     * Get days until departure
+     *
+     * @return int
+     */
+    public function getDaysUntilDeparture(): int
+    {
+        if (!$this->booking_date) {
+            return 0;
+        }
+
+        return max(0, now()->diffInDays($this->booking_date, false));
+    }
+
+    /**
+     * Get refund policy details for this booking
+     *
+     * @return array
+     */
+    public function getRefundPolicyDetails(): array
+    {
+        $daysUntilDeparture = $this->getDaysUntilDeparture();
+        $refundPercentage = $this->getRefundPercentage();
+        $refundAmount = $this->calculateRefundAmount();
+
+        return [
+            'can_be_refunded' => $this->canBeRefunded(),
+            'days_until_departure' => $daysUntilDeparture,
+            'refund_percentage' => $refundPercentage,
+            'refund_amount' => $refundAmount,
+            'formatted_refund_amount' => formatRupiah($refundAmount),
+            'policy_tier' => $this->getRefundPolicyTier($daysUntilDeparture),
+            'booking_date' => $this->booking_date?->format('Y-m-d'),
+            'total_price' => $this->total_price,
+        ];
+    }
+
+    /**
+     * Get refund policy tier description
+     *
+     * @param int $daysUntilDeparture
+     * @return string
+     */
+    private function getRefundPolicyTier(int $daysUntilDeparture): string
+    {
+        if ($daysUntilDeparture >= 30) {
+            return '30+ days before departure';
+        } elseif ($daysUntilDeparture >= 15) {
+            return '15-29 days before departure';
+        } elseif ($daysUntilDeparture >= 7) {
+            return '7-14 days before departure';
+        } else {
+            return 'Less than 7 days before departure';
+        }
+    }
+
+    /**
+     * Process refund for this booking
+     *
+     * @param string|null $reason
+     * @return array
+     */
+    public function processRefund(?string $reason = null): array
+    {
+        if (!$this->canBeRefunded()) {
+            return [
+                'success' => false,
+                'message' => 'This booking cannot be refunded',
+                'details' => $this->getRefundPolicyDetails()
+            ];
+        }
+
+        $refundAmount = $this->calculateRefundAmount();
+        
+        if ($refundAmount <= 0) {
+            return [
+                'success' => false,
+                'message' => 'No refund amount available for this booking',
+                'details' => $this->getRefundPolicyDetails()
+            ];
+        }
+
+        try {
+            // Update booking status
+            $this->update([
+                'status' => 'refunded',
+                'payment_status' => 'refunded'
+            ]);
+
+            // Mark payment as refunded if exists
+            if ($this->payment) {
+                $this->payment->markAsRefunded();
+            }
+
+            // Send notification to user
+            if ($this->user) {
+                $this->user->notify(new RefundProcessedNotification(
+                    $this,
+                    $refundAmount,
+                    $this->getRefundPercentage(),
+                    $reason
+                ));
+            }
+
+            // Log the refund
+            \Illuminate\Support\Facades\Log::info('Booking refund processed', [
+                'booking_id' => $this->id,
+                'booking_reference' => $this->booking_reference,
+                'refund_amount' => $refundAmount,
+                'refund_percentage' => $this->getRefundPercentage(),
+                'reason' => $reason,
+                'processed_at' => now()
+            ]);
+
+            return [
+                'success' => true,
+                'message' => 'Refund processed successfully',
+                'refund_amount' => $refundAmount,
+                'formatted_refund_amount' => formatRupiah($refundAmount),
+                'details' => $this->getRefundPolicyDetails()
+            ];
+
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Failed to process refund', [
+                'booking_id' => $this->id,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+
+            return [
+                'success' => false,
+                'message' => 'Failed to process refund: ' . $e->getMessage(),
+                'details' => $this->getRefundPolicyDetails()
+            ];
+        }
+    }
+
+    /**
+     * Scope for bookings eligible for refund
+     */
+    public function scopeEligibleForRefund($query)
+    {
+        return $query->whereHas('payment', function ($q) {
+                $q->where('payment_status', 'Paid');
+            })
+            ->whereNotIn('status', ['cancelled', 'refunded'])
+            ->where('booking_date', '>', now());
     }
 
     /**

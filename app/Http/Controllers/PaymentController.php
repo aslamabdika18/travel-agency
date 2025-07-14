@@ -88,20 +88,58 @@ class PaymentController extends Controller
     public function handleNotification(Request $request)
     {
         try {
-            // Midtrans Notification class akan otomatis membaca dari php://input
-            $notification = $this->midtransService->handleNotification();
+            // Log incoming notification untuk debugging
+            Log::info('Received Midtrans webhook notification', [
+                'headers' => $request->headers->all(),
+                'body' => $request->all(),
+                'ip' => $request->ip()
+            ]);
+            
+            // Validasi bahwa request berasal dari Midtrans
+            $this->validateMidtransRequest($request);
+            
+            $result = $this->midtransService->handleNotification();
+            
+            Log::info('Midtrans notification processed successfully', [
+                'result' => $result
+            ]);
             
             return response()->json([
                 'status' => 'success',
                 'message' => 'Notification processed successfully'
             ]);
         } catch (\Exception $e) {
-            Log::error('Payment notification error: ' . $e->getMessage());
+            Log::error('Error handling Midtrans notification', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+                'request_data' => $request->all()
+            ]);
             
             return response()->json([
                 'status' => 'error',
                 'message' => 'Failed to process notification'
             ], 500);
+        }
+    }
+
+    /**
+     * Validate that the request comes from Midtrans
+     */
+    private function validateMidtransRequest(Request $request): void
+    {
+        // Validasi basic untuk memastikan request memiliki data yang diperlukan
+        $requiredFields = ['order_id', 'transaction_status', 'transaction_id'];
+        
+        foreach ($requiredFields as $field) {
+            if (!$request->has($field)) {
+                throw new \Exception("Missing required field: {$field}");
+            }
+        }
+        
+        // Validasi format order_id
+        $orderId = $request->input('order_id');
+        if (!preg_match('/^BOOK-\d+-\d+$/', $orderId)) {
+            throw new \Exception("Invalid order_id format: {$orderId}");
         }
     }
 

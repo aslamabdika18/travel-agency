@@ -37,6 +37,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/booking/{id}', [PageController::class, 'bookingDetail'])->name('booking.detail');
     // Lihat daftar booking pengguna
     Route::get('/user/bookings', [PageController::class, 'userBookings'])->name('user-bookings');
+    // Halaman refund
+    Route::get('/refund', [PageController::class, 'refund'])->name('refund');
 });
 
 // Rute pembayaran

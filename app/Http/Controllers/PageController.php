@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PageController extends Controller
 {
@@ -113,7 +114,7 @@ class PageController extends Controller
      */
     public function userBookings()
     {
-        $user = auth()->user();
+        $user = Auth::user();
         
         // Ambil semua booking milik user yang sedang login dengan eager loading dan pagination
         $bookings = \App\Models\Booking::with([
@@ -132,7 +133,7 @@ class PageController extends Controller
      */
     public function bookingDetail($id)
     {
-        $user = auth()->user();
+        $user = Auth::user();
         
         // Ambil booking dengan semua relasi yang diperlukan
         $booking = \App\Models\Booking::with([
@@ -208,13 +209,13 @@ class PageController extends Controller
         }
         
         // Prioritas 3: Ambil booking terakhir user yang sedang login
-        if (!$booking && auth()->check()) {
+        if (!$booking && Auth::check()) {
             $booking = \App\Models\Booking::with([
                 'travelPackage.media',
                 'payment',
                 'user'
             ])
-            ->where('user_id', auth()->id())
+            ->where('user_id', Auth::id())
             ->whereHas('payment', function($q) {
                 $q->where('payment_status', 'Paid');
             })
@@ -280,13 +281,13 @@ class PageController extends Controller
         }
         
         // Prioritas 3: Ambil booking terakhir user yang sedang login (termasuk yang failed)
-        if (!$booking && auth()->check()) {
+        if (!$booking && Auth::check()) {
             $booking = \App\Models\Booking::with([
                 'travelPackage.media',
                 'payment',
                 'user'
             ])
-            ->where('user_id', auth()->id())
+            ->where('user_id', Auth::id())
             ->latest()
             ->first();
         }
@@ -344,13 +345,13 @@ class PageController extends Controller
         }
         
         // Prioritas 3: Ambil booking terakhir user yang sedang login
-        if (!$booking && auth()->check()) {
+        if (!$booking && Auth::check()) {
             $booking = \App\Models\Booking::with([
                 'travelPackage.media',
                 'payment',
                 'user'
             ])
-            ->where('user_id', auth()->id())
+            ->where('user_id', Auth::id())
             ->latest()
             ->first();
         }
@@ -392,5 +393,13 @@ class PageController extends Controller
     public function unauthorized()
     {
         return view('pages.unauthorized');
+    }
+
+    /**
+     * Menampilkan halaman refund
+     */
+    public function refund()
+    {
+        return view('pages.refund');
     }
 }

@@ -109,6 +109,23 @@ class Payment extends Model
     }
 
     /**
+     * Mark payment as refunded
+     */
+    public function markAsRefunded(): void
+    {
+        $this->update([
+            'payment_status' => 'Refunded',
+            'payment_date' => $this->payment_date ?? now() // Keep original payment date if exists
+        ]);
+        
+        // Update booking status
+        $this->booking->update([
+            'status' => 'refunded',
+            'payment_status' => 'refunded'
+        ]);
+    }
+
+    /**
      * Get formatted amount
      */
     public function getFormattedAmountAttribute()
@@ -142,6 +159,14 @@ class Payment extends Model
         return in_array($this->payment_status, ['Failed', 'failed']);
     }
 
+    /**
+     * Check if payment is refunded
+     */
+    public function isRefunded(): bool
+    {
+        return $this->payment_status === 'Refunded';
+    }
+
 
 
     /**
@@ -166,5 +191,13 @@ class Payment extends Model
     public function scopeFailed($query)
     {
         return $query->whereIn('payment_status', ['Failed', 'failed']);
+    }
+
+    /**
+     * Scope untuk filter payment yang refunded
+     */
+    public function scopeRefunded($query)
+    {
+        return $query->where('payment_status', 'Refunded');
     }
 }

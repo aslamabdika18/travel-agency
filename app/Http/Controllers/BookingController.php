@@ -28,7 +28,7 @@ class BookingController extends Controller
     {
         try {
             $user = Auth::user();
-            
+
             $bookings = Booking::where('user_id', $user->id)
                 ->with(['travelPackage:id,name,slug,price,duration'])
                 ->orderBy('created_at', 'desc')
@@ -76,7 +76,7 @@ class BookingController extends Controller
             'method' => $request->method(),
             'url' => $request->fullUrl(),
             'request_data' => $request->all(),
-            'user_id' => auth()->id(),
+            'user_id' => Auth::user() ? Auth::user()->id : null,
             'ip' => $request->ip(),
             'headers' => $request->headers->all()
         ]);
@@ -84,7 +84,7 @@ class BookingController extends Controller
         Log::info('=== STARTING VALIDATION ===', [
             'request_data' => $request->all()
         ]);
-        
+
         $validator = Validator::make($request->all(), [
             'travel_package_id' => 'required|exists:travel_packages,id',
             'booking_date' => 'required|date|after:today',
@@ -94,7 +94,7 @@ class BookingController extends Controller
             'contact' => 'required|string|max:20',
             'terms' => 'required|accepted',
         ]);
-        
+
         Log::info('=== VALIDATION COMPLETED ===', [
             'validation_passed' => !$validator->fails(),
             'errors' => $validator->errors()->toArray()
@@ -109,7 +109,7 @@ class BookingController extends Controller
                     'errors' => $validator->errors()
                 ], 422);
             }
-            
+
             // Web form submission - redirect back with errors
             return redirect()->back()
                 ->withErrors($validator)
@@ -120,18 +120,18 @@ class BookingController extends Controller
         try {
             $user = Auth::user();
             $travelPackage = TravelPackage::findOrFail($request->travel_package_id);
-            
+
             // Calculate pricing breakdown using TravelPackage method
             $priceData = $travelPackage->calculatePrice($request->person_count);
-            
+
             $basePrice = $priceData['base_price'];
             $additionalPrice = $priceData['additional_price'];
             $taxAmount = $priceData['tax_amount'];
             $totalPrice = $priceData['total_price'];
-            
+
             // Generate unique booking reference
             $bookingReference = 'BK-' . strtoupper(Str::random(8)) . '-' . date('Ymd');
-            
+
             $booking = Booking::create([
                 'user_id' => $user->id,
                 'travel_package_id' => $request->travel_package_id,
@@ -165,10 +165,10 @@ class BookingController extends Controller
                 'payment_id' => $payment->id,
                 'total_price' => $booking->total_price
             ]);
-            
+
             try {
                 $snapRedirectUrl = $this->midtransService->createSnapRedirectUrl($booking, $payment);
-                
+
                 Log::info('=== SNAP REDIRECT URL CREATED ===', [
                     'booking_id' => $booking->id,
                     'snap_url' => $snapRedirectUrl
@@ -179,14 +179,14 @@ class BookingController extends Controller
                     'error' => $e->getMessage(),
                     'trace' => $e->getTraceAsString()
                 ]);
-                
+
                 if ($request->expectsJson()) {
                     return response()->json([
                         'success' => false,
                         'message' => 'Failed to create payment URL: ' . $e->getMessage()
                     ], 500);
                 }
-                
+
                 return redirect()->back()
                     ->with('toast_error', 'Failed to create payment URL. Please try again.')
                     ->withInput();
@@ -196,14 +196,14 @@ class BookingController extends Controller
                 Log::error('=== SNAP REDIRECT URL EMPTY ===', [
                     'booking_id' => $booking->id
                 ]);
-                
+
                 if ($request->expectsJson()) {
                     return response()->json([
                         'success' => false,
                         'message' => 'Failed to create payment URL'
                     ], 500);
                 }
-                
+
                 return redirect()->back()
                     ->with('toast_error', 'Failed to create payment URL. Please contact support.')
                     ->withInput();
@@ -222,17 +222,17 @@ class BookingController extends Controller
                     ]
                 ], 201);
             }
-            
+
             // Web form submission - redirect to payment page
             // Simpan informasi booking di session untuk ditampilkan jika user kembali
             session(['last_booking' => $booking->id]);
-            
+
             Log::info('=== REDIRECTING TO SNAP URL ===', [
                 'booking_id' => $booking->id,
                 'snap_url' => $snapRedirectUrl,
                 'session_booking' => session('last_booking')
             ]);
-            
+
             return redirect()->to($snapRedirectUrl);
         } catch (\Exception $e) {
             // Check if request expects JSON (API call)
@@ -243,7 +243,7 @@ class BookingController extends Controller
                     'error' => $e->getMessage()
                 ], 500);
             }
-            
+
             // Web form submission - redirect back with error
             return redirect()->back()
                 ->with('toast_error', 'Failed to create booking. Please try again.')
@@ -258,7 +258,7 @@ class BookingController extends Controller
     {
         try {
             $user = Auth::user();
-            
+
             $booking = Booking::where('id', $id)
                 ->where('user_id', $user->id)
                 ->with(['travelPackage:id,name,slug,price,duration,description'])
@@ -322,7 +322,7 @@ class BookingController extends Controller
 
         try {
             $user = Auth::user();
-            
+
             $booking = Booking::where('id', $id)
                 ->where('user_id', $user->id)
                 ->first();
@@ -379,7 +379,7 @@ class BookingController extends Controller
     {
         try {
             $user = Auth::user();
-            
+
             // Get the most recent pending booking as draft
             $draft = Booking::where('user_id', $user->id)
                 ->where('status', 'pending')
