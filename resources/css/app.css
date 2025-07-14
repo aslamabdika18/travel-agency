@@ -1,0 +1,181 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    a {
+        @apply no-underline;
+    }
+    
+    body {
+        @apply font-poppins text-secondary leading-normal m-0 p-0 overflow-x-hidden w-full box-border scroll-smooth;
+    }
+    
+    * {
+        @apply box-border;
+    }
+}
+
+@layer components {
+    /* Utility classes yang menggunakan Tailwind */
+    .btn {
+        @apply inline-block px-4 py-2 rounded font-medium text-center transition-all duration-300;
+    }
+    
+    .btn-primary {
+        @apply bg-primary text-white hover:bg-primary-dark;
+    }
+    
+    .btn-outline {
+        @apply bg-transparent border border-primary text-primary hover:bg-primary hover:text-white;
+    }
+    
+    .card {
+        @apply bg-white rounded-lg shadow-md overflow-hidden;
+    }
+    
+    .card-body {
+        @apply p-6;
+    }
+    
+    .card-title {
+        @apply text-xl font-semibold mb-2;
+    }
+    
+    .form-group {
+        @apply mb-4;
+    }
+    
+    .form-label {
+        @apply block mb-2 font-medium;
+    }
+    
+    .form-control {
+        @apply w-full px-3 py-2 border border-neutral-dark rounded transition-colors focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/25;
+    }
+    
+    .navbar {
+        @apply fixed top-0 left-0 right-0 z-40 transition-all duration-300;
+    }
+    
+    .user-menu .dropdown-menu {
+        @apply absolute right-0 top-full z-50 min-w-48 bg-white rounded-md shadow-lg border border-neutral-dark/10 overflow-hidden origin-top-right transition-all duration-200;
+    }
+    
+    .user-menu .dropdown-menu.hidden {
+        @apply opacity-0 scale-95 invisible pointer-events-none;
+    }
+    
+    .user-menu .dropdown-menu:not(.hidden) {
+        @apply opacity-100 scale-100 visible pointer-events-auto;
+    }
+    
+    footer {
+        @apply bg-secondary-dark text-neutral py-12 pb-6;
+    }
+    
+    .img-fluid {
+        @apply max-w-full h-auto;
+    }
+    
+    /* Text size */
+    .text-2xs {
+        @apply text-[0.65rem] leading-4;
+    }
+    
+    /* Hero section */
+    .hero-section {
+        @apply bg-cover bg-center bg-no-repeat;
+    }
+    
+    /* Text shadow */
+    .text-shadow {
+        @apply [text-shadow:1px_1px_3px_rgba(0,0,0,0.5)];
+    }
+    .text-shadow-sm {
+        @apply [text-shadow:1px_1px_2px_rgba(0,0,0,0.5)];
+    }
+    .text-shadow-md {
+        @apply [text-shadow:2px_2px_4px_rgba(0,0,0,0.5)];
+    }
+    .text-shadow-lg {
+        @apply [text-shadow:3px_3px_6px_rgba(0,0,0,0.5)];
+    }
+    
+    /* Animation classes */
+    .animate-fade-in {
+        @apply animate-[fadeIn_0.3s_ease-in-out];
+    }
+    .animation-delay-300 {
+        @apply delay-300;
+    }
+    .animation-delay-600 {
+        @apply delay-600;
+    }
+    .animation-delay-900 {
+        @apply delay-[900ms];
+    }
+    
+    /* Image placeholders */
+    .bg-gray-200 img {
+        @apply w-full h-full object-cover;
+    }
+    .bg-gray-200 img.bg-gray-100 {
+        @apply object-contain p-4;
+    }
+    
+    /* Scroll animations */
+    .animate-on-scroll {
+        @apply opacity-0 translate-y-5 transition-all duration-600 ease-out;
+    }
+    .animate-on-scroll.visible {
+        @apply opacity-100 translate-y-0;
+    }
+    /* Pastikan form input dalam animasi tetap dapat diinteraksi */
+    .animate-on-scroll input,
+    .animate-on-scroll select,
+    .animate-on-scroll textarea,
+    .animate-on-scroll button {
+        @apply pointer-events-auto;
+    }
+    
+    /* Card hover effects */
+    .destination-card {
+        @apply transition-all duration-300;
+    }
+    .destination-card:hover {
+        @apply -translate-y-2.5 shadow-xl;
+    }
+    
+    .package-card {
+        @apply transition-all duration-300;
+    }
+    .package-card:hover {
+        @apply scale-[1.03];
+    }
+    
+    .testimonial-card {
+        @apply transition-all duration-300;
+    }
+    .testimonial-card:hover {
+        @apply shadow-xl;
+    }
+    
+    .faq-item {
+        @apply transition-all duration-300;
+    }
+    .faq-item:hover {
+        @apply bg-blue-50;
+    }
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
