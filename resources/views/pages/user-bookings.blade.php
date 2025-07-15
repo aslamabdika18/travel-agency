@@ -228,7 +228,7 @@
                                     </div>
                                     <div class="mt-4 md:mt-0">
                                         <p class="text-2xl font-bold text-primary">Rp
-                                            {{ number_format((float)$booking->total_amount, 0, ',', '.') }}</p>
+                                            {{ number_format((float)$booking->total_price, 0, ',', '.') }}</p>
                                     </div>
                                 </div>
 
@@ -241,8 +241,8 @@
                                     </div>
                                     <div>
                                         <p class="text-sm text-secondary">Travelers</p>
-                                        <p class="font-medium">{{ $booking->total_participants }}
-                                            {{ $booking->total_participants > 1 ? 'People' : 'Person' }}</p>
+                                        <p class="font-medium">{{ $booking->person_count }}
+                                            {{ $booking->person_count > 1 ? 'People' : 'Person' }}</p>
                                     </div>
                                 </div>
 

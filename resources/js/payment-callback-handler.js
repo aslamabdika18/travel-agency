@@ -8,6 +8,8 @@
 // Variabel global untuk order ID dan status transaksi
 let globalOrderId = null;
 let globalTransactionStatus = null;
+let retryCount = 0;
+const maxRetries = 3;
 
 document.addEventListener('DOMContentLoaded', function() {
     // Ambil order_id dan transaction_status dari URL jika ada
@@ -256,21 +258,46 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (data.success && data.data && data.data.payment) {
                     const payment = data.data.payment;
                     
+                    console.log('Payment status check:', {
+                        status: payment.status,
+                        gateway_status: payment.gateway_status
+                    });
                     
-                    if (payment.status === 'paid' || 
+                    // Redirect ke success jika payment berhasil
+                    if (payment.status === 'Paid' || 
                         payment.gateway_status === 'settlement' || 
                         payment.gateway_status === 'capture') {
-                        
+                        console.log('Redirecting to success page');
                         window.location.href = window.paymentCallbackRoutes.success;
-                    } else {
-                        
+                    } 
+                    // Redirect ke error jika payment gagal
+                    else if (payment.status === 'Failed' || 
+                             payment.gateway_status === 'deny' ||
+                             payment.gateway_status === 'cancel' ||
+                             payment.gateway_status === 'expire' ||
+                             payment.gateway_status === 'failure') {
+                        console.log('Redirecting to error page - payment failed');
                         window.location.href = window.paymentCallbackRoutes.error;
                     }
+                    // Untuk status pending atau lainnya, tetap di halaman callback
+                    else {
+                        console.log('Payment still pending, staying on callback page');
+                        // Tambahkan logic untuk retry check status dengan limit
+                        if (retryCount < maxRetries) {
+                            retryCount++;
+                            console.log(`Retrying payment status check (${retryCount}/${maxRetries})`);
+                            setTimeout(checkPaymentStatus, 5000); // Check lagi setelah 5 detik
+                            return; // Jangan redirect
+                        } else {
+                            console.log('Max retries reached, redirecting to error page');
+                            window.location.href = window.paymentCallbackRoutes.error;
+                        }
+                    }
                 } else if (data.success && data.data && data.data.payment_status === 'paid') {
-                    
+                    console.log('Redirecting to success page - legacy check');
                     window.location.href = window.paymentCallbackRoutes.success;
                 } else {
-                    
+                    console.log('Redirecting to error page - no valid payment data');
                     window.location.href = window.paymentCallbackRoutes.error;
                 }
             }, 1500);

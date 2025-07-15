@@ -425,8 +425,8 @@ class PaymentController extends Controller
                 $response['data']['payment'] = [
                     'id' => $payment->id,
                     'status' => $payment->payment_status,
-                    'gateway_status' => $payment->gateway_status ?? $payment->transaction_status,
-
+                    'gateway_status' => $payment->gateway_status,
+                    'transaction_id' => $payment->transaction_id,
                     'amount' => $payment->total_price,
                     'payment_date' => $payment->payment_date
                 ];
