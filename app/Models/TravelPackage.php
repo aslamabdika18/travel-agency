@@ -16,13 +16,13 @@ class TravelPackage extends Model implements HasMedia
     use HasFactory, SoftDeletes, InteractsWithMedia;
 
     protected $fillable = [
-        'name', 
-        'slug', 
-        'description', 
-        'price', 
-        'base_person_count', 
-        'additional_person_price', 
-        'capacity', 
+        'name',
+        'slug',
+        'description',
+        'price',
+        'base_person_count',
+        'additional_person_price',
+        'capacity',
         'duration',
         'tax_percentage'
     ];
@@ -73,11 +73,17 @@ class TravelPackage extends Model implements HasMedia
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('gallery')
-            ->useDisk('public');
+            ->useDisk('public')
+            ->acceptsFile(function (\Spatie\MediaLibrary\MediaCollections\File $file) {
+                return $file->mimeType === 'image/jpeg' || $file->mimeType === 'image/png';
+            });
 
         $this->addMediaCollection('thumbnail')
             ->useDisk('public')
-            ->singleFile();
+            ->singleFile()
+            ->acceptsFile(function (\Spatie\MediaLibrary\MediaCollections\File $file) {
+                return $file->mimeType === 'image/jpeg' || $file->mimeType === 'image/png';
+            });
     }
 
     public function registerMediaConversions(?Media $media = null): void
@@ -90,6 +96,8 @@ class TravelPackage extends Model implements HasMedia
             ->width(800)
             ->height(600);
     }
+
+
 
     public function bookings()
     {
@@ -114,7 +122,7 @@ class TravelPackage extends Model implements HasMedia
         if ($this->relationLoaded('reviews')) {
             return $this->reviews->avg('rating') ?? 0;
         }
-        
+
         // Fallback to query if not loaded
         return $this->reviews()->avg('rating') ?? 0;
     }
@@ -129,7 +137,7 @@ class TravelPackage extends Model implements HasMedia
         if ($this->relationLoaded('reviews')) {
             return $this->reviews->count();
         }
-        
+
         // Fallback to query if not loaded
         return $this->reviews()->count();
     }
@@ -167,7 +175,7 @@ class TravelPackage extends Model implements HasMedia
         if ($this->relationLoaded('travelIncludes')) {
             return $this->travelIncludes->pluck('name')->toArray();
         }
-        
+
         // Fallback to query if not loaded
         return $this->travelIncludes()->pluck('name')->toArray();
     }
@@ -182,7 +190,7 @@ class TravelPackage extends Model implements HasMedia
         if ($this->relationLoaded('travelExcludes')) {
             return $this->travelExcludes->pluck('name')->toArray();
         }
-        
+
         // Fallback to query if not loaded
         return $this->travelExcludes()->pluck('name')->toArray();
     }
@@ -204,7 +212,7 @@ class TravelPackage extends Model implements HasMedia
                 });
             })->toArray();
         }
-        
+
         // Fallback to query if not loaded
         return $this->itineraries()->get()->groupBy('day')->map(function ($dayItineraries) {
             return $dayItineraries->map(function ($itinerary) {
@@ -222,16 +230,16 @@ class TravelPackage extends Model implements HasMedia
     public function calculatePrice(int $personCount): array
     {
         $this->validatePersonCount($personCount);
-        
+
         $basePrice = $this->price;
         $basePersonCount = $this->base_person_count;
         $additionalPersonPrice = $this->additional_person_price;
-        
+
         $additionalPrice = $this->calculateAdditionalPrice($personCount, $basePersonCount, $additionalPersonPrice);
         $subtotal = $basePrice + $additionalPrice;
         $taxAmount = $this->calculateTax($subtotal);
         $totalPrice = $subtotal + $taxAmount;
-        
+
         return [
             'base_price' => $basePrice,
             'additional_price' => $additionalPrice,
