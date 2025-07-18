@@ -112,8 +112,8 @@ class TravelPackageResource extends Resource
                         
                         Forms\Components\Section::make('Itinerary')
                             ->schema([
-                                Forms\Components\Repeater::make('itinerary')
-                                    ->relationship('itinerary')
+                                Forms\Components\Repeater::make('itineraries')
+                                    ->relationship('itineraries')
                                     ->schema([
                                         Forms\Components\Grid::make(3)
                                             ->schema([

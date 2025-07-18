@@ -65,7 +65,7 @@ class TravelPackageTransformer extends JsonResource
         }
 
         // Add itinerary data
-        $data['itinerary'] = $this->resource->itinerary ? $this->resource->itinerary->map(function ($item) {
+        $data['itinerary'] = $this->resource->itineraries ? $this->resource->itineraries->map(function ($item) {
             return [
                 'day' => $item->day,
                 'activity' => $item->activity,
