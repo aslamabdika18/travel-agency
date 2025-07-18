@@ -15,6 +15,7 @@
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.9",
         "midtrans/midtrans-php": "^2.6",
+        "pxlrbt/filament-excel": "^2.4",
         "rupadana/filament-api-service": "^3.4",
         "spatie/laravel-permission": "^6.20"
     },

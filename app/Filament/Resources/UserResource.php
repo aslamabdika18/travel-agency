@@ -10,16 +10,17 @@ use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Tables\Actions\Action;
 use Filament\Forms\Components\Select;
-use App\Filament\Exports\UserExporter;
 use App\Filament\Imports\UserImporter;
 use Filament\Forms\Components\Section;
 use Filament\Support\Enums\FontWeight;
 use Filament\Forms\Components\TextInput;
-use Filament\Tables\Actions\ExportAction;
 use Filament\Tables\Actions\ImportAction;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Infolists\Components\TextEntry;
-use Filament\Tables\Actions\ExportBulkAction;
+use pxlrbt\FilamentExcel\Actions\Tables\ExportAction;
+use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
+use pxlrbt\FilamentExcel\Exports\ExcelExport;
+use Maatwebsite\Excel\Excel;
 use App\Filament\Resources\UserResource\Pages;
 use STS\FilamentImpersonate\Tables\Actions\Impersonate;
 use Filament\Infolists\Components\Section as InfolistSection;
@@ -113,7 +114,12 @@ class UserResource extends Resource
             ])
             ->headerActions([
                 ExportAction::make()
-                    ->exporter(UserExporter::class),
+                    ->exports([
+                        ExcelExport::make()
+                            ->fromTable()
+                            ->withFilename(fn() => 'users-' . date('Y-m-d'))
+                            ->withWriterType(Excel::XLSX)
+                    ]),
                 ImportAction::make()
                     ->importer(UserImporter::class)
             ])
@@ -122,7 +128,12 @@ class UserResource extends Resource
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
                 ExportBulkAction::make()
-                    ->exporter(UserExporter::class)
+                    ->exports([
+                        ExcelExport::make()
+                            ->fromTable()
+                            ->withFilename(fn() => 'users-bulk-' . date('Y-m-d'))
+                            ->withWriterType(Excel::XLSX)
+                    ])
             ]);
     }
 
