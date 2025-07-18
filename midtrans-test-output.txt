@@ -1,4 +1,0 @@
-
-Warning: syntax error, unexpected '=' in D:\aTA\backend/.env on line 3
- in D:\aTA\backend\test-midtrans-connection.php on line 14
-Error: Failed to parse .env file
