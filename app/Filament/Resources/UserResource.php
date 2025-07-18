@@ -22,7 +22,7 @@ use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
 use pxlrbt\FilamentExcel\Exports\ExcelExport;
 use Maatwebsite\Excel\Excel;
 use App\Filament\Resources\UserResource\Pages;
-use STS\FilamentImpersonate\Tables\Actions\Impersonate;
+
 use Filament\Infolists\Components\Section as InfolistSection;
 
 class UserResource extends Resource
@@ -109,7 +109,7 @@ class UserResource extends Resource
                             ->optionsLimit(10)
                             ->getOptionLabelFromRecordUsing(fn($record) => $record->name),
                     ]),
-                // Impersonate::make(),
+
                 Tables\Actions\DeleteAction::make(),
             ])
             ->headerActions([
