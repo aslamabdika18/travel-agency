@@ -31,7 +31,6 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->spa()
             ->loginRouteSlug('auth')
-            ->logoutRedirectUrl('/')
             ->colors([
                 'primary' => Color::Orange,
             ])

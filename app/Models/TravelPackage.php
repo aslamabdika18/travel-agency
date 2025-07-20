@@ -312,7 +312,31 @@ class TravelPackage extends Model implements HasMedia
      */
     public function getThumbnailUrlAttribute(): ?string
     {
-        return $this->getFirstMediaUrl('thumbnail', 'thumb');
+        // Try to get the original image first, fallback to thumb conversion
+        $url = $this->getFirstMediaUrl('thumbnail');
+        if (!$url) {
+            $url = $this->getFirstMediaUrl('thumbnail', 'thumb');
+        }
+        
+        // If no media found, use placeholder image
+        if (!$url) {
+            // Try SVG first, fallback to JPG
+            if (file_exists(public_path('images/placeholder-travel.svg'))) {
+                $url = asset('images/placeholder-travel.svg');
+            } else {
+                $url = asset('images/placeholder-travel.jpg');
+            }
+        }
+        
+        return $url;
+    }
+
+    /**
+     * Get featured image URL (uses thumbnail)
+     */
+    public function getFeaturedImageAttribute(): ?string
+    {
+        return $this->thumbnailUrl;
     }
 
     /**
