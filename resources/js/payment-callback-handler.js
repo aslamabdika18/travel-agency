@@ -1,6 +1,6 @@
 /**
  * Midtrans Payment Callback Handler
- * 
+ *
  * File ini menangani callback dari Midtrans setelah proses pembayaran
  * dan mengecek status pembayaran melalui API.
  */
@@ -12,38 +12,44 @@ let retryCount = 0;
 const maxRetries = 3;
 
 document.addEventListener('DOMContentLoaded', function() {
+    // Ensure page starts from top on load (best practice)
+    if (history.scrollRestoration) {
+        history.scrollRestoration = 'manual';
+    }
+    window.scrollTo(0, 0);
+    
     // Ambil order_id dan transaction_status dari URL jika ada
     const urlParams = new URLSearchParams(window.location.search);
     const orderId = urlParams.get('order_id');
     const transactionStatus = urlParams.get('transaction_status');
-    
+
     // Simpan ke variabel global
     globalOrderId = orderId;
     globalTransactionStatus = transactionStatus;
-    
+
     // Log untuk debugging
-    
+
     // Log semua parameter URL untuk debugging
-    
-    
+
+
     // Periksa apakah parameter yang diperlukan ada
     if (!orderId) {
-        
-        
+
+
         // Coba cari parameter lain yang mungkin berisi order ID
         const possibleOrderIdParams = ['order_id', 'orderId', 'id', 'booking_id'];
         for (const param of possibleOrderIdParams) {
             const value = urlParams.get(param);
             if (value) {
-                
+
             }
         }
     }
-    
+
     // Elemen UI
     const progressBar = document.querySelector('.progress-bar');
     const progressText = document.querySelector('.progress-text');
-    
+
     // Langkah-langkah progress
     const progressSteps = [
         { width: '20%', text: 'Menghubungkan ke gateway pembayaran...' },
@@ -52,29 +58,29 @@ document.addEventListener('DOMContentLoaded', function() {
         { width: '80%', text: 'Mengonfirmasi booking...' },
         { width: '100%', text: 'Pembayaran dikonfirmasi! Mengalihkan...' }
     ];
-    
+
     let currentStep = 0;
-    
+
     // Fungsi untuk memperbarui progress
     function updateProgress() {
         if (currentStep < progressSteps.length) {
             const step = progressSteps[currentStep];
-            
-            
+
+
             progressBar.style.width = step.width;
             progressText.textContent = step.text;
-            
+
             // Tambahkan animasi smooth untuk progress bar
             progressBar.style.transition = 'width 0.5s ease-in-out';
-            
+
             currentStep++;
         } else {
-            
+
             clearInterval(progressInterval);
             checkPaymentStatus();
         }
     }
-    
+
     // Mulai pembaruan progress
     updateProgress();
     const progressInterval = setInterval(function() {
@@ -84,19 +90,19 @@ document.addEventListener('DOMContentLoaded', function() {
             clearInterval(progressInterval);
         }
     }, 1500);
-    
+
     // Fungsi untuk menampilkan detail pembayaran
     function displayPaymentDetails(data) {
-        
-        
+
+
         // Buat container untuk detail pembayaran
         const detailsContainer = document.createElement('div');
         detailsContainer.className = 'mt-8 p-4 bg-white border border-gray-200 rounded-md shadow-sm';
-        
+
         // Siapkan data yang akan ditampilkan
         const payment = data.payment || {};
         const booking = data.booking || {};
-        
+
         // Format tanggal jika ada
         const formatDate = (dateString) => {
             if (!dateString) return '-';
@@ -109,105 +115,157 @@ document.addEventListener('DOMContentLoaded', function() {
                 minute: '2-digit'
             });
         };
-        
-        // Tentukan status pembayaran dalam bahasa Indonesia
+
+        // Tentukan status pembayaran berdasarkan dokumentasi Midtrans
         let statusText = 'Menunggu Pembayaran';
         let statusClass = 'text-yellow-600 bg-yellow-50';
-        
-        if (payment.status === 'paid' || payment.gateway_status === 'settlement' || payment.gateway_status === 'capture') {
+        let statusMessage = 'Pembayaran sedang diproses, mohon tunggu...';
+
+        // Status berhasil: settlement, capture (dengan fraud accept atau null)
+        if (payment.status === 'Paid' ||
+            payment.gateway_status === 'settlement' ||
+            payment.gateway_status === 'capture') {
             statusText = 'Pembayaran Berhasil';
             statusClass = 'text-green-600 bg-green-50';
-        } else if (payment.gateway_status === 'deny' || payment.gateway_status === 'cancel' || payment.gateway_status === 'expire') {
+            statusMessage = 'Pembayaran Anda telah berhasil diproses. Booking dikonfirmasi!';
+        }
+        // Status pending: pending, challenge
+        else if (payment.status === 'Unpaid' ||
+                 payment.gateway_status === 'pending' ||
+                 payment.gateway_status === 'challenge') {
+            statusText = 'Menunggu Pembayaran';
+            statusClass = 'text-yellow-600 bg-yellow-50';
+            if (payment.gateway_status === 'challenge') {
+                statusMessage = 'Pembayaran sedang dalam proses verifikasi keamanan.';
+            } else {
+                statusMessage = 'Silakan selesaikan pembayaran Anda dalam waktu yang ditentukan.';
+            }
+        }
+        // Status gagal: deny, cancel, expire, failure
+        else if (payment.status === 'Failed' ||
+                 payment.gateway_status === 'deny' ||
+                 payment.gateway_status === 'cancel' ||
+                 payment.gateway_status === 'expire' ||
+                 payment.gateway_status === 'failure') {
             statusText = 'Pembayaran Gagal';
             statusClass = 'text-red-600 bg-red-50';
+
+            // Pesan spesifik berdasarkan alasan kegagalan
+            switch (payment.gateway_status) {
+                case 'deny':
+                    statusMessage = 'Pembayaran ditolak oleh bank atau sistem keamanan.';
+                    break;
+                case 'cancel':
+                    statusMessage = 'Transaksi dibatalkan.';
+                    break;
+                case 'expire':
+                    statusMessage = 'Waktu pembayaran telah habis.';
+                    break;
+                case 'failure':
+                    statusMessage = 'Terjadi kesalahan sistem saat memproses pembayaran.';
+                    break;
+                default:
+                    statusMessage = 'Pembayaran tidak dapat diproses.';
+            }
         }
-        
+
         // Buat HTML untuk detail pembayaran
         detailsContainer.innerHTML = `
             <h3 class="text-lg font-semibold mb-4">Detail Pembayaran</h3>
-            
+
             <div class="flex justify-between items-center mb-4">
                 <span class="text-gray-600">Status:</span>
                 <span class="px-3 py-1 rounded-full ${statusClass} font-medium">${statusText}</span>
             </div>
-            
+
+            <div class="mb-4 p-3 rounded-lg ${statusClass.replace('text-', 'border-').replace('bg-', 'bg-opacity-20 border-')}">
+                <p class="text-sm ${statusClass.split(' ')[0]}">${statusMessage}</p>
+            </div>
+
             <div class="grid grid-cols-1 gap-3 text-sm">
                 <div class="flex justify-between py-2 border-b border-gray-100">
                     <span class="text-gray-600">ID Booking:</span>
                     <span class="font-medium">${booking.id || payment.booking_id || '-'}</span>
                 </div>
-                
+
                 <div class="flex justify-between py-2 border-b border-gray-100">
                     <span class="text-gray-600">Jumlah:</span>
                     <span class="font-medium">Rp ${new Intl.NumberFormat('id-ID').format(payment.total_price || 0)}</span>
                 </div>
-                
+
                 <div class="flex justify-between py-2 border-b border-gray-100">
                     <span class="text-gray-600">Waktu Pembayaran:</span>
-                    <span class="font-medium">${formatDate(payment.paid_at)}</span>
+                    <span class="font-medium">${formatDate(payment.payment_date || payment.paid_at)}</span>
                 </div>
-                
+
                 <div class="flex justify-between py-2 border-b border-gray-100">
                     <span class="text-gray-600">ID Transaksi:</span>
                     <span class="font-medium">${payment.transaction_id || globalOrderId || '-'}</span>
                 </div>
+
+                ${payment.gateway_status ? `
+                <div class="flex justify-between py-2 border-b border-gray-100">
+                    <span class="text-gray-600">Status Gateway:</span>
+                    <span class="font-medium">${payment.gateway_status}</span>
+                </div>
+                ` : ''}
             </div>
-            
+
             <div class="mt-4 text-sm text-gray-500">
                 <p>Anda akan dialihkan dalam beberapa detik...</p>
             </div>
         `;
-        
+
         // Tambahkan ke halaman
         const container = document.querySelector('.progress-bar').closest('div').parentNode;
         container.appendChild(detailsContainer);
     }
-    
+
     // Fungsi untuk memeriksa status pembayaran
     async function checkPaymentStatus() {
         try {
             // Jika tidak ada orderId, coba cari dari parameter lain atau gunakan fallback
             let orderIdToUse = globalOrderId;
-            
+
             if (!orderIdToUse) {
-                
-                
+
+
                 // Coba cari dari parameter lain
                 const urlParams = new URLSearchParams(window.location.search);
-                const possibleOrderIdParams = ['orderId', 'id', 'booking_id', 'transaction_id'];
-                
+                const possibleOrderIdParams = ['order_id', 'orderId', 'id', 'booking_id', 'transaction_id'];
+
                 for (const param of possibleOrderIdParams) {
                     const value = urlParams.get(param);
                     if (value) {
-                        
+                        console.log(`Found order_id from parameter ${param}:`, value);
                         orderIdToUse = value;
                         globalOrderId = value; // Update global variable
                         break;
                     }
                 }
-                
+
                 // Jika masih tidak ada, cek apakah ada di path URL
                 if (!orderIdToUse) {
                     const pathParts = window.location.pathname.split('/');
                     const lastPart = pathParts[pathParts.length - 1];
-                    
+
                     if (lastPart && lastPart !== 'callback') {
-                        
+
                         orderIdToUse = lastPart;
                         globalOrderId = lastPart; // Update global variable
                     }
                 }
-                
+
                 // Jika masih tidak ada, kita tidak bisa melanjutkan
                 if (!orderIdToUse) {
-                    
+
                     handleError('Order ID tidak ditemukan dalam URL');
                     return;
                 }
             }
-            
-            
-            
+
+
+
             // Panggil API untuk memeriksa status pembayaran
             const response = await fetch(`/api/payment/status?order_id=${orderIdToUse}`, {
                 method: 'GET',
@@ -217,81 +275,77 @@ document.addEventListener('DOMContentLoaded', function() {
                 },
                 credentials: 'same-origin'
             });
-            
+
             // Tambahkan timeout untuk menghindari permintaan yang terlalu lama
             const timeoutPromise = new Promise((_, reject) => {
                 setTimeout(() => reject(new Error('Permintaan API timeout setelah 10 detik')), 10000);
             });
-            
+
             // Gunakan Promise.race untuk menerapkan timeout
             const responseWithTimeout = await Promise.race([
                 response,
                 timeoutPromise
             ]);
-            
-            
-            
+
+
+
             if (!responseWithTimeout.ok) {
                 throw new Error(`HTTP error! status: ${responseWithTimeout.status}`);
             }
-            
+
             const data = await responseWithTimeout.json();
-            
+
             // Validasi data respons
             if (!data) {
                 throw new Error('Respons API tidak berisi data');
             }
-            
-            
+
+
             // Perbarui ke langkah terakhir
             progressBar.style.width = progressSteps[progressSteps.length - 1].width;
             progressText.textContent = progressSteps[progressSteps.length - 1].text;
-            
+
             // Tampilkan detail pembayaran jika tersedia
             if (data.success && data.data) {
                 displayPaymentDetails(data.data);
             }
-            
+
             // Tunggu sebentar sebelum redirect
             setTimeout(() => {
                 // Redirect berdasarkan status pembayaran
                 if (data.success && data.data && data.data.payment) {
                     const payment = data.data.payment;
-                    
+                    const booking = data.data.booking;
+
                     console.log('Payment status check:', {
                         status: payment.status,
                         gateway_status: payment.gateway_status
                     });
-                    
-                    // Redirect ke success jika payment berhasil
-                    if (payment.status === 'Paid' || 
-                        payment.gateway_status === 'settlement' || 
-                        payment.gateway_status === 'capture') {
-                        console.log('Redirecting to success page');
-                        window.location.href = window.paymentCallbackRoutes.success;
-                    } 
-                    // Redirect ke error jika payment gagal
-                    else if (payment.status === 'Failed' || 
-                             payment.gateway_status === 'deny' ||
-                             payment.gateway_status === 'cancel' ||
-                             payment.gateway_status === 'expire' ||
-                             payment.gateway_status === 'failure') {
-                        console.log('Redirecting to error page - payment failed');
-                        window.location.href = window.paymentCallbackRoutes.error;
+
+                    // Status berhasil: hanya jika payment_status adalah 'Paid'
+                    if (payment.status === 'Paid') {
+                        console.log('Redirecting to success page - payment confirmed as Paid');
+                        window.location.href = `/payment/success?order_id=${orderIdToUse}`;
                     }
-                    // Untuk status pending atau lainnya, tetap di halaman callback
+                    // Status gagal: jika payment_status adalah 'Failed'
+                    else if (payment.status === 'Failed') {
+                        console.log('Redirecting to error page - payment status is Failed');
+                        window.location.href = `/payment/error?order_id=${orderIdToUse}`;
+                    }
+                    // Status pending atau unpaid: tetap di halaman callback untuk monitoring
+                    else if (payment.status === 'Unpaid' || payment.status === 'pending') {
+                        console.log('Payment masih pending/unpaid, menampilkan status kepada user');
+                        // Bisa tambahkan auto-refresh setelah beberapa detik untuk cek ulang
+                        setTimeout(() => {
+                            console.log('Auto-refreshing to check payment status again...');
+                            checkPaymentStatus();
+                        }, 5000);
+                    }
+                    // Status lainnya
                     else {
-                        console.log('Payment still pending, staying on callback page');
-                        // Tambahkan logic untuk retry check status dengan limit
-                        if (retryCount < maxRetries) {
-                            retryCount++;
-                            console.log(`Retrying payment status check (${retryCount}/${maxRetries})`);
-                            setTimeout(checkPaymentStatus, 5000); // Check lagi setelah 5 detik
-                            return; // Jangan redirect
-                        } else {
-                            console.log('Max retries reached, redirecting to error page');
-                            window.location.href = window.paymentCallbackRoutes.error;
-                        }
+                        console.log('Unknown payment status:', payment.status);
+                        console.log('Gateway status:', payment.gateway_status);
+                        // Untuk status yang tidak dikenal, tetap di halaman callback
                     }
                 } else if (data.success && data.data && data.data.payment_status === 'paid') {
                     console.log('Redirecting to success page - legacy check');
@@ -301,26 +355,26 @@ document.addEventListener('DOMContentLoaded', function() {
                     window.location.href = window.paymentCallbackRoutes.error;
                 }
             }, 1500);
-            
+
         } catch (error) {
-            
+
             handleError('Terjadi kesalahan saat memeriksa status pembayaran: ' + error.message);
         }
     }
-    
+
     // Fungsi untuk menangani error
     function handleError(message) {
         clearInterval(progressInterval);
         const errorMessage = message || 'Terjadi kesalahan saat memproses pembayaran';
-        
-        
-        
+
+
+
         // Update UI
         progressText.textContent = errorMessage;
         progressText.classList.add('text-red-600');
         progressBar.classList.remove('bg-blue-600');
         progressBar.classList.add('bg-red-600');
-        
+
         // Tambahkan pesan error tambahan di halaman
         const errorContainer = document.createElement('div');
         errorContainer.className = 'mt-4 p-3 bg-red-50 border border-red-200 rounded-md text-red-700 text-sm';
@@ -334,21 +388,21 @@ document.addEventListener('DOMContentLoaded', function() {
             <p>${errorMessage}</p>
             <p class="mt-2">Anda akan dialihkan ke halaman error dalam 5 detik...</p>
         `;
-        
+
         // Tambahkan ke halaman
         const container = document.querySelector('.progress-bar').closest('div').parentNode;
         container.appendChild(errorContainer);
-        
+
         // Tunggu 5 detik sebelum redirect ke halaman error
         setTimeout(() => {
-            
+
             window.location.href = window.paymentCallbackRoutes.error;
         }, 5000);
     }
-    
+
     // Mulai pemeriksaan status setelah beberapa detik
     setTimeout(checkPaymentStatus, 3000);
-    
+
     // Timeout setelah 30 detik jika tidak ada respons
     setTimeout(function() {
         if (currentStep < progressSteps.length) {

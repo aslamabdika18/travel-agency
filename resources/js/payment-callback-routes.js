@@ -2,7 +2,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     // Make routes available globally
     window.paymentCallbackRoutes = {
-        success: paymentSuccessRoute,
-        error: paymentErrorRoute
+        success: typeof paymentSuccessRoute !== 'undefined' ? paymentSuccessRoute : '/payment/success',
+        error: typeof paymentErrorRoute !== 'undefined' ? paymentErrorRoute : '/payment/error'
     };
 });

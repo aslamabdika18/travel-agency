@@ -16,18 +16,38 @@
                 <h1 class="text-2xl md:text-3xl font-bold text-red-800 mb-2">Payment Failed</h1>
                 <p class="text-red-700 text-lg">We couldn't process your payment.</p>
             </div>
-            
+
             <!-- Error Details -->
             <div class="p-6 sm:p-8">
                 <div class="mb-8 text-center">
-                    <p class="text-secondary text-lg mb-2">Don't worry, your booking has not been lost!</p>
-                    <p class="text-secondary">You can try again or choose a different payment method.</p>
+                    <p class="text-secondary text-lg mb-2">Maaf, pembayaran Anda tidak dapat diproses.</p>
+                    <p class="text-secondary">Jangan khawatir - booking Anda masih tersedia dan Anda dapat mencoba lagi.</p>
                 </div>
-                
+
+                <!-- Link ke Notifikasi -->
+                @if(Auth::check())
+                    <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center">
+                                <svg class="w-5 h-5 text-blue-600 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"></path>
+                                </svg>
+                                <div>
+                                    <h4 class="text-blue-800 font-medium">Notifikasi Tersimpan</h4>
+                                    <p class="text-blue-700 text-sm mt-1">Detail pembayaran telah disimpan di notifikasi Anda.</p>
+                                </div>
+                            </div>
+                            <a href="{{ route('notifications') }}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors">
+                                Lihat Notifikasi
+                            </a>
+                        </div>
+                    </div>
+                @endif
+
                 <!-- Error Information -->
                 <div class="border border-gray-200 rounded-lg p-6 mb-8">
                     <h2 class="text-xl font-bold text-secondary-dark mb-4">What Happened?</h2>
-                    
+
                     <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-6">
                         <div class="flex">
                             <div class="flex-shrink-0">
@@ -42,7 +62,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="space-y-4">
                         <p class="text-secondary">Common reasons for payment failure include:</p>
                         <ul class="list-disc pl-5 space-y-2 text-secondary">
@@ -55,12 +75,12 @@
                         </ul>
                     </div>
                 </div>
-                
+
                 @if($booking)
                 <!-- Booking Summary -->
                 <div class="border border-gray-200 rounded-lg p-6 mb-8">
                     <h2 class="text-xl font-bold text-secondary-dark mb-4">Booking Summary</h2>
-                    
+
                     <div class="flex items-center mb-6">
                         @if($booking->travelPackage && $booking->travelPackage->media->isNotEmpty())
                             <img src="{{ $booking->travelPackage->media->first()->getUrl() }}" alt="{{ $booking->travelPackage->name }}" class="w-20 h-20 object-cover rounded-lg mr-4">
@@ -74,7 +94,7 @@
                             <p class="text-secondary text-sm">{{ $booking->travelPackage->duration ?? 'Duration Not Available' }}</p>
                         </div>
                     </div>
-                    
+
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                         <div>
                             <p class="text-sm text-secondary">Booking Reference</p>
@@ -93,7 +113,7 @@
                             <p class="font-medium text-secondary-dark">{{ $booking->person_count ?? 0 }} {{ ($booking->person_count ?? 0) > 1 ? 'Persons' : 'Person' }}</p>
                         </div>
                     </div>
-                    
+
                     <div class="border-t border-gray-200 pt-4">
                         @if($booking->price_breakdown)
                             @php $breakdown = $booking->price_breakdown; @endphp
@@ -132,7 +152,7 @@
                     <p class="text-secondary">We couldn't retrieve your booking information at this time.</p>
                 </div>
                 @endif
-                
+
                 <!-- What to do next -->
                 <div class="bg-blue-50 rounded-lg p-6 mb-8">
                     <h2 class="text-lg font-bold text-blue-800 mb-3">What to do next?</h2>
@@ -157,7 +177,7 @@
                         </li>
                     </ul>
                 </div>
-                
+
                 <!-- Action Buttons -->
                 <div class="flex flex-col sm:flex-row gap-4">
                     @if($booking && $booking->travelPackage)
@@ -184,13 +204,13 @@
                 </div>
             </div>
         </div>
-        
+
         <!-- Alternative Payment Methods -->
         <div class="mt-8 bg-white rounded-xl shadow-md overflow-hidden">
             <div class="p-6 sm:p-8">
                 <h2 class="text-xl font-bold text-secondary-dark mb-4">Alternative Payment Methods</h2>
                 <p class="text-secondary mb-6">Payment is processed securely through Midtrans payment gateway:</p>
-                
+
                 <div class="border border-gray-200 rounded-lg p-6 text-center">
                     <div class="flex items-center justify-center mb-3">
                         <svg class="w-8 h-8 text-primary mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -202,14 +222,14 @@
                 </div>
             </div>
         </div>
-        
+
         <!-- Support Information -->
         <div class="mt-8 text-center">
             <p class="text-secondary mb-2">Need help with your payment?</p>
             <p class="text-secondary">
-                Contact our support team at 
-                <a href="mailto:support@acehtouradventure.com" class="text-primary hover:underline">support@acehtouradventure.com</a> 
-                or call 
+                Contact our support team at
+                <a href="mailto:support@acehtouradventure.com" class="text-primary hover:underline">support@acehtouradventure.com</a>
+                or call
                 <a href="tel:+6265123456" class="text-primary hover:underline">+62 651 123456</a>
             </p>
         </div>

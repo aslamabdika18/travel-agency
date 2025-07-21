@@ -158,6 +158,8 @@
     </div>
 </div>
 
+@endsection
+
 @section('scripts')
 <script>
     // Define routes for the payment callback JavaScript
@@ -165,5 +167,4 @@
     const paymentErrorRoute = '{{ route("payment-error") }}';
 </script>
 @vite(['resources/js/payment-callback-routes.js', 'resources/js/payment-callback-handler.js'])
-@endsection
 @endsection

@@ -20,13 +20,33 @@
             <!-- Booking Details -->
             <div class="p-6 sm:p-8">
                 <div class="mb-8 text-center">
-                    <p class="text-secondary text-lg mb-2">Thank you for booking with Aceh Tour Adventure!</p>
+                    <p class="text-secondary text-lg mb-2">Terima kasih telah memesan dengan Aceh Tour Adventure!</p>
                     @if($booking && $booking->user)
-                        <p class="text-secondary">A confirmation email has been sent to <span class="font-medium">{{ $booking->user->email }}</span></p>
+                        <p class="text-secondary">Email konfirmasi telah dikirim ke <span class="font-medium">{{ $booking->user->email }}</span></p>
                     @else
-                        <p class="text-secondary">A confirmation email will be sent to your registered email address.</p>
+                        <p class="text-secondary">Email konfirmasi akan dikirim ke alamat email terdaftar Anda.</p>
                     @endif
                 </div>
+
+                <!-- Link ke Notifikasi -->
+                @if(Auth::check())
+                    <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center">
+                                <svg class="w-5 h-5 text-blue-600 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"></path>
+                                </svg>
+                                <div>
+                                    <h4 class="text-blue-800 font-medium">Notifikasi Tersimpan</h4>
+                                    <p class="text-blue-700 text-sm mt-1">Detail pembayaran telah disimpan di notifikasi Anda.</p>
+                                </div>
+                            </div>
+                            <a href="{{ route('notifications') }}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors">
+                                Lihat Notifikasi
+                            </a>
+                        </div>
+                    </div>
+                @endif
 
                 @if($booking)
                     <!-- Booking Summary -->
@@ -141,12 +161,12 @@
                         <p class="text-gray-500">We couldn't retrieve your booking details at this time. Please check your email for confirmation or contact our support team.</p>
                     </div>
                 @endif
-                
+
                 @if($payment)
                     <!-- Payment Information -->
                 <div class="border border-gray-200 rounded-lg p-6 mb-8">
                     <h2 class="text-xl font-bold text-secondary-dark mb-4">Payment Information</h2>
-                    
+
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <p class="text-sm text-secondary">Payment Reference</p>
@@ -191,7 +211,7 @@
                         <p class="text-gray-500">Payment details are being processed. You will receive a confirmation email shortly.</p>
                     </div>
                 @endif
-                
+
                 <!-- Next Steps -->
                 <div class="bg-blue-50 rounded-lg p-6 mb-8">
                     <h2 class="text-lg font-bold text-blue-800 mb-3">What's Next?</h2>

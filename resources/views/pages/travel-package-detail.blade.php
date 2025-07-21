@@ -7,6 +7,14 @@
     <meta name="travel-package-slug" content="{{ $slug ?? '' }}">
 
     <script>
+        // Ensure page starts from top on initial load
+        if (history.scrollRestoration) {
+            history.scrollRestoration = 'manual';
+        }
+        window.addEventListener('beforeunload', function() {
+            window.scrollTo(0, 0);
+        });
+        
         // Set global variables for external JavaScript
         window.travelPackageConfig = {
             slug: '{{ $slug ?? '' }}',

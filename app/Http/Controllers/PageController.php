@@ -22,7 +22,7 @@ class PageController extends Controller
             ->latest()
             ->take(3)
             ->get();
-            
+
         return view('pages.home', compact('travelPackages'));
     }
 
@@ -55,7 +55,7 @@ class PageController extends Controller
             'travelExcludes' // Untuk excludesList accessor
         ])
             ->paginate(12); // Pagination dengan 12 item per halaman
-            
+
         return view('pages.travel-packages', compact('travelPackages'));
     }
 
@@ -72,7 +72,7 @@ class PageController extends Controller
             'travelExcludes',
             'reviews.user'
         ])->where('slug', $slug)->first();
-        
+
         // Cek apakah ada hash #booking di URL atau session booking_intent
         $bookingIntent = false;
         if (request()->has('booking') || session('booking_intent')) {
@@ -80,7 +80,7 @@ class PageController extends Controller
             // Hapus session booking_intent setelah digunakan
             session()->forget('booking_intent');
         }
-        
+
         // Kirim data travel package dan slug ke view
         return view('pages.travel-package-detail', [
             'travelPackage' => $travelPackage,
@@ -97,12 +97,12 @@ class PageController extends Controller
         // Ambil travel package berdasarkan slug dari parameter
         $packageSlug = $request->get('package', 'sabang-island-explorer'); // Default package
         $travelPackage = \App\Models\TravelPackage::where('slug', $packageSlug)->first();
-        
+
         // Jika package tidak ditemukan, gunakan package pertama yang tersedia
         if (!$travelPackage) {
             $travelPackage = \App\Models\TravelPackage::first();
         }
-        
+
         // Redirect ke halaman detail paket dengan pesan untuk mengarahkan ke form booking
         return redirect()->route('travel-package-detail', $travelPackage->slug)
             ->with('booking_intent', true)
@@ -115,7 +115,7 @@ class PageController extends Controller
     public function userBookings()
     {
         $user = Auth::user();
-        
+
         // Ambil semua booking milik user yang sedang login dengan eager loading dan pagination
         $bookings = \App\Models\Booking::with([
             'travelPackage.media',
@@ -124,7 +124,7 @@ class PageController extends Controller
         ->where('user_id', $user->id)
         ->orderBy('created_at', 'desc')
         ->paginate(10); // Pagination dengan 10 item per halaman
-        
+
         return view('pages.user-bookings', compact('bookings', 'user'));
     }
 
@@ -134,7 +134,7 @@ class PageController extends Controller
     public function bookingDetail($id)
     {
         $user = Auth::user();
-        
+
         // Ambil booking dengan semua relasi yang diperlukan
         $booking = \App\Models\Booking::with([
             'travelPackage.media',
@@ -147,13 +147,13 @@ class PageController extends Controller
         ->where('id', $id)
         ->where('user_id', $user->id)
         ->first();
-        
+
         // Jika booking tidak ditemukan atau bukan milik user
         if (!$booking) {
             return redirect()->route('user-bookings')
                 ->with('toast_error', 'Booking not found or you do not have permission to view it.');
         }
-        
+
         return view('pages.booking-detail', compact('booking'));
     }
 
@@ -181,11 +181,11 @@ class PageController extends Controller
         $booking = null;
         $payment = null;
         $redirectUrl = route('home');
-        
+
         // Coba ambil data dari berbagai sumber
         $orderId = $request->get('order_id');
         $lastBookingId = session('last_booking');
-        
+
         // Prioritas 1: Cari berdasarkan order_id dari parameter
         if ($orderId) {
             // Order ID format: BOOKING-{booking_id}-{timestamp}
@@ -198,7 +198,7 @@ class PageController extends Controller
                 ])->find($bookingId);
             }
         }
-        
+
         // Prioritas 2: Cari berdasarkan session last_booking
         if (!$booking && $lastBookingId) {
             $booking = \App\Models\Booking::with([
@@ -207,7 +207,7 @@ class PageController extends Controller
                 'user'
             ])->find($lastBookingId);
         }
-        
+
         // Prioritas 3: Ambil booking terakhir user yang sedang login
         if (!$booking && Auth::check()) {
             $booking = \App\Models\Booking::with([
@@ -222,22 +222,22 @@ class PageController extends Controller
             ->latest()
             ->first();
         }
-        
+
         // Jika booking ditemukan
         if ($booking) {
             $payment = $booking->payment;
-            
+
             // Set URL redirect
             if ($booking->travelPackage) {
                 $redirectUrl = route('travel-package-detail', ['slug' => $booking->travelPackage->slug]);
             }
-            
+
             // Hapus session last_booking setelah digunakan
             if ($lastBookingId) {
                 session()->forget('last_booking');
             }
         }
-        
+
         return view('pages.payment-success', [
             'booking' => $booking,
             'payment' => $payment,
@@ -253,11 +253,11 @@ class PageController extends Controller
         $booking = null;
         $payment = null;
         $redirectUrl = route('home');
-        
+
         // Coba ambil data dari berbagai sumber
         $orderId = $request->get('order_id');
         $lastBookingId = session('last_booking');
-        
+
         // Prioritas 1: Cari berdasarkan order_id dari parameter
         if ($orderId) {
             // Order ID format: BOOKING-{booking_id}-{timestamp}
@@ -270,7 +270,7 @@ class PageController extends Controller
                 ])->find($bookingId);
             }
         }
-        
+
         // Prioritas 2: Cari berdasarkan session last_booking
         if (!$booking && $lastBookingId) {
             $booking = \App\Models\Booking::with([
@@ -279,7 +279,7 @@ class PageController extends Controller
                 'user'
             ])->find($lastBookingId);
         }
-        
+
         // Prioritas 3: Ambil booking terakhir user yang sedang login (termasuk yang failed)
         if (!$booking && Auth::check()) {
             $booking = \App\Models\Booking::with([
@@ -291,17 +291,17 @@ class PageController extends Controller
             ->latest()
             ->first();
         }
-        
+
         // Jika booking ditemukan
         if ($booking) {
             $payment = $booking->payment;
-            
+
             // Set URL redirect
             if ($booking->travelPackage) {
                 $redirectUrl = route('travel-package-detail', ['slug' => $booking->travelPackage->slug]);
             }
         }
-        
+
         return view('pages.payment-error', [
             'booking' => $booking,
             'payment' => $payment,
@@ -317,11 +317,11 @@ class PageController extends Controller
         $status = $request->query('status', 'finish');
         $booking = null;
         $payment = null;
-        
+
         // Coba ambil data dari berbagai sumber
         $orderId = $request->get('order_id');
         $lastBookingId = session('last_booking');
-        
+
         // Prioritas 1: Cari berdasarkan order_id dari parameter
         if ($orderId) {
             // Order ID format: BOOKING-{booking_id}-{timestamp}
@@ -334,7 +334,7 @@ class PageController extends Controller
                 ])->find($bookingId);
             }
         }
-        
+
         // Prioritas 2: Cari berdasarkan session last_booking
         if (!$booking && $lastBookingId) {
             $booking = \App\Models\Booking::with([
@@ -343,7 +343,7 @@ class PageController extends Controller
                 'user'
             ])->find($lastBookingId);
         }
-        
+
         // Prioritas 3: Ambil booking terakhir user yang sedang login
         if (!$booking && Auth::check()) {
             $booking = \App\Models\Booking::with([
@@ -355,12 +355,12 @@ class PageController extends Controller
             ->latest()
             ->first();
         }
-        
+
         // Jika booking ditemukan
         if ($booking) {
             $payment = $booking->payment;
         }
-        
+
         return view('pages.payment-callback', [
             'status' => $status,
             'booking' => $booking,
@@ -377,13 +377,13 @@ class PageController extends Controller
         if ($request->has('intended')) {
             $intended = $request->get('intended');
             session(['url.intended' => $intended]);
-            
+
             // Jika intended URL mengandung #booking, set session booking_intent
             if (strpos($intended, '#booking') !== false) {
                 session(['booking_intent' => true]);
             }
         }
-        
+
         return view('pages.login');
     }
 
@@ -401,5 +401,81 @@ class PageController extends Controller
     public function refund()
     {
         return view('pages.refund');
+    }
+
+    /**
+     * Redirect untuk retry pembayaran dari notifikasi email
+     */
+    public function paymentRetry(\App\Models\Payment $payment)
+    {
+        // Pastikan user memiliki akses ke payment ini
+        if (!Auth::check() || $payment->booking->user_id !== Auth::id()) {
+            return redirect()->route('auth')
+                ->with('toast_error', 'Anda perlu login untuk mengakses halaman ini.');
+        }
+
+        // Jika payment sudah berhasil, redirect ke detail booking
+        if ($payment->payment_status === 'Paid') {
+            return redirect()->route('booking.detail', $payment->booking_id)
+                ->with('toast_success', 'Pembayaran sudah berhasil diproses.');
+        }
+
+        // Redirect ke halaman detail paket dengan intent booking untuk retry payment
+        return redirect()->route('travel-package-detail', $payment->booking->travelPackage->slug)
+            ->with('retry_payment', $payment->id)
+            ->with('toast_info', 'Silakan coba lakukan pembayaran ulang untuk booking Anda.');
+    }
+
+    /**
+     * Redirect untuk melanjutkan pembayaran dari notifikasi email
+     */
+    public function paymentContinue(\App\Models\Payment $payment)
+    {
+        // Pastikan user memiliki akses ke payment ini
+        if (!Auth::check() || $payment->booking->user_id !== Auth::id()) {
+            return redirect()->route('auth')
+                ->with('toast_error', 'Anda perlu login untuk mengakses halaman ini.');
+        }
+
+        // Jika payment sudah berhasil, redirect ke detail booking
+        if ($payment->payment_status === 'Paid') {
+            return redirect()->route('booking.detail', $payment->booking_id)
+                ->with('toast_success', 'Pembayaran sudah berhasil diproses.');
+        }
+
+        // Jika payment sudah gagal, redirect ke retry
+        if ($payment->payment_status === 'Failed') {
+            return $this->paymentRetry($payment);
+        }
+
+        // Untuk payment yang masih pending, redirect ke halaman callback untuk monitoring
+        return redirect()->route('payment-callback')
+            ->with('continue_payment', $payment->id)
+            ->with('toast_info', 'Silakan selesaikan pembayaran Anda.');
+    }
+
+    /**
+     * Display notifications page
+     */
+    public function notifications()
+    {
+        $notifications = Auth::user()->notifications()->paginate(10);
+
+        return view('pages.notifications', compact('notifications'));
+    }
+
+    /**
+     * Mark notification as read
+     */
+    public function markNotificationAsRead($notificationId)
+    {
+        $notification = Auth::user()->notifications()->find($notificationId);
+
+        if ($notification) {
+            $notification->markAsRead();
+            return response()->json(['success' => true]);
+        }
+
+        return response()->json(['success' => false], 404);
     }
 }

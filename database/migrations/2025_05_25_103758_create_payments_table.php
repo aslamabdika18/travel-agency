@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('booking_id')->constrained('bookings')->cascadeOnDelete();
-            $table->string('payment_reference')->nullable();
-            $table->string('transaction_id')->nullable(); // Menambahkan transaction_id sesuai model
+            $table->string('payment_reference')->nullable()->unique();
+            $table->string('transaction_id')->nullable()->unique(); // Menambahkan transaction_id sesuai model
             $table->date('payment_date')->nullable();
             $table->unsignedInteger('total_price');
             $table->enum('payment_status', ['Unpaid', 'Paid','Failed'])->default('Unpaid');
@@ -24,7 +24,7 @@ return new class extends Migration
             $table->json('gateway_response')->nullable();
             $table->timestamps();
             $table->softDeletes();
-            
+
             // Menambahkan indeks untuk mempercepat pencarian
             $table->index('payment_reference');
             $table->index('transaction_id');

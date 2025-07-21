@@ -58,6 +58,26 @@
         @apply fixed top-0 left-0 right-0 z-40 transition-all duration-300;
     }
     
+    /* Navbar link styles with smooth transitions */
+    .navbar-link {
+        @apply transition-colors duration-300 ease-in-out;
+    }
+    
+    /* Default navbar link colors for non-home pages */
+    .navbar-link:not(.text-primary) {
+        @apply text-secondary-dark;
+    }
+    
+    /* Home page navbar styles when at top (scroll = 0) */
+    .navbar.bg-transparent .navbar-link {
+        @apply text-primary;
+    }
+    
+    /* Scrolled navbar styles */
+    .navbar:not(.bg-transparent) .navbar-link {
+        @apply text-secondary-dark;
+    }
+    
     .user-menu .dropdown-menu {
         @apply absolute right-0 top-full z-50 min-w-48 bg-white rounded-md shadow-lg border border-neutral-dark/10 overflow-hidden origin-top-right transition-all duration-200;
     }

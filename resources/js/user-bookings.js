@@ -3,6 +3,11 @@
  */
 
 document.addEventListener('DOMContentLoaded', function() {
+    // Ensure page starts from top on load (best practice)
+    if (history.scrollRestoration) {
+        history.scrollRestoration = 'manual';
+    }
+    window.scrollTo(0, 0);
 
     // Add click effect to booking cards
     const bookingCards = document.querySelectorAll('.grid > div:not(.col-span-full)');

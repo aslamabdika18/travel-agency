@@ -1,4 +1,10 @@
 document.addEventListener('DOMContentLoaded', function() {
+    // Ensure page starts from top on load (best practice)
+    if (history.scrollRestoration) {
+        history.scrollRestoration = 'manual';
+    }
+    window.scrollTo(0, 0);
+    
     // Toggle functionality between login and register
     const authToggle = document.getElementById('authToggle');
     const authForm = document.getElementById('authForm');

@@ -1,5 +1,14 @@
 document.addEventListener('DOMContentLoaded', function() {
-
+    // Ensure page starts from top on load (best practice)
+    if (history.scrollRestoration) {
+        history.scrollRestoration = 'manual';
+    }
+    
+    // Only scroll to top if not configured to scroll to booking
+    const scrollConfig = window.travelPackageConfig || {};
+    if (!scrollConfig.shouldScrollToBooking) {
+        window.scrollTo(0, 0);
+    }
     
     // Fix animate-on-scroll elements that are already visible to prevent double-click issues
     document.querySelectorAll('.animate-on-scroll').forEach(item => {

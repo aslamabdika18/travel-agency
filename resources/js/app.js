@@ -6,6 +6,12 @@ import './toast';
  */
 
 document.addEventListener('DOMContentLoaded', function() {
+    // Ensure page starts from top on load (best practice)
+    if (history.scrollRestoration) {
+        history.scrollRestoration = 'manual';
+    }
+    window.scrollTo(0, 0);
+    
     // Animation Observer for scroll animations
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
@@ -35,20 +41,28 @@ document.addEventListener('DOMContentLoaded', function() {
     // Navbar scroll effect
     const navbar = document.getElementById('navbar');
     if (navbar) {
-        window.addEventListener('scroll', function() {
-            if (window.scrollY > 10) {
+        function updateNavbarStyle() {
+            const isHomePage = window.location.pathname === '/' || window.location.pathname === '/home';
+            const isScrolled = window.scrollY > 10;
+            
+            if (isScrolled) {
+                // Saat di-scroll: background muncul
                 navbar.classList.add('bg-neutral', 'bg-opacity-95', 'backdrop-blur-sm', 'shadow-lg', 'py-2');
                 navbar.classList.remove('bg-transparent', 'py-4');
             } else {
-                if (window.location.pathname === '/' || window.location.pathname === '/home') {
+                if (isHomePage) {
+                    // Di halaman home saat belum scroll: background transparan
                     navbar.classList.remove('bg-neutral', 'bg-opacity-95', 'backdrop-blur-sm', 'shadow-lg', 'py-2');
                     navbar.classList.add('bg-transparent', 'py-4');
                 }
+                // Di halaman lain: tetap dengan background (tidak ada perubahan)
             }
-        });
-
+        }
+        
+        window.addEventListener('scroll', updateNavbarStyle);
+        
         // Trigger scroll event on page load to set initial navbar state
-        window.dispatchEvent(new Event('scroll'));
+        updateNavbarStyle();
     }
 
     // Navbar functionality has been moved to navbar.js

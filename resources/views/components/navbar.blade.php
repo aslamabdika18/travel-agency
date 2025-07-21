@@ -1,4 +1,4 @@
-<nav class="fixed w-full top-0 z-50 transition-all duration-300 bg-neutral bg-opacity-95 backdrop-blur-sm shadow-lg py-2" id="navbar">
+<nav class="navbar fixed w-full top-0 z-50 transition-all duration-300 {{ (request()->routeIs('home') || request()->is('/')) ? 'bg-transparent py-4' : 'bg-neutral bg-opacity-95 backdrop-blur-sm shadow-lg py-2' }}" id="navbar">
     <div class="w-full mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center h-10 sm:h-12">
             <!-- Logo Section -->
@@ -11,22 +11,22 @@
 
             <!-- Desktop Navigation -->
             <div class="hidden md:flex items-center space-x-1 lg:space-x-4">
-                <a href="{{ route('home') }}" class="relative text-secondary-dark hover:text-primary px-2 lg:px-3 py-2 text-sm lg:text-base font-medium transition-all duration-200 group rounded-md hover:bg-neutral-light/50 {{ request()->routeIs('home') ? 'text-primary' : '' }}">
+                <a href="{{ route('home') }}" class="navbar-link relative hover:text-primary px-2 lg:px-3 py-2 text-sm lg:text-base font-medium transition-all duration-200 group rounded-md hover:bg-neutral-light/50 {{ request()->routeIs('home') ? 'text-primary' : '' }}">
                     Home
                     <span class="absolute bottom-0 left-1/2 w-0 h-[2px] bg-primary transition-all duration-300 ease-out transform -translate-x-1/2 group-hover:w-full {{ request()->routeIs('home') ? 'w-full' : '' }}"></span>
                 </a>
 
-                <a href="{{ route('travel-packages') }}" class="relative text-secondary-dark hover:text-primary px-2 lg:px-3 py-2 text-sm lg:text-base font-medium transition-all duration-200 group rounded-md hover:bg-neutral-light/50 {{ request()->routeIs('travel-packages') ? 'text-primary' : '' }}">
+                <a href="{{ route('travel-packages') }}" class="navbar-link relative hover:text-primary px-2 lg:px-3 py-2 text-sm lg:text-base font-medium transition-all duration-200 group rounded-md hover:bg-neutral-light/50 {{ request()->routeIs('travel-packages') ? 'text-primary' : '' }}">
                     Travel Packages
                     <span class="absolute bottom-0 left-1/2 w-0 h-[2px] bg-primary transition-all duration-300 ease-out transform -translate-x-1/2 group-hover:w-full {{ request()->routeIs('travel-packages') ? 'w-full' : '' }}"></span>
                 </a>
 
-                <a href="{{ route('about') }}" class="relative text-secondary-dark hover:text-primary px-2 lg:px-3 py-2 text-sm lg:text-base font-medium transition-all duration-200 group rounded-md hover:bg-neutral-light/50 {{ request()->routeIs('about') ? 'text-primary' : '' }}">
+                <a href="{{ route('about') }}" class="navbar-link relative hover:text-primary px-2 lg:px-3 py-2 text-sm lg:text-base font-medium transition-all duration-200 group rounded-md hover:bg-neutral-light/50 {{ request()->routeIs('about') ? 'text-primary' : '' }}">
                     About Us
                     <span class="absolute bottom-0 left-1/2 w-0 h-[2px] bg-primary transition-all duration-300 ease-out transform -translate-x-1/2 group-hover:w-full {{ request()->routeIs('about') ? 'w-full' : '' }}"></span>
                 </a>
 
-                <a href="{{ route('contact') }}" class="relative text-secondary-dark hover:text-primary px-2 lg:px-3 py-2 text-sm lg:text-base font-medium transition-all duration-200 group rounded-md hover:bg-neutral-light/50 {{ request()->routeIs('contact') ? 'text-primary' : '' }}">
+                <a href="{{ route('contact') }}" class="navbar-link relative hover:text-primary px-2 lg:px-3 py-2 text-sm lg:text-base font-medium transition-all duration-200 group rounded-md hover:bg-neutral-light/50 {{ request()->routeIs('contact') ? 'text-primary' : '' }}">
                     Contact
                     <span class="absolute bottom-0 left-1/2 w-0 h-[2px] bg-primary transition-all duration-300 ease-out transform -translate-x-1/2 group-hover:w-full {{ request()->routeIs('contact') ? 'w-full' : '' }}"></span>
                 </a>
@@ -36,7 +36,7 @@
             <div class="flex items-center">
                 @auth
                     <div class="relative user-menu hidden md:block">
-                        <button id="userMenuButton" class="flex items-center space-x-1 sm:space-x-2 text-secondary-dark hover:text-primary focus:outline-none p-1.5 rounded-md hover:bg-neutral-light/50 transition-all duration-200">
+                        <button id="userMenuButton" class="navbar-link flex items-center space-x-1 sm:space-x-2 hover:text-primary focus:outline-none p-1.5 rounded-md hover:bg-neutral-light/50 transition-all duration-200">
                             <span class="hidden sm:block text-sm lg:text-base truncate max-w-[80px] md:max-w-[120px] lg:max-w-none">{{ Auth::user()->name }}</span>
                             <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-primary-light flex items-center justify-center text-primary shadow-sm">
                                 <i class="fas fa-user text-xs sm:text-sm"></i>
@@ -44,6 +44,16 @@
                             <i class="fas fa-chevron-down text-xs transition-transform duration-200 group-hover:rotate-180"></i>
                         </button>
                         <div id="userMenu" class="dropdown-menu hidden py-1">
+                            <a href="{{ route('notifications') }}" class="block px-4 py-2.5 text-sm text-secondary-dark hover:bg-primary-light hover:text-primary transition-colors duration-200">
+                                <i class="fas fa-bell mr-2"></i> Notifikasi
+                                @php
+                                    $unreadCount = Auth::user()->unreadNotifications->count();
+                                @endphp
+                                @if($unreadCount > 0)
+                                    <span class="inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-red-600 rounded-full ml-2">{{ $unreadCount }}</span>
+                                @endif
+                            </a>
+
                             @if(Auth::user()->hasRole('customer'))
                                 <a href="{{ route('user-bookings') }}" class="block px-4 py-2.5 text-sm text-secondary-dark hover:bg-primary-light hover:text-primary transition-colors duration-200">
                                     <i class="fas fa-calendar-alt mr-2"></i> My Bookings
@@ -65,7 +75,7 @@
                 @endauth
 
                 <!-- Mobile Menu Button -->
-                <button id="mobileMenuButton" class="ml-2 xs:ml-3 sm:ml-4 md:hidden text-secondary-dark hover:text-primary focus:outline-none p-1 rounded-md hover:bg-neutral-light transition-colors duration-200">
+                <button id="mobileMenuButton" class="navbar-link ml-2 xs:ml-3 sm:ml-4 md:hidden hover:text-primary focus:outline-none p-1 rounded-md hover:bg-neutral-light transition-colors duration-200">
                     <svg class="h-6 w-6 xs:h-7 xs:w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
                     </svg>
@@ -107,6 +117,19 @@
                         <div class="text-xs font-semibold text-secondary uppercase tracking-wide mb-3 px-3 py-1 bg-neutral-light rounded-md">
                             <i class="fas fa-user mr-2"></i> {{ Auth::user()->name }}
                         </div>
+
+                        <a href="{{ route('notifications') }}" class="text-secondary-dark hover:text-primary py-2.5 px-3 text-sm font-medium flex items-center rounded-md transition-all duration-200 hover:bg-neutral-light {{ request()->routeIs('notifications') ? 'text-primary bg-neutral-light' : '' }}">
+                            <i class="fas fa-bell mr-3 w-5 text-center"></i> Notifikasi
+                            @php
+                                $unreadCount = Auth::user()->unreadNotifications->count();
+                            @endphp
+                            @if($unreadCount > 0)
+                                <span class="inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-red-600 rounded-full ml-2">{{ $unreadCount }}</span>
+                            @endif
+                            @if(request()->routeIs('notifications'))
+                                <span class="ml-2 w-1.5 h-1.5 rounded-full bg-primary"></span>
+                            @endif
+                        </a>
 
                         @if(Auth::user()->hasRole('customer'))
                             <a href="{{ route('user-bookings') }}" class="text-secondary-dark hover:text-primary py-2.5 px-3 text-sm font-medium flex items-center rounded-md transition-all duration-200 hover:bg-neutral-light {{ request()->routeIs('user-bookings') ? 'text-primary bg-neutral-light' : '' }}">

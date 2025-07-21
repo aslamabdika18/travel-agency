@@ -46,6 +46,16 @@ Route::prefix('payment')->group(function () {
     Route::get('/success', [PageController::class, 'paymentSuccess'])->name('payment-success');
     Route::get('/error', [PageController::class, 'paymentError'])->name('payment-error');
     Route::get('/callback', [PageController::class, 'paymentCallback'])->name('payment-callback');
+
+    // Route untuk retry dan continue payment dari notifikasi email
+    Route::get('/retry/{payment}', [PageController::class, 'paymentRetry'])->name('payment.retry');
+    Route::get('/continue/{payment}', [PageController::class, 'paymentContinue'])->name('payment.continue');
+});
+
+// Notifications routes
+Route::middleware('auth')->group(function () {
+    Route::get('/notifications', [PageController::class, 'notifications'])->name('notifications');
+    Route::post('/notifications/{notification}/mark-as-read', [PageController::class, 'markNotificationAsRead'])->name('notifications.mark-as-read');
 });
 
 // Rute contoh toast notification
