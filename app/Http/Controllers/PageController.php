@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use App\Helpers\InvoiceLogger;
 
 class PageController extends Controller
 {
@@ -491,5 +492,91 @@ class PageController extends Controller
         }
 
         return response()->json(['success' => false], 404);
+    }
+    
+    /**
+     * Download invoice PDF
+     */
+    public function downloadInvoice(\App\Models\Payment $payment)
+    {
+        $downloadStartTime = microtime(true);
+        
+        InvoiceLogger::logDownloadStart($payment);
+        
+        // Pastikan user memiliki akses ke payment ini
+        if (!Auth::check()) {
+            abort(401, 'Authentication required.');
+        }
+        
+        if ($payment->booking->user_id !== Auth::id()) {
+            abort(403, 'Unauthorized access to invoice.');
+        }
+        
+        // Pastikan payment sudah berhasil
+        if (!$payment->isPaid()) {
+            return redirect()->back()
+                ->with('toast_error', 'Invoice hanya tersedia untuk pembayaran yang sudah berhasil.');
+        }
+        
+        try {
+            $invoiceService = new \App\Services\InvoiceService();
+            
+            // Check service configuration
+            if (!$invoiceService->isConfigured()) {
+                return redirect()->back()
+                    ->with('toast_error', 'Layanan invoice tidak tersedia saat ini.');
+            }
+            
+            // Cek apakah invoice sudah ada
+            $existingPath = $invoiceService->getInvoiceFilePath($payment);
+            
+            if ($existingPath && \Illuminate\Support\Facades\Storage::disk('public')->exists($existingPath)) {
+                $filePath = $existingPath;
+            } else {
+                // Generate invoice baru jika belum ada
+                $filePath = $invoiceService->generateInvoicePdf($payment);
+            }
+            
+            if (!$filePath) {
+                return redirect()->back()
+                    ->with('toast_error', 'Gagal menggenerate invoice PDF.');
+            }
+            
+            if (!\Illuminate\Support\Facades\Storage::disk('public')->exists($filePath)) {
+                return redirect()->back()
+                    ->with('toast_error', 'File invoice tidak ditemukan.');
+            }
+            
+            $fullPath = \Illuminate\Support\Facades\Storage::disk('public')->path($filePath);
+            $fileName = 'Invoice-' . $payment->booking->booking_reference . '.pdf';
+            $fileSize = \Illuminate\Support\Facades\Storage::disk('public')->size($filePath);
+            
+            // Verify physical file exists
+            if (!file_exists($fullPath)) {
+                return redirect()->back()
+                    ->with('toast_error', 'File invoice tidak dapat diakses.');
+            }
+            
+            // Check file size
+            if ($fileSize === 0) {
+                return redirect()->back()
+                    ->with('toast_error', 'File invoice kosong atau rusak.');
+            }
+            
+            $downloadEndTime = microtime(true);
+            $duration = $downloadEndTime - $downloadStartTime;
+            
+            InvoiceLogger::logDownloadSuccess($payment, $fullPath, $duration);
+            
+            return response()->download($fullPath, $fileName, [
+                'Content-Type' => 'application/pdf',
+            ]);
+            
+        } catch (\Exception $e) {
+            InvoiceLogger::logDownloadError($payment, $e);
+            
+            return redirect()->back()
+                ->with('toast_error', 'Terjadi kesalahan saat mengunduh invoice.');
+        }
     }
 }

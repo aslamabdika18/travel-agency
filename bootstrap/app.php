@@ -28,6 +28,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'environment' => \App\Http\Middleware\EnvironmentMiddleware::class,
             'midtrans.webhook' => \App\Http\Middleware\MidtransWebhookMiddleware::class,
+            'invoice.logger' => \App\Http\Middleware\InvoiceActivityLogger::class,
         ]);
         
         // Configure authentication redirect

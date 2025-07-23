@@ -49,6 +49,9 @@ Route::prefix('payment')->group(function () {
     // Route untuk retry dan continue payment dari notifikasi email
     Route::get('/retry/{payment}', [PageController::class, 'paymentRetry'])->name('payment.retry');
     Route::get('/continue/{payment}', [PageController::class, 'paymentContinue'])->name('payment.continue');
+    
+    // Route untuk download invoice PDF
+    Route::middleware(['auth', 'invoice.logger'])->get('/invoice/{payment}', [PageController::class, 'downloadInvoice'])->name('payment.invoice');
 });
 
 // Notifications routes

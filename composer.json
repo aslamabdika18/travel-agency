@@ -7,6 +7,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.3",
+        "barryvdh/laravel-dompdf": "^3.1",
         "bezhansalleh/filament-shield": "^3.3",
         "dedoc/scramble": "^0.12.23",
         "filament/filament": "^3.3",
@@ -64,6 +65,14 @@
             "@php artisan migrate:fresh --seed",
             "@php artisan shield:super-admin --user=1",
             "@php artisan shield:generate --all --panel=admin"
+        ],
+        "clear": [
+            "@php artisan config:clear",
+            "@php artisan cache:clear",
+            "@php artisan route:clear",
+            "@php artisan view:clear",
+            "@php artisan optimize:clear",
+            "@php artisan optimize"
         ],
         "dev": [
             "Composer\\Config::disableProcessTimeout",

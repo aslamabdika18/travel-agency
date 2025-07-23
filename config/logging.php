@@ -127,6 +127,30 @@ return [
             'path' => storage_path('logs/laravel.log'),
         ],
 
+        'invoice' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/invoice.log'),
+            'level' => env('INVOICE_LOG_LEVEL', 'info'),
+            'days' => env('INVOICE_LOG_DAYS', 30),
+            'replace_placeholders' => true,
+        ],
+
+        'invoice_errors' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/invoice-errors.log'),
+            'level' => 'error',
+            'days' => env('INVOICE_ERROR_LOG_DAYS', 60),
+            'replace_placeholders' => true,
+        ],
+
+        'invoice_performance' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/invoice-performance.log'),
+            'level' => 'info',
+            'days' => env('INVOICE_PERFORMANCE_LOG_DAYS', 14),
+            'replace_placeholders' => true,
+        ],
+
     ],
 
 ];
