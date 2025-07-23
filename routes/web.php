@@ -43,7 +43,6 @@ Route::middleware('auth')->group(function () {
 
 // Rute pembayaran
 Route::prefix('payment')->group(function () {
-    Route::get('/success', [PageController::class, 'paymentSuccess'])->name('payment-success');
     Route::get('/error', [PageController::class, 'paymentError'])->name('payment-error');
     Route::get('/callback', [PageController::class, 'paymentCallback'])->name('payment-callback');
 

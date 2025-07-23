@@ -124,6 +124,15 @@ class MidtransService
             // Nonaktifkan SSL verification untuk development
             CURLOPT_SSL_VERIFYPEER => false,
             CURLOPT_SSL_VERIFYHOST => false,
+            // Tambahkan DNS resolver untuk mengatasi masalah DNS
+            CURLOPT_DNS_SERVERS => '8.8.8.8,8.8.4.4',
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_CONNECTTIMEOUT => 10,
+            // Fallback jika DNS gagal
+            CURLOPT_RESOLVE => [
+                'app.sandbox.midtrans.com:443:147.139.240.90',
+                'app.sandbox.midtrans.com:443:147.139.179.86'
+            ],
         ]);
 
         $result = curl_exec($ch);
@@ -259,8 +268,8 @@ class MidtransService
                 'booking_id' => $bookingId
             ]);
 
-            // Cari payment berdasarkan booking_id terlebih dahulu
-            $payment = Payment::where('booking_id', $bookingId)->first();
+            // Cari payment dengan eager loading booking untuk menghindari query N+1
+            $payment = Payment::with('booking.user')->where('booking_id', $bookingId)->first();
 
             if (!$payment) {
                 Log::error('Payment not found for booking', [
@@ -270,17 +279,31 @@ class MidtransService
                 throw new Exception('Payment not found for order: ' . $orderId);
             }
 
-            // Update gateway_transaction_id jika belum ada atau berbeda
+            // Update gateway_transaction_id dan transaction_id jika belum ada atau berbeda
+            $updateData = [];
+            
             if (!$payment->gateway_transaction_id || $payment->gateway_transaction_id !== $orderId) {
-                Log::info('Updating gateway_transaction_id', [
+                $updateData['gateway_transaction_id'] = $orderId;
+            }
+            
+            // Update transaction_id dengan transaction_id dari Midtrans jika ada
+            if (isset($notification->transaction_id) && $notification->transaction_id) {
+                if (!$payment->transaction_id || $payment->transaction_id !== $notification->transaction_id) {
+                    $updateData['transaction_id'] = $notification->transaction_id;
+                }
+            }
+            
+            if (!empty($updateData)) {
+                Log::info('Updating payment transaction IDs', [
                     'payment_id' => $payment->id,
-                    'old_transaction_id' => $payment->gateway_transaction_id,
-                    'new_transaction_id' => $orderId
+                    'old_gateway_transaction_id' => $payment->gateway_transaction_id,
+                    'new_gateway_transaction_id' => $orderId,
+                    'old_transaction_id' => $payment->transaction_id,
+                    'new_transaction_id' => $notification->transaction_id ?? null,
+                    'update_data' => $updateData
                 ]);
                 
-                $payment->update([
-                    'gateway_transaction_id' => $orderId
-                ]);
+                $payment->update($updateData);
             }
 
             // Update payment status based on transaction status
@@ -303,6 +326,8 @@ class MidtransService
         }
     }
 
+
+
     /**
      * Mendapatkan status transaksi dari Midtrans sesuai dokumentasi resmi
      */
@@ -320,7 +345,7 @@ class MidtransService
     /**
      * Update payment status based on Midtrans transaction status sesuai dokumentasi resmi
      */
-    private function updatePaymentStatus(Payment $payment, string $transactionStatus, ?string $fraudStatus, array $notification): void
+    public function updatePaymentStatus(Payment $payment, string $transactionStatus, ?string $fraudStatus, array $notification): void
     {
         // Log notification untuk debugging
         Log::info('Processing Midtrans notification', [
@@ -391,7 +416,7 @@ class MidtransService
 
             case 'pending':
                 $payment->update([
-                    'payment_status' => 'Unpaid',
+                    'payment_status' => 'unpaid',
                     'gateway_status' => 'pending'
                 ]);
                 Log::info('Payment status updated to pending', [
@@ -447,7 +472,18 @@ class MidtransService
     private function sendPaymentNotification(Payment $payment, string $status, ?string $reason = null): void
     {
         try {
-            $user = $payment->booking->user;
+            // Optimasi: gunakan relasi yang sudah dimuat untuk menghindari query N+1
+            $booking = $payment->relationLoaded('booking') ? $payment->getRelation('booking') : $payment->booking;
+            
+            if (!$booking) {
+                Log::warning('Booking not found for payment notification', [
+                    'payment_id' => $payment->id,
+                    'booking_id' => $payment->booking_id
+                ]);
+                return;
+            }
+            
+            $user = $booking->relationLoaded('user') ? $booking->getRelation('user') : $booking->user;
 
             if (!$user) {
                 Log::warning('User not found for payment notification', [

@@ -161,7 +161,7 @@ class EnvironmentMiddleware
             'X-Frame-Options' => 'DENY',
             'X-XSS-Protection' => '1; mode=block',
             'Referrer-Policy' => 'strict-origin-when-cross-origin',
-            'Content-Security-Policy' => "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' https:; connect-src 'self' https:;",
+            'Content-Security-Policy' => "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://snap-assets.al-pc-id-b.cdn.gtflabs.io https://snap-assets.al-pc-id-s.cdn.gtflabs.io https://api.sandbox.midtrans.com https://pay.google.com https://js-agent.newrelic.com https://bam.nr-data.net; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' https:; connect-src 'self' https:;",
         ];
         
         foreach ($headers as $name => $value) {
@@ -178,6 +178,9 @@ class EnvironmentMiddleware
         $response->headers->set('Access-Control-Allow-Origin', '*');
         $response->headers->set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
         $response->headers->set('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
+        
+        // Add permissive CSP for development to allow Midtrans scripts
+        $response->headers->set('Content-Security-Policy', "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https: http:; style-src 'self' 'unsafe-inline' https: http:; img-src 'self' data: https: http:; font-src 'self' https: http:; connect-src 'self' https: http:; frame-src 'self' https: http:;");
         
         // Add development indicator
         $response->headers->set('X-Debug-Mode', 'enabled');

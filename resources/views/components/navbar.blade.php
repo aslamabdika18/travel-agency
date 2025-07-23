@@ -44,7 +44,7 @@
                             <i class="fas fa-chevron-down text-xs transition-transform duration-200 group-hover:rotate-180"></i>
                         </button>
                         <div id="userMenu" class="dropdown-menu hidden py-1">
-                            <a href="{{ route('notifications') }}" class="block px-4 py-2.5 text-sm text-secondary-dark hover:bg-primary-light hover:text-primary transition-colors duration-200">
+                            {{-- <a href="{{ route('notifications') }}" class="block px-4 py-2.5 text-sm text-secondary-dark hover:bg-primary-light hover:text-primary transition-colors duration-200">
                                 <i class="fas fa-bell mr-2"></i> Notifikasi
                                 @php
                                     $unreadCount = Auth::user()->unreadNotifications->count();
@@ -52,7 +52,7 @@
                                 @if($unreadCount > 0)
                                     <span class="inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-red-600 rounded-full ml-2">{{ $unreadCount }}</span>
                                 @endif
-                            </a>
+                            </a> --}}
 
                             @if(Auth::user()->hasRole('customer'))
                                 <a href="{{ route('user-bookings') }}" class="block px-4 py-2.5 text-sm text-secondary-dark hover:bg-primary-light hover:text-primary transition-colors duration-200">
@@ -118,7 +118,7 @@
                             <i class="fas fa-user mr-2"></i> {{ Auth::user()->name }}
                         </div>
 
-                        <a href="{{ route('notifications') }}" class="text-secondary-dark hover:text-primary py-2.5 px-3 text-sm font-medium flex items-center rounded-md transition-all duration-200 hover:bg-neutral-light {{ request()->routeIs('notifications') ? 'text-primary bg-neutral-light' : '' }}">
+                        {{-- <a href="{{ route('notifications') }}" class="text-secondary-dark hover:text-primary py-2.5 px-3 text-sm font-medium flex items-center rounded-md transition-all duration-200 hover:bg-neutral-light {{ request()->routeIs('notifications') ? 'text-primary bg-neutral-light' : '' }}">
                             <i class="fas fa-bell mr-3 w-5 text-center"></i> Notifikasi
                             @php
                                 $unreadCount = Auth::user()->unreadNotifications->count();
@@ -129,7 +129,7 @@
                             @if(request()->routeIs('notifications'))
                                 <span class="ml-2 w-1.5 h-1.5 rounded-full bg-primary"></span>
                             @endif
-                        </a>
+                        </a> --}}
 
                         @if(Auth::user()->hasRole('customer'))
                             <a href="{{ route('user-bookings') }}" class="text-secondary-dark hover:text-primary py-2.5 px-3 text-sm font-medium flex items-center rounded-md transition-all duration-200 hover:bg-neutral-light {{ request()->routeIs('user-bookings') ? 'text-primary bg-neutral-light' : '' }}">

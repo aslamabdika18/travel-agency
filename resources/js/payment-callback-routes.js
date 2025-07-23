@@ -1,8 +1,17 @@
-// Define routes for the payment callback JavaScript
+/**
+ * Payment Callback Routes Configuration
+ * 
+ * File ini berisi konfigurasi rute untuk callback pembayaran
+ * yang diperlukan oleh payment-callback-handler.js
+ */
+
+// Tunggu sampai DOM siap
 document.addEventListener('DOMContentLoaded', function() {
-    // Make routes available globally
+    // Definisikan rute global untuk callback pembayaran
     window.paymentCallbackRoutes = {
-        success: typeof paymentSuccessRoute !== 'undefined' ? paymentSuccessRoute : '/payment/success',
-        error: typeof paymentErrorRoute !== 'undefined' ? paymentErrorRoute : '/payment/error'
+        success: '/payment/success',
+        error: '/payment/error'
     };
+    
+    console.log('Payment callback routes initialized:', window.paymentCallbackRoutes);
 });

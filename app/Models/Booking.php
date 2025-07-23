@@ -86,14 +86,14 @@ class Booking extends Model
      * @param int $personCount
      * @return void
      */
-    public function calculatePricing(int $personCount = null): void
+    public function calculatePricing(): void
     {
         try {
             // Pastikan relasi travelPackage dimuat
             if (!$this->relationLoaded('travelPackage') && $this->travel_package_id) {
                 $this->load('travelPackage');
             }
-            
+
             if (!$this->travelPackage) {
                 // Coba ambil langsung dari database
                 $travelPackage = \App\Models\TravelPackage::find($this->travel_package_id);
@@ -200,7 +200,7 @@ class Booking extends Model
         $totalPrice = is_numeric($this->total_price) ? (float)$this->total_price : 0;
         $basePrice = is_numeric($this->base_price) ? (float)$this->base_price : 0;
         $additionalPrice = is_numeric($this->additional_price) ? (float)$this->additional_price : 0;
-        
+
         if ($additionalPrice > 0) {
             $extraPersons = $this->person_count - ($this->travelPackage->base_person_count ?? 0);
             return sprintf(
@@ -222,6 +222,12 @@ class Booking extends Model
      */
     public function hasPayment(): bool
     {
+        // Jika relasi payment sudah dimuat, gunakan itu untuk menghindari query database
+        if ($this->relationLoaded('payment')) {
+            return $this->getRelation('payment') !== null;
+        }
+
+        // Jika belum dimuat, lakukan query
         return $this->payment()->exists();
     }
 
@@ -232,6 +238,13 @@ class Booking extends Model
      */
     public function isPaid(): bool
     {
+        // Optimasi: gunakan relasi yang sudah dimuat jika tersedia
+        if ($this->relationLoaded('payment')) {
+            $payment = $this->getRelation('payment');
+            return $payment && $payment->isPaid();
+        }
+
+        // Fallback: akses payment dengan lazy loading
         return $this->payment && $this->payment->isPaid();
     }
 
@@ -242,6 +255,13 @@ class Booking extends Model
      */
     public function isPaymentPending(): bool
     {
+        // Optimasi: gunakan relasi yang sudah dimuat jika tersedia
+        if ($this->relationLoaded('payment')) {
+            $payment = $this->getRelation('payment');
+            return $payment && $payment->isPending();
+        }
+
+        // Fallback: akses payment dengan lazy loading
         return $this->payment && $this->payment->isPending();
     }
 
@@ -262,6 +282,13 @@ class Booking extends Model
      */
     public function getPaymentStatus(): string
     {
+        // Optimasi: gunakan relasi yang sudah dimuat jika tersedia
+        if ($this->relationLoaded('payment')) {
+            $payment = $this->getRelation('payment');
+            return $payment ? $payment->payment_status : 'Not Created';
+        }
+
+        // Fallback: load payment jika belum dimuat
         if (!$this->hasPayment()) {
             return 'Not Created';
         }
@@ -340,7 +367,7 @@ class Booking extends Model
                     return $travelPackage;
                 }
             }
-            
+
             // Jika belum dimuat atau null, coba ambil langsung dari database
             if ($this->travel_package_id) {
                 // Simpan hasil query ke relasi agar tidak perlu query lagi
@@ -350,7 +377,7 @@ class Booking extends Model
                     return $travelPackage;
                 }
             }
-            
+
             // Jika masih null, kembalikan null
             return null;
         } catch (\Exception $e) {
@@ -411,7 +438,7 @@ class Booking extends Model
 
         // Calculate days until departure
         $daysUntilDeparture = now()->diffInDays($this->booking_date, false);
-        
+
         // Can refund if departure is in the future
         return $daysUntilDeparture > 0;
     }
@@ -449,7 +476,7 @@ class Booking extends Model
     public function calculateRefundAmount(): float
     {
         $refundPercentage = $this->getRefundPercentage();
-        
+
         if ($refundPercentage === 0) {
             return 0;
         }
@@ -530,7 +557,7 @@ class Booking extends Model
         }
 
         $refundAmount = $this->calculateRefundAmount();
-        
+
         if ($refundAmount <= 0) {
             return [
                 'success' => false,

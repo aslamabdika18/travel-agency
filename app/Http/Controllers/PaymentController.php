@@ -138,7 +138,7 @@ class PaymentController extends Controller
         
         // Validasi format order_id
         $orderId = $request->input('order_id');
-        if (!preg_match('/^BOOK-\d+-\d+$/', $orderId)) {
+        if (!preg_match('/^BOOKING-\d+-\d+$/', $orderId)) {
             throw new \Exception("Invalid order_id format: {$orderId}");
         }
     }
@@ -382,17 +382,17 @@ class PaymentController extends Controller
                 ], 400);
             }
             
-            // Ekstrak booking_id dari order_id jika format adalah 'BOOK-{id}-{timestamp}'
+            // Ekstrak booking_id dari order_id jika format adalah 'BOOKING-{id}-{timestamp}'
             $bookingId = $orderId;
-            if (strpos($orderId, 'BOOK-') === 0) {
+            if (strpos($orderId, 'BOOKING-') === 0) {
                 $parts = explode('-', $orderId);
-                if (count($parts) >= 2) {
+                if (count($parts) >= 3) {
                     $bookingId = $parts[1];
                 }
             }
             
-            // Cari booking tanpa memeriksa user_id untuk callback Midtrans
-            $booking = Booking::where('id', $bookingId)->first();
+            // Cari booking dengan eager loading untuk menghindari query N+1
+            $booking = Booking::with('payment')->where('id', $bookingId)->first();
                 
             if (!$booking) {
                 return response()->json([

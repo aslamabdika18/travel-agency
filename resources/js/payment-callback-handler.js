@@ -5,6 +5,8 @@
  * dan mengecek status pembayaran melalui API.
  */
 
+console.log('🔄 Payment Callback Handler loaded successfully');
+
 // Variabel global untuk order ID dan status transaksi
 let globalOrderId = null;
 let globalTransactionStatus = null;
@@ -12,11 +14,7 @@ let retryCount = 0;
 const maxRetries = 3;
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Ensure page starts from top on load (best practice)
-    if (history.scrollRestoration) {
-        history.scrollRestoration = 'manual';
-    }
-    window.scrollTo(0, 0);
+    console.log('Payment callback handler loaded - redirecting immediately');
     
     // Ambil order_id dan transaction_status dari URL jika ada
     const urlParams = new URLSearchParams(window.location.search);
@@ -27,209 +25,43 @@ document.addEventListener('DOMContentLoaded', function() {
     globalOrderId = orderId;
     globalTransactionStatus = transactionStatus;
 
-    // Log untuk debugging
-
-    // Log semua parameter URL untuk debugging
-
-
     // Periksa apakah parameter yang diperlukan ada
     if (!orderId) {
-
-
         // Coba cari parameter lain yang mungkin berisi order ID
         const possibleOrderIdParams = ['order_id', 'orderId', 'id', 'booking_id'];
         for (const param of possibleOrderIdParams) {
             const value = urlParams.get(param);
             if (value) {
-
+                globalOrderId = value;
+                break;
             }
         }
     }
 
-    // Elemen UI
-    const progressBar = document.querySelector('.progress-bar');
-    const progressText = document.querySelector('.progress-text');
-
-    // Langkah-langkah progress
-    const progressSteps = [
-        { width: '20%', text: 'Menghubungkan ke gateway pembayaran...' },
-        { width: '40%', text: 'Memeriksa status transaksi...' },
-        { width: '60%', text: 'Memverifikasi pembayaran...' },
-        { width: '80%', text: 'Mengonfirmasi booking...' },
-        { width: '100%', text: 'Pembayaran dikonfirmasi! Mengalihkan...' }
-    ];
-
-    let currentStep = 0;
-
-    // Fungsi untuk memperbarui progress
-    function updateProgress() {
-        if (currentStep < progressSteps.length) {
-            const step = progressSteps[currentStep];
-
-
-            progressBar.style.width = step.width;
-            progressText.textContent = step.text;
-
-            // Tambahkan animasi smooth untuk progress bar
-            progressBar.style.transition = 'width 0.5s ease-in-out';
-
-            currentStep++;
-        } else {
-
-            clearInterval(progressInterval);
-            checkPaymentStatus();
-        }
+    // Jika status pembayaran sudah berhasil dari URL, langsung redirect
+    if (transactionStatus === 'capture' || transactionStatus === 'settlement') {
+        console.log('Payment successful from URL params, redirecting immediately to dashboard');
+        window.location.href = '/user/bookings';
+        return;
     }
 
-    // Mulai pembaruan progress
-    updateProgress();
-    const progressInterval = setInterval(function() {
-        if (currentStep < progressSteps.length - 1) { // Jangan update ke langkah terakhir secara otomatis
-            updateProgress();
-        } else {
-            clearInterval(progressInterval);
-        }
-    }, 1500);
-
-    // Fungsi untuk menampilkan detail pembayaran
-    function displayPaymentDetails(data) {
+    // Langsung cek status pembayaran tanpa menampilkan UI
+    checkPaymentStatusAndRedirect();
 
 
-        // Buat container untuk detail pembayaran
-        const detailsContainer = document.createElement('div');
-        detailsContainer.className = 'mt-8 p-4 bg-white border border-gray-200 rounded-md shadow-sm';
 
-        // Siapkan data yang akan ditampilkan
-        const payment = data.payment || {};
-        const booking = data.booking || {};
-
-        // Format tanggal jika ada
-        const formatDate = (dateString) => {
-            if (!dateString) return '-';
-            const date = new Date(dateString);
-            return date.toLocaleString('id-ID', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit'
-            });
-        };
-
-        // Tentukan status pembayaran berdasarkan dokumentasi Midtrans
-        let statusText = 'Menunggu Pembayaran';
-        let statusClass = 'text-yellow-600 bg-yellow-50';
-        let statusMessage = 'Pembayaran sedang diproses, mohon tunggu...';
-
-        // Status berhasil: settlement, capture (dengan fraud accept atau null)
-        if (payment.status === 'Paid' ||
-            payment.gateway_status === 'settlement' ||
-            payment.gateway_status === 'capture') {
-            statusText = 'Pembayaran Berhasil';
-            statusClass = 'text-green-600 bg-green-50';
-            statusMessage = 'Pembayaran Anda telah berhasil diproses. Booking dikonfirmasi!';
-        }
-        // Status pending: pending, challenge
-        else if (payment.status === 'Unpaid' ||
-                 payment.gateway_status === 'pending' ||
-                 payment.gateway_status === 'challenge') {
-            statusText = 'Menunggu Pembayaran';
-            statusClass = 'text-yellow-600 bg-yellow-50';
-            if (payment.gateway_status === 'challenge') {
-                statusMessage = 'Pembayaran sedang dalam proses verifikasi keamanan.';
-            } else {
-                statusMessage = 'Silakan selesaikan pembayaran Anda dalam waktu yang ditentukan.';
-            }
-        }
-        // Status gagal: deny, cancel, expire, failure
-        else if (payment.status === 'Failed' ||
-                 payment.gateway_status === 'deny' ||
-                 payment.gateway_status === 'cancel' ||
-                 payment.gateway_status === 'expire' ||
-                 payment.gateway_status === 'failure') {
-            statusText = 'Pembayaran Gagal';
-            statusClass = 'text-red-600 bg-red-50';
-
-            // Pesan spesifik berdasarkan alasan kegagalan
-            switch (payment.gateway_status) {
-                case 'deny':
-                    statusMessage = 'Pembayaran ditolak oleh bank atau sistem keamanan.';
-                    break;
-                case 'cancel':
-                    statusMessage = 'Transaksi dibatalkan.';
-                    break;
-                case 'expire':
-                    statusMessage = 'Waktu pembayaran telah habis.';
-                    break;
-                case 'failure':
-                    statusMessage = 'Terjadi kesalahan sistem saat memproses pembayaran.';
-                    break;
-                default:
-                    statusMessage = 'Pembayaran tidak dapat diproses.';
-            }
-        }
-
-        // Buat HTML untuk detail pembayaran
-        detailsContainer.innerHTML = `
-            <h3 class="text-lg font-semibold mb-4">Detail Pembayaran</h3>
-
-            <div class="flex justify-between items-center mb-4">
-                <span class="text-gray-600">Status:</span>
-                <span class="px-3 py-1 rounded-full ${statusClass} font-medium">${statusText}</span>
-            </div>
-
-            <div class="mb-4 p-3 rounded-lg ${statusClass.replace('text-', 'border-').replace('bg-', 'bg-opacity-20 border-')}">
-                <p class="text-sm ${statusClass.split(' ')[0]}">${statusMessage}</p>
-            </div>
-
-            <div class="grid grid-cols-1 gap-3 text-sm">
-                <div class="flex justify-between py-2 border-b border-gray-100">
-                    <span class="text-gray-600">ID Booking:</span>
-                    <span class="font-medium">${booking.id || payment.booking_id || '-'}</span>
-                </div>
-
-                <div class="flex justify-between py-2 border-b border-gray-100">
-                    <span class="text-gray-600">Jumlah:</span>
-                    <span class="font-medium">Rp ${new Intl.NumberFormat('id-ID').format(payment.total_price || 0)}</span>
-                </div>
-
-                <div class="flex justify-between py-2 border-b border-gray-100">
-                    <span class="text-gray-600">Waktu Pembayaran:</span>
-                    <span class="font-medium">${formatDate(payment.payment_date || payment.paid_at)}</span>
-                </div>
-
-                <div class="flex justify-between py-2 border-b border-gray-100">
-                    <span class="text-gray-600">ID Transaksi:</span>
-                    <span class="font-medium">${payment.transaction_id || globalOrderId || '-'}</span>
-                </div>
-
-                ${payment.gateway_status ? `
-                <div class="flex justify-between py-2 border-b border-gray-100">
-                    <span class="text-gray-600">Status Gateway:</span>
-                    <span class="font-medium">${payment.gateway_status}</span>
-                </div>
-                ` : ''}
-            </div>
-
-            <div class="mt-4 text-sm text-gray-500">
-                <p>Anda akan dialihkan dalam beberapa detik...</p>
-            </div>
-        `;
-
-        // Tambahkan ke halaman
-        const container = document.querySelector('.progress-bar').closest('div').parentNode;
-        container.appendChild(detailsContainer);
-    }
-
-    // Fungsi untuk memeriksa status pembayaran
-    async function checkPaymentStatus() {
+    // Fungsi untuk memeriksa status pembayaran dan langsung redirect
+    async function checkPaymentStatusAndRedirect() {
+        console.log('=== checkPaymentStatusAndRedirect function called ===');
+        console.log('Current URL:', window.location.href);
+        console.log('Global variables:', { globalOrderId, globalTransactionStatus });
+        
         try {
             // Jika tidak ada orderId, coba cari dari parameter lain atau gunakan fallback
             let orderIdToUse = globalOrderId;
+            console.log('Initial orderIdToUse:', orderIdToUse);
 
             if (!orderIdToUse) {
-
-
                 // Coba cari dari parameter lain
                 const urlParams = new URLSearchParams(window.location.search);
                 const possibleOrderIdParams = ['order_id', 'orderId', 'id', 'booking_id', 'transaction_id'];
@@ -237,9 +69,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 for (const param of possibleOrderIdParams) {
                     const value = urlParams.get(param);
                     if (value) {
-                        console.log(`Found order_id from parameter ${param}:`, value);
                         orderIdToUse = value;
-                        globalOrderId = value; // Update global variable
+                        globalOrderId = value;
                         break;
                     }
                 }
@@ -250,24 +81,24 @@ document.addEventListener('DOMContentLoaded', function() {
                     const lastPart = pathParts[pathParts.length - 1];
 
                     if (lastPart && lastPart !== 'callback') {
-
                         orderIdToUse = lastPart;
-                        globalOrderId = lastPart; // Update global variable
+                        globalOrderId = lastPart;
                     }
                 }
 
-                // Jika masih tidak ada, kita tidak bisa melanjutkan
+                // Jika masih tidak ada, langsung redirect ke dashboard
                 if (!orderIdToUse) {
-
-                    handleError('Order ID tidak ditemukan dalam URL');
+                    console.log('Order ID tidak ditemukan, redirect ke dashboard');
+                    window.location.href = '/user/bookings';
                     return;
                 }
             }
 
-
-
             // Panggil API untuk memeriksa status pembayaran
-            const response = await fetch(`/api/payment/status?order_id=${orderIdToUse}`, {
+            const apiUrl = `/api/payment/status?order_id=${orderIdToUse}`;
+            console.log('Making API call to:', apiUrl);
+            
+            const response = await fetch(apiUrl, {
                 method: 'GET',
                 headers: {
                     'Accept': 'application/json',
@@ -275,138 +106,79 @@ document.addEventListener('DOMContentLoaded', function() {
                 },
                 credentials: 'same-origin'
             });
+            
+            console.log('API response status:', response.status, response.statusText);
 
-            // Tambahkan timeout untuk menghindari permintaan yang terlalu lama
-            const timeoutPromise = new Promise((_, reject) => {
-                setTimeout(() => reject(new Error('Permintaan API timeout setelah 10 detik')), 10000);
-            });
-
-            // Gunakan Promise.race untuk menerapkan timeout
-            const responseWithTimeout = await Promise.race([
-                response,
-                timeoutPromise
-            ]);
-
-
-
-            if (!responseWithTimeout.ok) {
-                throw new Error(`HTTP error! status: ${responseWithTimeout.status}`);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
             }
 
-            const data = await responseWithTimeout.json();
+            const data = await response.json();
+            console.log('API response data:', JSON.stringify(data, null, 2));
 
             // Validasi data respons
             if (!data) {
                 throw new Error('Respons API tidak berisi data');
             }
 
+            // Redirect berdasarkan status pembayaran - LANGSUNG tanpa delay
+            if (data.success && data.data && data.data.payment) {
+                const payment = data.data.payment;
+                const booking = data.data.booking;
 
-            // Perbarui ke langkah terakhir
-            progressBar.style.width = progressSteps[progressSteps.length - 1].width;
-            progressText.textContent = progressSteps[progressSteps.length - 1].text;
+                console.log('Payment status check:', {
+                    status: payment.status,
+                    gateway_status: payment.gateway_status,
+                    payment_id: payment.id,
+                    booking_id: booking ? booking.id : 'N/A'
+                });
 
-            // Tampilkan detail pembayaran jika tersedia
-            if (data.success && data.data) {
-                displayPaymentDetails(data.data);
+                // Status berhasil: payment_status 'Paid' atau gateway_status 'capture'/'settlement'
+                if (payment.status === 'Paid' || 
+                    payment.gateway_status === 'capture' || 
+                    payment.gateway_status === 'settlement') {
+                    console.log('Payment confirmed, redirecting to user bookings');
+                    window.location.href = '/user/bookings';
+                    return;
+                }
+                // Status gagal: jika payment_status adalah 'Failed'
+                else if (payment.status === 'Failed' ||
+                         payment.gateway_status === 'deny' ||
+                         payment.gateway_status === 'cancel' ||
+                         payment.gateway_status === 'expire' ||
+                         payment.gateway_status === 'failure') {
+                    console.log('Payment failed, redirecting to error page');
+                    const errorUrl = window.paymentCallbackRoutes?.error || '/payment/error';
+                    window.location.href = `${errorUrl}?order_id=${orderIdToUse}`;
+                    return;
+                }
+                // Status pending atau unpaid: redirect ke dashboard dengan pesan
+                else {
+                    console.log('Payment pending/unpaid, redirecting to dashboard');
+                    window.location.href = '/user/bookings';
+                    return;
+                }
+            } 
+            // Fallback: cek payment_status dari data.data langsung
+            else if (data.success && data.data && data.data.payment_status === 'Paid') {
+                console.log('Payment confirmed (legacy), redirecting to user bookings');
+                window.location.href = '/user/bookings';
+                return;
+            } 
+            // Jika tidak ada data payment yang valid, redirect ke dashboard
+            else {
+                console.log('No valid payment data found, redirecting to dashboard');
+                window.location.href = '/user/bookings';
+                return;
             }
 
-            // Tunggu sebentar sebelum redirect
-            setTimeout(() => {
-                // Redirect berdasarkan status pembayaran
-                if (data.success && data.data && data.data.payment) {
-                    const payment = data.data.payment;
-                    const booking = data.data.booking;
-
-                    console.log('Payment status check:', {
-                        status: payment.status,
-                        gateway_status: payment.gateway_status
-                    });
-
-                    // Status berhasil: hanya jika payment_status adalah 'Paid'
-                    if (payment.status === 'Paid') {
-                        console.log('Redirecting to success page - payment confirmed as Paid');
-                        window.location.href = `/payment/success?order_id=${orderIdToUse}`;
-                    }
-                    // Status gagal: jika payment_status adalah 'Failed'
-                    else if (payment.status === 'Failed') {
-                        console.log('Redirecting to error page - payment status is Failed');
-                        window.location.href = `/payment/error?order_id=${orderIdToUse}`;
-                    }
-                    // Status pending atau unpaid: tetap di halaman callback untuk monitoring
-                    else if (payment.status === 'Unpaid' || payment.status === 'pending') {
-                        console.log('Payment masih pending/unpaid, menampilkan status kepada user');
-                        // Bisa tambahkan auto-refresh setelah beberapa detik untuk cek ulang
-                        setTimeout(() => {
-                            console.log('Auto-refreshing to check payment status again...');
-                            checkPaymentStatus();
-                        }, 5000);
-                    }
-                    // Status lainnya
-                    else {
-                        console.log('Unknown payment status:', payment.status);
-                        console.log('Gateway status:', payment.gateway_status);
-                        // Untuk status yang tidak dikenal, tetap di halaman callback
-                    }
-                } else if (data.success && data.data && data.data.payment_status === 'paid') {
-                    console.log('Redirecting to success page - legacy check');
-                    window.location.href = window.paymentCallbackRoutes.success;
-                } else {
-                    console.log('Redirecting to error page - no valid payment data');
-                    window.location.href = window.paymentCallbackRoutes.error;
-                }
-            }, 1500);
-
         } catch (error) {
-
-            handleError('Terjadi kesalahan saat memeriksa status pembayaran: ' + error.message);
+            console.log('Error checking payment status:', error.message);
+            // Jika ada error, langsung redirect ke dashboard
+            window.location.href = '/user/bookings';
         }
     }
 
-    // Fungsi untuk menangani error
-    function handleError(message) {
-        clearInterval(progressInterval);
-        const errorMessage = message || 'Terjadi kesalahan saat memproses pembayaran';
-
-
-
-        // Update UI
-        progressText.textContent = errorMessage;
-        progressText.classList.add('text-red-600');
-        progressBar.classList.remove('bg-blue-600');
-        progressBar.classList.add('bg-red-600');
-
-        // Tambahkan pesan error tambahan di halaman
-        const errorContainer = document.createElement('div');
-        errorContainer.className = 'mt-4 p-3 bg-red-50 border border-red-200 rounded-md text-red-700 text-sm';
-        errorContainer.innerHTML = `
-            <div class="flex items-center mb-2">
-                <svg class="w-5 h-5 mr-2 text-red-600" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-                </svg>
-                <span class="font-medium">Terjadi kesalahan</span>
-            </div>
-            <p>${errorMessage}</p>
-            <p class="mt-2">Anda akan dialihkan ke halaman error dalam 5 detik...</p>
-        `;
-
-        // Tambahkan ke halaman
-        const container = document.querySelector('.progress-bar').closest('div').parentNode;
-        container.appendChild(errorContainer);
-
-        // Tunggu 5 detik sebelum redirect ke halaman error
-        setTimeout(() => {
-
-            window.location.href = window.paymentCallbackRoutes.error;
-        }, 5000);
-    }
-
-    // Mulai pemeriksaan status setelah beberapa detik
-    setTimeout(checkPaymentStatus, 3000);
-
-    // Timeout setelah 30 detik jika tidak ada respons
-    setTimeout(function() {
-        if (currentStep < progressSteps.length) {
-            handleError('Pemrosesan pembayaran memakan waktu lebih lama dari yang diharapkan');
-        }
-    }, 30000);
 });
+
+console.log('🔄 Payment Callback Handler initialized - will redirect immediately on callback');

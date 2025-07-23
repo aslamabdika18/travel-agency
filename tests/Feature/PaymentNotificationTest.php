@@ -56,7 +56,12 @@ class PaymentNotificationTest extends TestCase
         ];
 
         // Update payment status
-        $this->midtransService->updatePaymentStatus($this->payment, $notificationData);
+        $this->midtransService->updatePaymentStatus(
+            $this->payment, 
+            $notificationData['transaction_status'], 
+            $notificationData['fraud_status'] ?? null, 
+            $notificationData
+        );
 
         // Assert notifikasi success dikirim
         Notification::assertSentTo(
@@ -75,7 +80,12 @@ class PaymentNotificationTest extends TestCase
         ];
 
         // Update payment status
-        $this->midtransService->updatePaymentStatus($this->payment, $notificationData);
+        $this->midtransService->updatePaymentStatus(
+            $this->payment, 
+            $notificationData['transaction_status'], 
+            $notificationData['fraud_status'] ?? null, 
+            $notificationData
+        );
 
         // Assert notifikasi pending dikirim
         Notification::assertSentTo(
@@ -94,7 +104,12 @@ class PaymentNotificationTest extends TestCase
         ];
 
         // Update payment status
-        $this->midtransService->updatePaymentStatus($this->payment, $notificationData);
+        $this->midtransService->updatePaymentStatus(
+            $this->payment, 
+            $notificationData['transaction_status'], 
+            $notificationData['fraud_status'] ?? null, 
+            $notificationData
+        );
 
         // Assert notifikasi failed dikirim
         Notification::assertSentTo(
@@ -113,7 +128,12 @@ class PaymentNotificationTest extends TestCase
         ];
 
         // Update payment status
-        $this->midtransService->updatePaymentStatus($this->payment, $notificationData);
+        $this->midtransService->updatePaymentStatus(
+            $this->payment, 
+            $notificationData['transaction_status'], 
+            $notificationData['fraud_status'] ?? null, 
+            $notificationData
+        );
 
         // Assert notifikasi failed dikirim
         Notification::assertSentTo(
@@ -132,7 +152,12 @@ class PaymentNotificationTest extends TestCase
         ];
 
         // Update payment status
-        $this->midtransService->updatePaymentStatus($this->payment, $notificationData);
+        $this->midtransService->updatePaymentStatus(
+            $this->payment, 
+            $notificationData['transaction_status'], 
+            $notificationData['fraud_status'] ?? null, 
+            $notificationData
+        );
 
         // Assert notifikasi failed dikirim
         Notification::assertSentTo(
@@ -151,7 +176,12 @@ class PaymentNotificationTest extends TestCase
         ];
 
         // Update payment status
-        $this->midtransService->updatePaymentStatus($this->payment, $notificationData);
+        $this->midtransService->updatePaymentStatus(
+            $this->payment, 
+            $notificationData['transaction_status'], 
+            $notificationData['fraud_status'] ?? null, 
+            $notificationData
+        );
 
         // Assert notifikasi failed dikirim
         Notification::assertSentTo(
@@ -171,7 +201,12 @@ class PaymentNotificationTest extends TestCase
         ];
 
         // Update payment status
-        $this->midtransService->updatePaymentStatus($this->payment, $notificationData);
+        $this->midtransService->updatePaymentStatus(
+            $this->payment, 
+            $notificationData['transaction_status'], 
+            $notificationData['fraud_status'] ?? null, 
+            $notificationData
+        );
 
         // Assert notifikasi success dikirim
         Notification::assertSentTo(
@@ -191,7 +226,12 @@ class PaymentNotificationTest extends TestCase
         ];
 
         // Update payment status
-        $this->midtransService->updatePaymentStatus($this->payment, $notificationData);
+        $this->midtransService->updatePaymentStatus(
+            $this->payment, 
+            $notificationData['transaction_status'], 
+            $notificationData['fraud_status'] ?? null, 
+            $notificationData
+        );
 
         // Assert notifikasi pending dikirim
         Notification::assertSentTo(

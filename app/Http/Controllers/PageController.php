@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class PageController extends Controller
 {
@@ -176,74 +177,7 @@ class PageController extends Controller
     /**
      * Menampilkan halaman sukses pembayaran
      */
-    public function paymentSuccess(Request $request)
-    {
-        $booking = null;
-        $payment = null;
-        $redirectUrl = route('home');
 
-        // Coba ambil data dari berbagai sumber
-        $orderId = $request->get('order_id');
-        $lastBookingId = session('last_booking');
-
-        // Prioritas 1: Cari berdasarkan order_id dari parameter
-        if ($orderId) {
-            // Order ID format: BOOKING-{booking_id}-{timestamp}
-            if (preg_match('/BOOKING-(\d+)-/', $orderId, $matches)) {
-                $bookingId = $matches[1];
-                $booking = \App\Models\Booking::with([
-                    'travelPackage.media',
-                    'payment',
-                    'user'
-                ])->find($bookingId);
-            }
-        }
-
-        // Prioritas 2: Cari berdasarkan session last_booking
-        if (!$booking && $lastBookingId) {
-            $booking = \App\Models\Booking::with([
-                'travelPackage.media',
-                'payment',
-                'user'
-            ])->find($lastBookingId);
-        }
-
-        // Prioritas 3: Ambil booking terakhir user yang sedang login
-        if (!$booking && Auth::check()) {
-            $booking = \App\Models\Booking::with([
-                'travelPackage.media',
-                'payment',
-                'user'
-            ])
-            ->where('user_id', Auth::id())
-            ->whereHas('payment', function($q) {
-                $q->where('payment_status', 'Paid');
-            })
-            ->latest()
-            ->first();
-        }
-
-        // Jika booking ditemukan
-        if ($booking) {
-            $payment = $booking->payment;
-
-            // Set URL redirect
-            if ($booking->travelPackage) {
-                $redirectUrl = route('travel-package-detail', ['slug' => $booking->travelPackage->slug]);
-            }
-
-            // Hapus session last_booking setelah digunakan
-            if ($lastBookingId) {
-                session()->forget('last_booking');
-            }
-        }
-
-        return view('pages.payment-success', [
-            'booking' => $booking,
-            'payment' => $payment,
-            'redirectUrl' => $redirectUrl
-        ]);
-    }
 
     /**
      * Menampilkan halaman error pembayaran
@@ -320,6 +254,7 @@ class PageController extends Controller
 
         // Coba ambil data dari berbagai sumber
         $orderId = $request->get('order_id');
+        $transactionStatus = $request->get('transaction_status');
         $lastBookingId = session('last_booking');
 
         // Prioritas 1: Cari berdasarkan order_id dari parameter
@@ -359,6 +294,15 @@ class PageController extends Controller
         // Jika booking ditemukan
         if ($booking) {
             $payment = $booking->payment;
+
+            // Jika ada transaction_status dari URL dan payment masih unpaid,
+            // update status berdasarkan callback (fallback jika webhook tidak berfungsi)
+            if ($payment && $transactionStatus && $payment->payment_status === 'Unpaid') {
+                $this->updatePaymentFromCallback($payment, $transactionStatus, $request->all());
+
+                // Refresh payment data setelah update
+                $payment->refresh();
+            }
         }
 
         return view('pages.payment-callback', [
@@ -366,6 +310,76 @@ class PageController extends Controller
             'booking' => $booking,
             'payment' => $payment
         ]);
+    }
+
+    /**
+     * Update payment status berdasarkan callback URL (fallback jika webhook tidak berfungsi)
+     */
+    private function updatePaymentFromCallback($payment, $transactionStatus, $callbackData)
+    {
+        try {
+            Log::info('Updating payment status from callback', [
+                'payment_id' => $payment->id,
+                'transaction_status' => $transactionStatus,
+                'callback_data' => $callbackData
+            ]);
+
+            // Update status berdasarkan transaction_status dari callback
+            switch ($transactionStatus) {
+                case 'capture':
+                case 'settlement':
+                    $payment->markAsPaid();
+                    $payment->update([
+                        'gateway_status' => $transactionStatus,
+                        'payment_date' => now(),
+                        'gateway_response' => $callbackData
+                    ]);
+                    Log::info('Payment marked as paid from callback', [
+                        'payment_id' => $payment->id,
+                        'transaction_status' => $transactionStatus
+                    ]);
+                    break;
+
+                case 'pending':
+                    $payment->update([
+                        'payment_status' => 'Unpaid',
+                        'gateway_status' => 'pending',
+                        'gateway_response' => $callbackData
+                    ]);
+                    Log::info('Payment status updated to pending from callback', [
+                        'payment_id' => $payment->id
+                    ]);
+                    break;
+
+                case 'deny':
+                case 'cancel':
+                case 'expire':
+                case 'failure':
+                    $payment->markAsFailed();
+                    $payment->update([
+                        'gateway_status' => $transactionStatus,
+                        'gateway_response' => $callbackData
+                    ]);
+                    Log::info('Payment marked as failed from callback', [
+                        'payment_id' => $payment->id,
+                        'reason' => $transactionStatus
+                    ]);
+                    break;
+
+                default:
+                    Log::warning('Unknown transaction status from callback', [
+                        'payment_id' => $payment->id,
+                        'transaction_status' => $transactionStatus
+                    ]);
+                    break;
+            }
+        } catch (\Exception $e) {
+            Log::error('Error updating payment from callback', [
+                'payment_id' => $payment->id,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+        }
     }
 
     /**
