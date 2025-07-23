@@ -49,7 +49,7 @@ class PaymentController extends Controller
                             'name' => $payment->booking->travelPackage->name,
                             'slug' => $payment->booking->travelPackage->slug,
                         ],
-                        'travel_date' => $payment->booking->travel_date,
+                        'travel_date' => $payment->booking->booking_date,
                         'total_price' => $payment->booking->total_price,
                     ],
                     'amount' => $payment->total_price,
