@@ -1,4 +1,4 @@
-<nav class="navbar fixed w-full top-0 z-50 transition-all duration-300 {{ (request()->routeIs('home') || request()->is('/')) ? 'bg-transparent py-4' : 'bg-neutral bg-opacity-95 backdrop-blur-sm shadow-lg py-2' }}" id="navbar">
+<nav class="navbar fixed w-full top-0 z-50 transition-all duration-300 bg-transparent py-4" id="navbar">
     <div class="w-full mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center h-10 sm:h-12">
             <!-- Logo Section -->
@@ -84,7 +84,7 @@
         </div>
 
         <!-- Mobile Menu -->
-        <div id="mobileMenu" class="md:hidden hidden pt-4 pb-2 border-t mt-2 border-neutral-dark transform transition-all duration-300 ease-in-out opacity-0 max-h-0 overflow-hidden shadow-lg rounded-b-lg bg-white">
+        <div id="mobileMenu" class="md:hidden hidden pt-4 pb-2 border-t mt-2 border-neutral-light transform transition-all duration-300 ease-in-out opacity-0 max-h-0 overflow-hidden shadow-lg rounded-b-lg bg-white bg-opacity-95 backdrop-blur-sm">
             <div class="flex flex-col space-y-3 px-4">
                 <a href="{{ route('home') }}" class="text-secondary-dark hover:text-primary py-2.5 px-3 text-sm font-medium flex items-center rounded-md transition-all duration-200 hover:bg-neutral-light {{ request()->routeIs('home') ? 'text-primary bg-neutral-light' : '' }}">
                     <i class="fas fa-home mr-3 w-5 text-center"></i> Home

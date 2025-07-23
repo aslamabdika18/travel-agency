@@ -25,8 +25,21 @@ Route::post('/register', [AuthController::class, 'register'])->name('register.po
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::get('/unauthorized', [PageController::class, 'unauthorized'])->name('unauthorized');
 
-// Rute booking (memerlukan autentikasi)
-Route::middleware('auth')->group(function () {
+// Email Verification Routes
+Route::get('/email/verify', [App\Http\Controllers\EmailVerificationController::class, 'notice'])
+    ->middleware('auth')
+    ->name('verification.notice');
+
+Route::get('/email/verify/{id}/{hash}', [App\Http\Controllers\EmailVerificationController::class, 'verify'])
+    ->middleware(['auth', 'signed'])
+    ->name('verification.verify');
+
+Route::post('/email/verification-notification', [App\Http\Controllers\EmailVerificationController::class, 'resend'])
+    ->middleware(['auth', 'throttle:6,1'])
+    ->name('verification.send');
+
+// Rute booking (memerlukan autentikasi dan email verification)
+Route::middleware(['auth', 'verified'])->group(function () {
     // Redirect ke halaman detail paket untuk booking
     Route::get('/booking', [PageController::class, 'booking'])->name('booking');
     // Proses penyimpanan booking

@@ -29,6 +29,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'environment' => \App\Http\Middleware\EnvironmentMiddleware::class,
             'midtrans.webhook' => \App\Http\Middleware\MidtransWebhookMiddleware::class,
             'invoice.logger' => \App\Http\Middleware\InvoiceActivityLogger::class,
+            'verified' => \App\Http\Middleware\EnsureEmailIsVerified::class,
         ]);
         
         // Configure authentication redirect

@@ -42,24 +42,22 @@ document.addEventListener('DOMContentLoaded', function() {
     const navbar = document.getElementById('navbar');
     if (navbar) {
         function updateNavbarStyle() {
-            const isHomePage = window.location.pathname === '/' || window.location.pathname === '/home';
             const isScrolled = window.scrollY > 10;
+            const isMobile = window.innerWidth < 768; // breakpoint md
             
-            if (isScrolled) {
-                // Saat di-scroll: background muncul
-                navbar.classList.add('bg-neutral', 'bg-opacity-95', 'backdrop-blur-sm', 'shadow-lg', 'py-2');
-                navbar.classList.remove('bg-transparent', 'py-4');
+            if (isScrolled || isMobile) {
+                // Saat di-scroll atau di mobile: background muncul dengan opacity
+                navbar.classList.add('bg-white', 'bg-opacity-95', 'backdrop-blur-sm', 'shadow-lg', 'py-2');
+                navbar.classList.remove('bg-transparent', 'py-4', 'bg-neutral');
             } else {
-                if (isHomePage) {
-                    // Di halaman home saat belum scroll: background transparan
-                    navbar.classList.remove('bg-neutral', 'bg-opacity-95', 'backdrop-blur-sm', 'shadow-lg', 'py-2');
-                    navbar.classList.add('bg-transparent', 'py-4');
-                }
-                // Di halaman lain: tetap dengan background (tidak ada perubahan)
+                // Semua halaman saat belum scroll dan desktop: background transparan
+                navbar.classList.remove('bg-white', 'bg-neutral', 'bg-opacity-95', 'backdrop-blur-sm', 'shadow-lg', 'py-2');
+                navbar.classList.add('bg-transparent', 'py-4');
             }
         }
         
         window.addEventListener('scroll', updateNavbarStyle);
+        window.addEventListener('resize', updateNavbarStyle); // Update on resize
         
         // Trigger scroll event on page load to set initial navbar state
         updateNavbarStyle();

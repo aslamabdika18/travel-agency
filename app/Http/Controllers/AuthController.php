@@ -132,26 +132,28 @@ class AuthController extends Controller
         // Assign role customer secara default
         $user->assignRole('customer');
 
-        // Login otomatis setelah registrasi
+        // Kirim email verification
+        $user->sendEmailVerificationNotification();
+
+        // Login user setelah registrasi
         Auth::login($user);
         $request->session()->regenerate();
 
         // Jika request AJAX, return JSON
         if ($request->expectsJson() || $request->ajax()) {
-            $redirectUrl = $this->getRedirectUrlByRole($user);
             return response()->json([
                 'success' => true,
-                'message' => 'Registration successful! Welcome to our platform.',
+                'message' => 'Registrasi berhasil! Silakan periksa email Anda untuk verifikasi.',
                 'data' => [
                     'user' => $this->formatUserResponse($user),
-                    'redirect_url' => $redirectUrl
+                    'redirect_url' => route('verification.notice')
                 ]
             ], 201);
         }
 
-        // Redirect untuk request biasa
-        $redirectUrl = $this->getRedirectUrlByRole($user);
-        return redirect($redirectUrl)->with('toast_success', 'Registration successful! Welcome to our platform.');
+        // Redirect ke halaman verifikasi email
+        return redirect()->route('verification.notice')
+            ->with('toast_success', 'Registrasi berhasil! Silakan periksa email Anda untuk verifikasi.');
     }
 
     /**
