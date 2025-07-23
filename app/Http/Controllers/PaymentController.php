@@ -32,7 +32,7 @@ class PaymentController extends Controller
                 $query->where('user_id', $user->id);
             })
             ->with([
-                'booking:id,booking_reference,travel_package_id,total_price,travel_date',
+                'booking:id,booking_reference,travel_package_id,total_price,booking_date',
                 'booking.travelPackage:id,name,slug'
             ])
             ->orderBy('created_at', 'desc')
