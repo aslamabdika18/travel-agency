@@ -18,9 +18,9 @@ class TravelPackageSeeder extends Seeder
     {
         $travelPackages = [
             [
-                'name' => 'Banyak Islands Paradise Explorer',
-                'description' => 'Discover the pristine beauty of 99 islands in Aceh Singkil, often called "Aceh\'s Maldives". Experience crystal-clear waters, white sandy beaches, vibrant coral reefs, and traditional fishing village culture across multiple stunning islands.',
-                'price' => 1950000,
+                'name' => 'PT Sumatra Tour Travel Paradise Explorer',
+            'description' => 'Explore the beauty of 99 islands with PT Sumatra Tour Travel, Aceh Singkil, dubbed the "Maldives of Aceh". Enjoy crystal clear seawater, white sand beaches, pristine coral reefs, and traditional fishing culture across 17 tourist-favorite islands.',
+                'price' => 1850000,
                 'base_person_count' => 2,
                 'additional_person_price' => 750000,
                 'capacity' => 12,
@@ -28,8 +28,8 @@ class TravelPackageSeeder extends Seeder
                 'tax_percentage' => 10.00
             ],
             [
-                'name' => 'Banyak Island Hopping Adventure',
-                'description' => 'Ultimate island hopping experience in Banyak island archipelago. Visit 5-7 pristine islands, enjoy snorkeling in untouched coral gardens, relax on secluded beaches, and witness spectacular sunsets over the Indian Ocean.',
+                'name' => 'Panjang Island Hopping Adventure',
+                'description' => 'Island hopping adventure to Panjang Island and surroundings offering the most complete tourist attractions with PT Sumatra Tour Travel. Snorkeling, diving, fishing, and enjoying spectacular sunsets in the Indian Ocean.',
                 'price' => 2150000,
                 'base_person_count' => 2,
                 'additional_person_price' => 850000,
@@ -38,18 +38,18 @@ class TravelPackageSeeder extends Seeder
                 'tax_percentage' => 11.00
             ],
             [
-                'name' => 'Aceh Singkil Marine Conservation Experience',
-                'description' => 'Immerse yourself in marine conservation efforts while exploring Aceh Singkil\'s coastal wonders. Participate in turtle conservation programs, mangrove restoration, and sustainable fishing practices with local communities.',
-                'price' => 1750000,
+                'name' => 'Nibung Bay Turtle Conservation',
+                'description' => 'Visit the turtle conservation center at Nibung Bay, Aceh Singkil. Witness turtle egg hatching, baby turtle release to the sea, and learn about turtle conservation efforts while enjoying the beauty of pristine beaches.',
+                'price' => 1650000,
                 'base_person_count' => 2,
                 'additional_person_price' => 650000,
                 'capacity' => 8,
-                'duration' => '5 Days 4 Nights',
+                'duration' => '3 Days 2 Nights',
                 'tax_percentage' => 10.50
             ],
             [
-                'name' => 'Tuangku Island Diving & Snorkeling Safari',
-                'description' => 'Explore the underwater paradise of Tuangku Island in Banyak Islands. Experience world-class diving spots, encounter diverse marine life, and enjoy pristine coral reefs in crystal-clear tropical waters.',
+                'name' => 'Tuangku Island Diving Adventure',
+                'description' => 'Explore the underwater paradise of Tuangku Island with world-class diving spots. Encounter marine biodiversity, pristine coral reefs, and enjoy the stunning clarity of tropical seawater.',
                 'price' => 2350000,
                 'base_person_count' => 2,
                 'additional_person_price' => 950000,
@@ -58,9 +58,9 @@ class TravelPackageSeeder extends Seeder
                 'tax_percentage' => 12.00
             ],
             [
-                'name' => 'Singkil Coastal Cultural Journey',
+                'name' => 'Aceh Singkil Cultural Heritage',
                 'description' => 'Experience authentic coastal life in Aceh Singkil. Learn traditional fishing techniques, explore local markets, enjoy fresh seafood cuisine, and discover the rich maritime heritage of this charming coastal town.',
-                'price' => 1450000,
+                'price' => 1350000,
                 'base_person_count' => 2,
                 'additional_person_price' => 550000,
                 'capacity' => 12,
@@ -68,29 +68,19 @@ class TravelPackageSeeder extends Seeder
                 'tax_percentage' => 9.50
             ],
             [
-                'name' => 'Banyak Islands Eco-Lodge Retreat',
-                'description' => 'Sustainable island retreat in Pulau Banyak with eco-friendly accommodations. Enjoy solar-powered lodges, organic local cuisine, nature walks, and minimal-impact tourism while supporting local communities.',
+                'name' => 'Bangkaru Island Eco-Tourism',
+                'description' => 'Eco-friendly tourism to Bangkaru Island, one of Indonesia\'s most important turtle research sites. Join conservation programs, beach cleanup, and support sustainable ecotourism with local communities.',
                 'price' => 2250000,
                 'base_person_count' => 2,
                 'additional_person_price' => 900000,
                 'capacity' => 6,
-                'duration' => '5 Days 4 Nights',
+                'duration' => '4 Days 3 Nights',
                 'tax_percentage' => 11.50
             ],
             [
-                'name' => 'Pulau Bangkaru Turtle Sanctuary Tour',
-                'description' => 'Visit the famous turtle nesting site at Pulau Bangkaru in Banyak Islands. Witness sea turtle conservation efforts, participate in beach cleanups, and learn about marine ecosystem protection.',
-                'price' => 1850000,
-                'base_person_count' => 2,
-                'additional_person_price' => 750000,
-                'capacity' => 10,
-                'duration' => '4 Days 3 Nights',
-                'tax_percentage' => 10.00
-            ],
-            [
                 'name' => 'Aceh Singkil Mangrove Exploration',
-                'description' => 'Navigate through pristine mangrove forests of Aceh Singkil by traditional boat. Discover unique wildlife, learn about mangrove ecosystems, and support community-based conservation initiatives.',
-                'price' => 1650000,
+                'description' => 'Navigate through pristine mangrove forests of Aceh Singkil with traditional boats. Discover unique wildlife, learn about mangrove ecosystems, and support community-based conservation initiatives.',
+                'price' => 1450000,
                 'base_person_count' => 2,
                 'additional_person_price' => 600000,
                 'capacity' => 10,
@@ -98,8 +88,8 @@ class TravelPackageSeeder extends Seeder
                 'tax_percentage' => 9.00
             ],
             [
-                'name' => 'Banyak Islands Photography Workshop',
-                'description' => 'Professional photography tour across Banyak Islands\' most photogenic locations. Capture stunning landscapes, underwater scenes, cultural moments, and receive guidance from expert photographers.',
+                'name' => 'PT Sumatra Tour Travel Photography Tour',
+            'description' => 'Professional photography workshop at the most photogenic locations with PT Sumatra Tour Travel. Capture stunning landscapes, underwater scenes, cultural moments, and receive guidance from expert photographers.',
                 'price' => 2450000,
                 'base_person_count' => 2,
                 'additional_person_price' => 1000000,
@@ -108,8 +98,8 @@ class TravelPackageSeeder extends Seeder
                 'tax_percentage' => 12.50
             ],
             [
-                'name' => 'Singkil Traditional Boat Building Experience',
-                'description' => 'Learn the ancient art of traditional boat building in Aceh Singkil. Work alongside master craftsmen, understand maritime traditions, and create your own miniature traditional boat as a souvenir.',
+                'name' => 'Traditional Boat Building Singkil',
+                'description' => 'Learn the ancient art of traditional boat building in Aceh Singkil. Work alongside master craftsmen, understand maritime traditions, and create a miniature traditional boat as a souvenir.',
                 'price' => 1550000,
                 'base_person_count' => 2,
                 'additional_person_price' => 575000,
@@ -118,24 +108,34 @@ class TravelPackageSeeder extends Seeder
                 'tax_percentage' => 10.25
             ],
             [
-                'name' => 'Sabang Diving & Marine Adventure',
-                'description' => 'Explore the underwater paradise of Sabang Island with world-class diving spots at Rubiah Marine Park. Experience vibrant coral reefs, diverse marine life, and visit the westernmost point of Indonesia.',
-                'price' => 1850000,
+                'name' => 'Kenduri Laut Tradition Experience',
+                'description' => 'Witness and participate in the sacred Kenduri Laut (Tron U Laot) tradition of Aceh Singkil fishermen. Ritual ceremonies, prayers for fishermen\'s safety, and thanksgiving celebrations for sea harvest with coastal communities.',
+                'price' => 1250000,
                 'base_person_count' => 2,
-                'additional_person_price' => 750000,
-                'capacity' => 8,
-                'duration' => '3 Days 2 Nights',
-                'tax_percentage' => 11.00
+                'additional_person_price' => 500000,
+                'capacity' => 15,
+                'duration' => '2 Days 1 Night',
+                'tax_percentage' => 9.00
             ],
             [
-                'name' => 'Takengon Coffee & Lake Experience',
-                'description' => 'Discover the world-famous Gayo coffee in its highland origin. Enjoy coffee plantation tours, traditional boat rides on Lake Laut Tawar, and experience the cool mountain atmosphere of Takengon.',
-                'price' => 1650000,
+                'name' => 'PT Sumatra Tour Travel Sunrise & Sunset Tour',
+            'description' => 'Enjoy the best sunrise and sunset with PT Sumatra Tour Travel from strategic spots. Long bridges with coconut tree backdrops, white sand beaches, and stunning Indian Ocean panoramas.',
+                'price' => 1750000,
                 'base_person_count' => 2,
-                'additional_person_price' => 600000,
+                'additional_person_price' => 700000,
                 'capacity' => 10,
                 'duration' => '3 Days 2 Nights',
                 'tax_percentage' => 10.00
+            ],
+            [
+                'name' => 'Aceh Singkil Culinary & Market Tour',
+                'description' => 'Explore the culinary richness of Aceh Singkil and traditional markets. Taste fresh seafood, specialty salted fish, fish crackers, and learn traditional seafood processing methods from local fishermen.',
+                'price' => 950000,
+                'base_person_count' => 2,
+                'additional_person_price' => 400000,
+                'capacity' => 12,
+                'duration' => '1 Day',
+                'tax_percentage' => 8.00
             ]
         ];
 
@@ -194,16 +194,16 @@ class TravelPackageSeeder extends Seeder
     private function getItinerariesData(string $packageName): array
     {
         $itineraries = [
-            'Banyak Islands Paradise Explorer' => [
+            'PT Sumatra Tour Travel Paradise Explorer' => [
                 [
                     'day' => '1',
-                    'activity' => 'Arrival at Medan airport, scenic drive to Aceh Singkil (4-5 hours), hotel check-in, welcome seafood lunch, program orientation',
+                    'activity' => 'Arrive at Medan Airport, scenic journey to Aceh Singkil (4-5 hours), hotel check-in, seafood lunch, tourism program orientation',
                     'note' => 'Comfortable air-conditioned vehicle. Bring motion sickness medication if needed for the journey.'
                 ],
                 [
                     'day' => '2',
-                    'activity' => 'Speedboat to Banyak Islands, visit 4-5 pristine islands, snorkeling in crystal-clear waters, traditional fishing village exploration',
-                    'note' => 'Complete snorkeling equipment provided. Use reef-safe sunscreen to protect marine life.'
+                    'activity' => 'Speedboat with PT Sumatra Tour Travel, visit 4-5 pristine islands, snorkeling in crystal clear water, explore traditional fishing village',
+                    'note' => 'Complete snorkeling equipment provided. Use reef-safe sunscreen.'
                 ],
                 [
                     'day' => '3',
@@ -212,59 +212,49 @@ class TravelPackageSeeder extends Seeder
                 ],
                 [
                     'day' => '4',
-                    'activity' => 'Local market visit, cultural interaction with fishing communities, souvenir shopping, return journey to Medan',
-                    'note' => 'Perfect opportunity to buy local specialties like dried fish and traditional handicrafts.'
+                    'activity' => 'Visit local market, cultural interaction with fishing community, souvenir shopping, return journey to Medan',
+                    'note' => 'Perfect opportunity to buy local specialties like salted fish and traditional crafts.'
                 ]
             ],
-            'Banyak Island Hopping Adventure' => [
+            'Panjang Island Hopping Adventure' => [
                 [
                     'day' => '1',
-                    'activity' => 'Medan pickup, comfortable drive to Aceh Singkil, accommodation check-in, equipment briefing, sunset viewing at harbor',
-                    'note' => 'Journey takes 4-5 hours with scenic mountain and coastal views. Rest stops included.'
+                    'activity' => 'Pick-up in Medan, comfortable journey to Aceh Singkil, accommodation check-in, equipment briefing, sunset viewing at the harbor',
+                    'note' => '4-5 hour journey with mountain and coastal views. Rest stops included.'
                 ],
                 [
                     'day' => '2',
-                    'activity' => 'Full-day island hopping to 6-7 islands, multiple snorkeling sites, beach picnic, swimming in secluded lagoons',
-                    'note' => 'Ultimate island adventure with pristine coral reefs. Underwater camera available for rent.'
+                    'activity' => 'Full-day island hopping to Panjang Island and 6-7 other islands, multiple snorkeling sites, beach picnic, swimming in hidden lagoons',
+                    'note' => 'Ultimate island adventure with pristine coral reefs. Underwater cameras available for rent.'
                 ],
                 [
                     'day' => '3',
-                    'activity' => 'Visit most photogenic island, final snorkeling session, beachside relaxation, departure preparation',
+                    'activity' => 'Visit the most photogenic island, final snorkeling session, beach relaxation, departure preparation',
                     'note' => 'Last chance for perfect photos and swimming. Check-out and return journey to Medan.'
                 ]
             ],
-            'Aceh Singkil Marine Conservation Experience' => [
+            'Nibung Bay Turtle Conservation' => [
                 [
                     'day' => '1',
-                    'activity' => 'Arrival in Singkil, eco-accommodation check-in, conservation program introduction, beach cleanup activity',
-                    'note' => 'Stay at environmentally friendly accommodation. Participate in meaningful conservation efforts.'
+                    'activity' => 'Arrive in Aceh Singkil, check-in to eco-friendly accommodation, introduction to turtle conservation program, beach cleanup activities at Nibung Bay',
+                    'note' => 'Stay in eco-friendly accommodation. Participate in meaningful conservation efforts.'
                 ],
                 [
                     'day' => '2',
-                    'activity' => 'Turtle conservation program, mangrove restoration, sustainable fishing workshop, coral reef monitoring',
-                    'note' => 'Hands-on conservation activities with local communities. Educational and impactful experience.'
+                    'activity' => 'Turtle conservation program at Nibung Bay, witness turtle egg hatching, baby turtle release to the sea, sustainable fishing workshop',
+                    'note' => 'Hands-on conservation activities with local community. Educational and impactful experience.'
                 ],
                 [
                     'day' => '3',
-                    'activity' => 'Marine research expedition, underwater ecosystem study, data collection training, conservation technology workshop',
+                    'activity' => 'Marine research expedition, underwater ecosystem study, data collection training, conservation technology workshop, conservation certificate',
                     'note' => 'Advanced conservation techniques and marine research methods. Scientific approach to conservation.'
-                ],
-                [
-                    'day' => '4',
-                    'activity' => 'Community outreach program, environmental education workshop, local school visit, conservation presentation',
-                    'note' => 'Share conservation knowledge with local communities. Educational outreach activities.'
-                ],
-                [
-                    'day' => '5',
-                    'activity' => 'Final conservation project, impact assessment, certificate presentation, departure',
-                    'note' => 'Receive conservation participation certificate. Contribute to marine ecosystem protection.'
                 ]
             ],
-            'Tuangku Island Diving & Snorkeling Safari' => [
+            'Tuangku Island Diving Adventure' => [
                 [
                     'day' => '1',
                     'activity' => 'Journey to Singkil, diving equipment check, accommodation check-in, diving theory session, shallow water practice',
-                    'note' => 'Professional diving equipment provided. Certification required for diving activities.'
+                    'note' => 'Professional diving equipment provided. Certificate required for diving activities.'
                 ],
                 [
                     'day' => '2',
@@ -277,7 +267,7 @@ class TravelPackageSeeder extends Seeder
                     'note' => 'Complete diving logbook with new experiences. Professional underwater photos available.'
                 ]
             ],
-            'Singkil Coastal Cultural Journey' => [
+            'Aceh Singkil Cultural Heritage' => [
                 [
                     'day' => '1',
                     'activity' => 'Traditional welcome ceremony, homestay check-in, fishing village tour, traditional boat ride, cultural evening',
@@ -285,11 +275,11 @@ class TravelPackageSeeder extends Seeder
                 ],
                 [
                     'day' => '2',
-                    'activity' => 'Dawn fishing expedition, traditional fishing techniques, local market exploration, cooking class, cultural performance, farewell lunch, departure',
-                    'note' => 'Learn traditional maritime skills from experienced fishermen. Early morning start required.'
+                    'activity' => 'Dawn fishing expedition, traditional fishing techniques, local market exploration, cooking class, cultural performance, farewell lunch',
+                    'note' => 'Learn traditional maritime skills from experienced fishermen. Start very early in the morning.'
                 ]
             ],
-            'Banyak Islands Eco-Lodge Retreat' => [
+            'PT Sumatra Tour Travel Eco-Lodge Retreat' => [
                 [
                     'day' => '1',
                     'activity' => 'Eco-friendly transfer, solar-powered lodge check-in, organic welcome lunch, sustainability tour, sunset meditation',
@@ -350,7 +340,7 @@ class TravelPackageSeeder extends Seeder
                     'note' => 'Discover unique mangrove wildlife. Plant mangrove seedlings and receive conservation certificate.'
                 ]
             ],
-            'Banyak Islands Photography Workshop' => [
+            'PT Sumatra Tour Travel Photography Workshop' => [
                 [
                     'day' => '1',
                     'activity' => 'Photography equipment check, technical briefing, camera settings workshop, golden hour practice, image review',
@@ -406,21 +396,40 @@ class TravelPackageSeeder extends Seeder
                     'note' => 'Titik paling barat Indonesia. Bawa kamera untuk foto bersejarah.'
                 ]
             ],
-            'Takengon Coffee & Lake Experience' => [
+            'Kenduri Laut Tradition Experience' => [
                 [
                     'day' => '1',
-                    'activity' => 'Kunjungi perkebunan kopi arabika terbaik dunia, coffee cupping session',
-                    'note' => 'Bawa jaket karena udara pegunungan dingin. Pelajari proses dari biji hingga secangkir kopi.'
+                    'activity' => 'Arrive in Aceh Singkil, introduction to Kenduri Laut tradition, Tron U Laot ceremony preparation, cultural evening with fishermen',
+                    'note' => 'Sacred tradition of Acehnese fishermen. Respect customs and follow traditional elder guidance.'
                 ],
                 [
                     'day' => '2',
-                    'activity' => 'Aktivitas perahu di danau terbesar Aceh, menikmati pemandangan pegunungan',
-                    'note' => 'Danau Laut Tawar adalah danau terbesar di Aceh. Bawa kamera untuk landscape photography.'
+                    'activity' => 'Witness Kenduri Laut ceremony, ritual for protection, prayers for fishermen safety, thanksgiving celebration for sea harvest, community feast',
+                    'note' => 'Deep spiritual and cultural experience. Participate with full respect.'
+                ]
+            ],
+            'PT Sumatra Tour Travel Sunrise & Sunset Tour' => [
+                [
+                    'day' => '1',
+                    'activity' => 'Journey to Aceh Singkil, speedboat with PT Sumatra Tour Travel, resort check-in, sunset viewing at long bridge with coconut tree backdrop',
+                    'note' => 'Best sunset spot at iconic bridge. Bring camera for spectacular photos.'
+                ],
+                [
+                    'day' => '2',
+                    'activity' => 'Sunrise hunting at white sand beach, island hopping to best photo spots, snorkeling, relaxation at pristine beach',
+                    'note' => 'Wake up early for best sunrise. Enjoy the natural beauty that remains pristine.'
                 ],
                 [
                     'day' => '3',
-                    'activity' => 'Kunjungi desa tradisional Gayo, beli kopi langsung dari petani',
-                    'note' => 'Kesempatan membeli kopi premium langsung dari sumbernya dengan harga terbaik.'
+                    'activity' => 'Final sunrise session, last island exploration, departure preparation, return journey to Medan',
+                    'note' => 'Last chance for sunrise photos. Bring Aceh Singkil specialty souvenirs.'
+                ]
+            ],
+            'Aceh Singkil Culinary & Market Tour' => [
+                [
+                    'day' => '1',
+                    'activity' => 'Traditional market tour of Aceh Singkil, taste fresh seafood, specialty salted fish, fish crackers, learn traditional seafood processing, cooking class with fishermen',
+                    'note' => 'Explore coastal culinary richness. Taste authentic food and learn traditional recipes.'
                 ]
             ]
         ];
@@ -431,34 +440,34 @@ class TravelPackageSeeder extends Seeder
     private function getIncludesData(string $packageName): array
     {
         $includes = [
-            'Banyak Islands Paradise Explorer' => [
-                'Round-trip AC transportation Medan - Aceh Singkil',
-                'Speedboat transfers to Banyak Islands',
+            'PT Sumatra Tour Travel Paradise Explorer' => [
+                'AC transportation round trip Medan - Aceh Singkil',
+                'Speedboat transfer with PT Sumatra Tour Travel',
                 '2 nights accommodation (hotel/guesthouse)',
                 'All meals during tour (breakfast, lunch, dinner)',
-                'Professional English-speaking guide',
+                'Professional tour guide Indonesian/English speaking',
                 'Complete snorkeling equipment',
-                'All entrance fees and permits',
+                'All entrance tickets and permits',
                 'Underwater photography session',
-                'Mineral water throughout the journey',
-                'Travel insurance coverage'
+                'Mineral water throughout journey',
+                'Travel insurance'
             ],
-            'Banyak Island Hopping Adventure' => [
-                'Private AC vehicle Medan - Singkil return',
+            'Panjang Island Hopping Adventure' => [
+                'Private AC vehicle Medan - Singkil round trip',
                 'Speedboat for island hopping',
                 '2 nights quality accommodation',
                 'All meals with fresh seafood',
                 'Professional island guide',
-                'Snorkeling gear and safety equipment',
-                'Island entrance fees',
+                'Snorkeling and safety equipment',
+                'Island entrance tickets',
                 'Waterproof camera rental option',
-                'Cool box with refreshments',
+                'Cool box with fresh drinks',
                 'First aid kit and safety briefing'
             ],
-            'Aceh Singkil Marine Conservation Experience' => [
+            'Nibung Bay Turtle Conservation' => [
                 'Eco-friendly transportation',
-                '2 nights eco-accommodation',
-                'Organic meals and local cuisine',
+                '2 nights eco-friendly accommodation',
+                'Organic food and local cuisine',
                 'Conservation program participation',
                 'Marine conservation equipment',
                 'Expert conservation guide',
@@ -467,8 +476,8 @@ class TravelPackageSeeder extends Seeder
                 'Turtle adoption program',
                 'Environmental impact assessment'
             ],
-            'Tuangku Island Diving & Snorkeling Safari' => [
-                'Transportation Medan - Singkil return',
+            'Tuangku Island Diving Adventure' => [
+                'Transportation Medan - Singkil round trip',
                 'Diving boat to Tuangku Island',
                 '2 nights diving resort accommodation',
                 'All meals including diving lunch',
@@ -479,95 +488,53 @@ class TravelPackageSeeder extends Seeder
                 'Diving logbook completion',
                 'Safety equipment and insurance'
             ],
-            'Singkil Coastal Cultural Journey' => [
+            'Aceh Singkil Cultural Heritage' => [
                 'Cultural transportation experience',
                 '2 nights traditional homestay',
-                'Authentic local meals with families',
+                'Authentic local meals with family',
                 'Traditional fishing expedition',
-                'Cultural guide and interpreter',
+                'Cultural guide and translator',
                 'Traditional boat experience',
-                'Handicraft workshop materials',
+                'Craft workshop materials',
                 'Cultural performance tickets',
                 'Traditional costume photo session',
                 'Cultural exchange certificate'
             ],
-            'Banyak Islands Eco-Lodge Retreat' => [
-                'Carbon-neutral transportation',
-                '2 nights solar-powered eco-lodge',
-                'Organic farm-to-table meals',
-                'Sustainability workshop participation',
-                'Eco-activity equipment',
-                'Environmental education guide',
-                'Renewable energy demonstration',
-                'Organic farming experience',
-                'Sustainability certificate',
-                'Eco-impact measurement report'
+            'Kenduri Laut Tradition Experience' => [
+                'Cultural transportation to Aceh Singkil',
+                '1 night traditional fisherman homestay',
+                'Meals with fisherman community',
+                'Kenduri Laut ceremony participation',
+                'Cultural and spiritual guide',
+                'Traditional ritual experience',
+                'Maritime cultural education materials',
+                'Cultural participation certificate',
+                'Traditional ceremony documentation',
+                'Aceh Singkil specialty souvenirs'
             ],
-            'Pulau Bangkaru Turtle Sanctuary Tour' => [
-                'Transportation to turtle sanctuary',
-                '2 nights conservation accommodation',
-                'Meals with conservation team',
-                'Turtle conservation program',
-                'Conservation equipment and tools',
-                'Marine biologist guide',
-                'Turtle nesting observation',
-                'Beach cleanup materials',
-                'Turtle adoption certificate',
-                'Conservation impact documentation'
+            'PT Sumatra Tour Travel Sunrise & Sunset Tour' => [
+                'AC transportation Medan - Aceh Singkil',
+                'Speedboat to best sunrise/sunset spots with PT Sumatra Tour Travel',
+                '2 nights resort accommodation',
+                'All meals with spectacular views',
+                'Professional photography guide',
+                'Basic photography equipment',
+                'Access to exclusive photo spots',
+                'Sunrise and sunset photography sessions',
+                'Professional photo editing',
+                'Digital photo album'
             ],
-            'Aceh Singkil Mangrove Exploration' => [
-                'Eco-transportation to mangrove sites',
-                '2 nights eco-friendly accommodation',
-                'Local cuisine with mangrove honey',
-                'Traditional boat navigation',
-                'Wildlife observation equipment',
-                'Mangrove ecosystem guide',
-                'Conservation activity participation',
-                'Mangrove planting materials',
-                'Ecosystem education materials',
-                'Conservation participation certificate'
-            ],
-            'Banyak Islands Photography Workshop' => [
-                'Photography equipment transportation',
-                '2 nights photographer-friendly accommodation',
-                'Meals at photogenic locations',
-                'Professional photography guidance',
-                'Camera equipment rental option',
-                'Underwater photography gear',
-                'Photo editing software access',
-                'Professional portfolio review',
-                'Photography workshop certificate',
-                'High-resolution photo delivery'
-            ],
-            'Singkil Traditional Boat Building Experience' => [
-                'Transportation to traditional shipyard',
-                '2 nights cultural accommodation',
-                'Meals with master craftsmen',
-                'Traditional boat building workshop',
-                'Traditional tools and materials',
-                'Master craftsman instruction',
-                'Maritime heritage education',
-                'Miniature boat creation materials',
-                'Cultural exchange sessions',
-                'Maritime craftsmanship certificate'
-            ],
-            'Sabang Diving & Marine Adventure' => [
-                'PADI certified dive master',
-                'Complete diving equipment',
-                'Ferry from Banda Aceh to Sabang',
-                'Fresh seafood lunch',
-                'Underwater photography service',
-                'Diving safety equipment',
-                'Entrance ticket to Rubiah Marine Park'
-            ],
-            'Takengon Coffee & Lake Experience' => [
-                'Coffee expert guide',
-                'Transportation to coffee plantations',
-                'Coffee cupping session',
-                'Traditional boat on Lake Laut Tawar',
-                'Traditional Gayo lunch',
-                'Premium Gayo coffee 250gr',
-                'Mineral water and snacks'
+            'Aceh Singkil Culinary & Market Tour' => [
+                'Local transportation in Aceh Singkil',
+                'Experienced culinary guide',
+                'Traditional market tour',
+                'Cooking class with fishermen',
+                'All food and beverages',
+                'Traditional cooking recipes',
+                'Cooking ingredients to take home',
+                'Cooking class certificate',
+                'Cooking process documentation',
+                'Specialty culinary souvenirs'
             ]
 
 
@@ -579,37 +546,37 @@ class TravelPackageSeeder extends Seeder
     private function getExcludesData(string $packageName): array
     {
         $excludes = [
-            'Banyak Islands Paradise Explorer' => [
+            'PT Sumatra Tour Travel Paradise Explorer' => [
                 'Personal expenses and souvenirs',
                 'Alcoholic beverages (not available)',
                 'Tips for guide and crew',
-                'Additional meals outside the package',
-                'Paid water sports activities',
+                'Additional meals outside package',
+                'Paid watersport activities',
                 'Personal diving equipment',
-                'Medical expenses and medication',
+                'Medical costs and medications',
                 'International flight tickets'
             ],
-            'Pulau Banyak Island Hopping Adventure' => [
+            'Panjang Island Hopping Adventure' => [
                 'Personal expenses and shopping',
                 'Travel insurance upgrade',
                 'Tips for boat crew and guide',
-                'Additional water sports activities',
+                'Additional watersport activities',
                 'Personal snorkeling equipment',
                 'Alcoholic beverages',
-                'Medical expenses',
-                'Extra accommodation nights'
+                'Medical costs',
+                'Additional accommodation nights'
             ],
-            'Aceh Singkil Marine Conservation Experience' => [
+            'Nibung Bay Turtle Conservation' => [
                 'Personal expenses',
                 'Tips for conservation team',
                 'Additional conservation donations',
                 'Personal conservation equipment',
-                'Extra educational materials',
+                'Additional educational materials',
                 'Personal transportation',
-                'Medical expenses',
+                'Medical costs',
                 'Additional certification fees'
             ],
-            'Tuangku Island Diving & Snorkeling Safari' => [
+            'Tuangku Island Diving Adventure' => [
                 'Diving certification course fees',
                 'Personal diving equipment',
                 'Tips for diving instructor',
@@ -619,85 +586,45 @@ class TravelPackageSeeder extends Seeder
                 'Medical diving clearance',
                 'Diving insurance upgrade'
             ],
-            'Singkil Coastal Cultural Journey' => [
+            'Aceh Singkil Cultural Heritage' => [
                 'Personal expenses and souvenirs',
-                'Tips for host families',
+                'Tips for host family',
                 'Additional cultural activities',
                 'Personal fishing equipment',
-                'Extra handicraft materials',
+                'Additional craft materials',
                 'Traditional costume purchase',
                 'Additional cultural performances',
                 'Personal transportation'
             ],
-            'Banyak Islands Eco-Lodge Retreat' => [
+            'Kenduri Laut Tradition Experience' => [
                 'Personal expenses',
-                'Tips for eco-lodge staff',
-                'Additional sustainability workshops',
-                'Personal eco-equipment',
-                'Extra organic products',
-                'Carbon offset donations',
-                'Personal environmental projects',
-                'Additional certification fees'
-            ],
-            'Pulau Bangkaru Turtle Sanctuary Tour' => [
-                'Personal expenses',
-                'Tips for conservation team',
-                'Additional turtle adoptions',
-                'Personal conservation equipment',
-                'Extra conservation donations',
-                'Research participation fees',
+                'Tips for fisherman family',
+                'Additional ceremony donations',
                 'Personal transportation',
-                'Additional educational materials'
+                'Medical costs',
+                'Additional souvenirs',
+                'Additional spiritual activities',
+                'Personal documentation'
             ],
-            'Aceh Singkil Mangrove Exploration' => [
-                'Personal expenses',
-                'Tips for boat operator',
-                'Additional mangrove seedlings',
-                'Personal wildlife equipment',
-                'Extra conservation activities',
-                'Research participation fees',
-                'Personal transportation',
-                'Additional educational workshops'
-            ],
-            'Banyak Islands Photography Workshop' => [
+            'PT Sumatra Tour Travel Sunrise & Sunset Tour' => [
                 'Personal camera equipment',
-                'Tips for photography instructor',
+                'Tips for photography guide',
                 'Additional photo editing software',
-                'Personal photography gear',
-                'Extra photo printing services',
+                'Personal photography equipment',
+                'Additional photo printing services',
                 'Professional portfolio creation',
                 'Additional workshop sessions',
                 'Personal equipment insurance'
             ],
-            'Singkil Traditional Boat Building Experience' => [
-                'Personal expenses',
-                'Tips for master craftsmen',
-                'Additional boat building materials',
-                'Personal woodworking tools',
-                'Extra workshop sessions',
-                'Traditional tool purchases',
-                'Additional cultural activities',
+            'Aceh Singkil Culinary & Market Tour' => [
+                'Personal expenses at market',
+                'Tips for local chef',
+                'Additional cooking ingredient purchases',
+                'Personal cooking equipment',
+                'Additional cooking workshops',
+                'Traditional kitchen equipment purchase',
+                'Additional culinary activities',
                 'Personal transportation'
-            ],
-            'Sabang Diving & Marine Adventure' => [
-                'Personal diving equipment',
-                'Tips for dive master and crew',
-                'Additional diving sessions',
-                'Underwater camera purchase',
-                'Personal expenses and souvenirs',
-                'Diving certification course fees',
-                'Medical diving clearance',
-                'Alcoholic beverages'
-            ],
-            'Takengon Coffee & Lake Experience' => [
-                'Personal expenses and souvenirs',
-                'Tips for guide and boat crew',
-                'Additional coffee purchases',
-                'Personal transportation',
-                'Extra accommodation nights',
-                'Personal hiking equipment',
-                'Medical expenses',
-                'Alcoholic beverages'
             ]
         ];
 

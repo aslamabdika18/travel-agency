@@ -14,7 +14,7 @@
         window.addEventListener('beforeunload', function() {
             window.scrollTo(0, 0);
         });
-        
+
         // Set global variables for external JavaScript
         window.travelPackageConfig = {
             slug: '{{ $slug ?? '' }}',
@@ -83,11 +83,11 @@
                     <div class="flex-1 w-full lg:pr-10 px-2 sm:px-3">
                         <h1
                             class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-white mb-3 sm:mb-4 animate-fade-in leading-tight">
-                            Banyak Islands Explorer
+                            PT Sumatra Tour Travel
                         </h1>
                         <div class="flex items-center mb-4 sm:mb-6 ml-1">
                             <i class="fas fa-map-marker-alt text-primary mr-3 text-base sm:text-lg"></i>
-                            <span class="text-white text-base sm:text-lg md:text-xl">Banyak Islands, Aceh</span>
+                            <span class="text-white text-base sm:text-lg md:text-xl">PT Sumatra Tour Travel, Aceh</span>
                         </div>
                     </div>
                     <div
@@ -145,12 +145,12 @@
                         </div>
                     @else
                         <div class="prose prose-sm sm:prose-base lg:prose-lg max-w-none text-secondary">
-                            <p>Discover the pristine beaches and vibrant marine life of the Banyak Islands, a hidden
+                            <p>Discover the pristine beaches and vibrant marine life with PT Sumatra Tour Travel, a hidden
                                 paradise off the west coast of Sumatra. This 5-day adventure takes you through the
                                 archipelago's most beautiful spots, offering a perfect blend of relaxation, adventure, and
                                 cultural immersion.</p>
 
-                            <p>The Banyak Islands, meaning "Many Islands" in Indonesian, consist of 99 small islands known
+                            <p>PT Sumatra Tour Travel offers access to 99 small islands known
                                 for their white sandy beaches, crystal-clear waters, and diverse coral reefs. This tour is
                                 designed for travelers seeking an off-the-beaten-path experience in one of Indonesia's most
                                 unspoiled regions.</p>
@@ -487,14 +487,18 @@
         </div>
     </section>
 
-    <!-- Reviews Section -->
-    <section id="reviews" class="py-8 sm:py-12 md:py-16 bg-neutral">
+    <!-- ========================================= -->
+    <!-- IMPORTANT: DO NOT DELETE - REVIEWS SECTION START -->
+    <!-- This section contains customer reviews and ratings -->
+    <!-- ========================================= -->
+    {{-- <section id="reviews" class="py-8 sm:py-12 md:py-16 bg-neutral">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2
                 class="text-xl sm:text-2xl md:text-3xl font-bold text-primary-dark mb-6 sm:mb-8 md:mb-12 text-center animate-on-scroll">
                 Traveler Reviews
             </h2>
 
+            <!-- IMPORTANT: DO NOT DELETE - Review Summary Section Start -->
             <div class="mb-6 sm:mb-8 md:mb-12 bg-white rounded-lg shadow-xl p-4 sm:p-6 md:p-8 animate-on-scroll">
                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 sm:mb-6">
                     <div class="flex items-center mb-4 sm:mb-0">
@@ -519,6 +523,7 @@
                     </div>
                 </div>
 
+                <!-- Rating Categories Grid -->
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 mb-4 sm:mb-6">
                     <div class="bg-neutral-light p-3 sm:p-4 rounded-lg">
                         <div class="text-secondary-dark font-medium mb-2 text-xs sm:text-sm">Value for Money</div>
@@ -561,10 +566,13 @@
                         </div>
                     </div>
                 </div>
+                <!-- End Rating Categories Grid -->
             </div>
+            <!-- IMPORTANT: DO NOT DELETE - Review Summary Section End -->
 
             <div class="space-y-8">
-                <!-- Review 1 -->
+                <!-- IMPORTANT: DO NOT DELETE - Customer Review Section Start -->
+                <!-- Review 1 - Sarah Johnson - 5 Stars -->
                 <div class="bg-white p-6 rounded-lg shadow-md animate-on-scroll">
                     <div class="flex items-center mb-4">
                         <div class="h-12 w-12 rounded-full bg-gray-300 mr-4"></div>
@@ -582,14 +590,15 @@
                     </div>
                     <h5 class="font-bold text-secondary-dark mb-2">A paradise that exceeded expectations!</h5>
                     <p class="text-secondary mb-4">
-                        Our Banyak Islands tour was absolutely incredible! The beaches were pristine, the snorkeling was
+                        Our PT Sumatra Tour Travel tour was absolutely incredible! The beaches were pristine, the snorkeling was
                         world-class, and our guide was knowledgeable and friendly. The beach camping night was magical -
                         falling asleep to the sound of waves and waking up to the most beautiful sunrise. The food was fresh
                         and delicious throughout the trip. I can't recommend this experience enough!
                     </p>
                 </div>
+                <!-- End Review 1 -->
 
-                <!-- Review 2 -->
+                <!-- Review 2 - David Chen - 4 Stars -->
                 <div class="bg-white p-6 rounded-lg shadow-md animate-on-scroll animation-delay-300">
                     <div class="flex items-center mb-4">
                         <div class="h-12 w-12 rounded-full bg-gray-300 mr-4"></div>
@@ -607,15 +616,16 @@
                     </div>
                     <h5 class="font-bold text-secondary-dark mb-2">Great tour with minor accommodation issues</h5>
                     <p class="text-secondary mb-4">
-                        The Banyak Islands are truly a hidden gem with incredible marine life and beautiful beaches. Our
+                        PT Sumatra Tour Travel destinations are truly a hidden gem with incredible marine life and beautiful beaches. Our
                         guide Budi was excellent and very knowledgeable about the local ecosystem. The only reason I'm not
                         giving 5 stars is that the accommodation on Balai Island was more basic than expected. That said,
                         the camping night was a highlight of the trip, and the overall experience was fantastic. Would
                         recommend for adventurous travelers!
                     </p>
                 </div>
+                <!-- End Review 2 -->
 
-                <!-- Review 3 -->
+                <!-- Review 3 - Emma Wilson - 4.5 Stars -->
                 <div class="bg-white p-6 rounded-lg shadow-md animate-on-scroll animation-delay-600">
                     <div class="flex items-center mb-4">
                         <div class="h-12 w-12 rounded-full bg-gray-300 mr-4"></div>
@@ -633,23 +643,30 @@
                     </div>
                     <h5 class="font-bold text-secondary-dark mb-2">Unforgettable island adventure</h5>
                     <p class="text-secondary mb-4">
-                        This tour was the highlight of our Indonesia trip! The Banyak Islands are absolutely stunning and
+                        This tour was the highlight of our Indonesia trip! PT Sumatra Tour Travel destinations are absolutely stunning and
                         still relatively untouched by tourism. We saw incredible marine life while snorkeling, including
                         reef sharks, turtles, and countless colorful fish. The cultural visit to the fishing village was
                         fascinating and gave us insight into local life. Our guide was professional and friendly, and the
                         food was delicious. Highly recommend for anyone looking to get off the beaten path!
                     </p>
                 </div>
+                <!-- End Review 3 -->
+                <!-- IMPORTANT: DO NOT DELETE - Customer Review Section End -->
             </div>
 
+            <!-- IMPORTANT: DO NOT DELETE - View All Reviews Button -->
             <div class="mt-8 text-center">
                 <a href="#"
                     class="inline-block bg-primary-light hover:bg-primary text-primary hover:text-white font-bold py-2 px-6 rounded-lg transition duration-300">
                     View All 24 Reviews
                 </a>
             </div>
+            <!-- End View All Reviews Button -->
         </div>
-    </section>
+    </section> --}}
+    <!-- ========================================= -->
+    <!-- IMPORTANT: DO NOT DELETE - REVIEWS SECTION END -->
+    <!-- ========================================= -->
 
     <!-- Booking Section -->
     <section id="booking" class="py-8 sm:py-12 md:py-16 bg-neutral-light">

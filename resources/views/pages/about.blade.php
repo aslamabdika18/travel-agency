@@ -29,7 +29,7 @@
                         Our journey began with a simple mission: to create authentic travel experiences that benefit both visitors and local communities. Over the years, we've remained true to this vision while expanding our offerings to showcase more of Indonesia's incredible diversity.
                     </p>
                     <p class="text-secondary text-base sm:text-lg">
-                        Today, we're proud to be the leading tour operator for the Banyak Islands and surrounding regions, with a team of experienced guides who are passionate about conservation, cultural preservation, and creating unforgettable experiences for our guests.
+                        Today, we're proud to be the leading tour operator PT Sumatra Tour Travel for the surrounding regions, with a team of experienced guides who are passionate about conservation, cultural preservation, and creating unforgettable experiences for our guests.
                     </p>
                 </div>
                 <div class="relative animate-on-scroll animation-delay-300">
@@ -94,7 +94,7 @@
     </section>
 
     <!-- Our Team Section -->
-    <section class="py-12 sm:py-16 md:py-20 bg-neutral">
+    {{-- <section class="py-12 sm:py-16 md:py-20 bg-neutral">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-10 sm:mb-16 animate-on-scroll">
                 <h2 class="text-2xl sm:text-3xl font-bold text-primary-dark mb-2 sm:mb-4">
@@ -159,7 +159,7 @@
                         <h3 class="text-lg sm:text-xl font-bold text-secondary-dark mb-1">Budi Santoso</h3>
                         <p class="text-primary font-medium mb-2 sm:mb-3 text-sm sm:text-base">Lead Guide</p>
                         <p class="text-gray-600 mb-3 sm:mb-4 text-sm sm:text-base">
-                            A certified diving instructor and wildlife expert with intimate knowledge of the Banyak Islands ecosystem.
+                            A certified diving instructor and wildlife expert with intimate knowledge of the PT Sumatra Tour Travel ecosystem.
                         </p>
                         <div class="flex space-x-3">
                             <a href="#" class="text-gray-400 hover:text-primary transition-colors">
@@ -199,10 +199,10 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> --}}
 
     <!-- Achievements Section -->
-    <section class="py-12 sm:py-16 md:py-20 bg-neutral-light">
+    {{-- <section class="py-12 sm:py-16 md:py-20 bg-neutral-light">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-10 sm:mb-16 animate-on-scroll">
                 <h2 class="text-2xl sm:text-3xl font-bold text-primary-dark mb-2 sm:mb-4">
@@ -250,11 +250,11 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> --}}
 
     <!-- CTA Section -->
-    <section 
-        class="py-12 sm:py-16 md:py-20 bg-cover bg-center relative" 
+    <section
+        class="py-12 sm:py-16 md:py-20 bg-cover bg-center relative"
         style="background-image: url('https://images.unsplash.com/photo-1540541338287-41700207dee6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80')"
     >
         <div class="absolute inset-0 bg-secondary-dark opacity-70"></div>

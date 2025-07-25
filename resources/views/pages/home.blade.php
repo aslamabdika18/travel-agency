@@ -10,7 +10,7 @@
         <!-- Main content -->
         <div class="relative z-10 px-3 sm:px-6 lg:px-8 max-w-4xl mx-auto">
             <!-- Main heading -->
-            <h1 class="text-4xl md:text-5xl font-bold text-white mb-6 animate-fade-in">Discover the Untouched Beauty of Banyak Islands</h1>
+            <h1 class="text-4xl md:text-5xl font-bold text-white mb-6 animate-fade-in">Discover the Untouched Beauty with PT Sumatra Tour Travel</h1>
             <!-- Description -->
             <p class="text-white text-sm sm:text-base md:text-lg lg:text-xl mb-6 sm:mb-8">Your journey to paradise starts here with customized tours to Indonesia's hidden gems.</p>
             <!-- CTA Buttons -->
@@ -33,7 +33,7 @@
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-10 md:gap-12 lg:gap-16 items-center">
                 <!-- Text Content -->
                 <div class="order-2 lg:order-1 text-center lg:text-left space-y-6">
-                    <h2 class="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-primary-dark leading-tight">Why Choose Banyak Island Travel?</h2>
+                    <h2 class="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-primary-dark leading-tight">Why Choose PT Sumatra Tour Travel?</h2>
                     <p class="text-sm sm:text-base md:text-lg text-secondary-dark leading-relaxed max-w-none lg:max-w-lg xl:max-w-xl">With over 15 years of experience in crafting unforgettable journeys, we specialize in showcasing the untouched beauty of Indonesia's hidden paradises. Our local expertise ensures authentic experiences that go beyond typical tourist routes.</p>
 
                     <!-- Features List -->
@@ -69,7 +69,7 @@
                 <div class="order-1 lg:order-2 relative mx-auto lg:mx-0 w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-none">
                     <div class="relative overflow-hidden rounded-xl sm:rounded-2xl shadow-xl">
                         <img src="https://images.unsplash.com/photo-1559128010-7c1ad6e1b6a5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2073&q=80"
-                        alt="Banyak Islands"
+                        alt="PT Sumatra Tour Travel"
                         class="w-full h-56 sm:h-64 md:h-72 lg:h-80 xl:h-96 object-cover transition-transform duration-300 hover:scale-105"
                         loading="lazy">
                     </div>
@@ -176,8 +176,11 @@
         </div>
     </section>
 
-    <!-- Testimonials Section -->
-    <section class="py-6 sm:py-10 md:py-14 lg:py-16 bg-neutral-light">
+    <!-- ========================================= -->
+    <!-- IMPORTANT: DO NOT DELETE - TESTIMONIALS SECTION START -->
+    <!-- This section contains customer testimonials and ratings -->
+    <!-- ========================================= -->
+    {{-- <section class="py-6 sm:py-10 md:py-14 lg:py-16 bg-neutral-light">
         <div class="w-full max-w-7xl mx-auto px-3 xs:px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-4 xs:mb-6 sm:mb-8 md:mb-12 animate-on-scroll">
                 <h2 class="text-lg sm:text-xl md:text-2xl font-bold text-primary-dark mb-2 sm:mb-3 md:mb-4">
@@ -191,13 +194,15 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 xs:gap-6 sm:gap-8 max-w-7xl mx-auto">
                 @for ($i = 0; $i < 3; $i++)
                     <div class="bg-neutral p-4 xs:p-5 sm:p-6 rounded-lg shadow-md animate-on-scroll hover:shadow-lg transition duration-300">
+                        <!-- IMPORTANT: DO NOT DELETE - Testimonial Rating -->
                         <div class="flex text-yellow-400 mb-2 xs:mb-3 sm:mb-4 text-xs xs:text-sm sm:text-base">
                             @for ($j = 0; $j < 5; $j++)
                                 <i class="fas fa-star"></i>
                             @endfor
                         </div>
+                        <!-- End Testimonial Rating -->
                         <p class="text-secondary mb-4 xs:mb-5 sm:mb-6 text-xs xs:text-sm sm:text-base">
-                            "Our trip to the Banyak Islands was absolutely incredible! The guides were knowledgeable and friendly, and the itinerary was perfectly balanced. We'll definitely be booking with Sumatra Tour Travel again!"
+                            "Our trip with PT Sumatra Tour Travel was absolutely incredible! The guides were knowledgeable and friendly, and the itinerary was perfectly balanced. We'll definitely be booking with Sumatra Tour Travel again!"
                         </p>
                         <div class="flex items-center">
                             <div class="w-8 h-8 xs:w-10 xs:h-10 sm:w-12 sm:h-12 bg-gray-300 rounded-full mr-2 xs:mr-3 sm:mr-4"></div>
@@ -210,7 +215,10 @@
                 @endfor
             </div>
         </div>
-    </section>
+    </section> --}}
+    <!-- ========================================= -->
+    <!-- IMPORTANT: DO NOT DELETE - TESTIMONIALS SECTION END -->
+    <!-- ========================================= -->
 
     <!-- FAQ Section -->
     <section class="py-6 sm:py-10 md:py-14 lg:py-16 bg-neutral-light">
@@ -228,7 +236,7 @@
                 @php
                     $faqs = [
                         [
-                            'question' => 'What is the best time to visit Banyak Islands?',
+                            'question' => 'What is the best time to visit with PT Sumatra Tour Travel?',
                             'answer' => 'The best time to visit is during the dry season from April to October when the weather is sunny and the seas are calm, perfect for island hopping and water activities.'
                         ],
                         [

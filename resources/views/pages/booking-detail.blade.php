@@ -20,7 +20,7 @@
                 </div>
             </div>
         </div>
-        
+
         <!-- Booking Header -->
         <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
             <div>
@@ -42,7 +42,7 @@
                 </a>
             </div>
         </div>
-        
+
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <!-- Main Content -->
             <div class="lg:col-span-2 space-y-6">
@@ -50,7 +50,7 @@
                 <div class="bg-white rounded-xl shadow-sm overflow-hidden">
                     <div class="p-6">
                         <h2 class="text-xl font-bold text-secondary-dark mb-4">Package Details</h2>
-                        
+
                         <div class="flex items-start">
                             @if($booking->travelPackage && $booking->travelPackage->media->isNotEmpty())
                                 <img src="{{ $booking->travelPackage->media->first()->url }}" alt="{{ $booking->travelPackage->name }}" class="w-24 h-24 object-cover rounded-lg mr-4">
@@ -72,7 +72,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="mt-6 border-t border-gray-200 pt-4">
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
@@ -105,12 +105,12 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Itinerary Summary -->
                 <div class="bg-white rounded-xl shadow-sm overflow-hidden">
                     <div class="p-6">
                         <h2 class="text-xl font-bold text-secondary-dark mb-4">Itinerary Summary</h2>
-                        
+
                         <div class="space-y-6">
                             @if($booking->travelPackage && $booking->travelPackage->itineraries && $booking->travelPackage->itineraries->count() > 0)
                                 @foreach($booking->travelPackage->itineraries as $index => $itinerary)
@@ -133,7 +133,7 @@
                                 </div>
                             @endif
                         </div>
-                        
+
                         <div class="mt-6">
                             <a href="#" class="text-primary hover:text-primary-dark font-medium flex items-center">
                                 View Full Itinerary
@@ -144,12 +144,12 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Accommodation Details -->
                 <div class="bg-white rounded-xl shadow-sm overflow-hidden">
                     <div class="p-6">
                         <h2 class="text-xl font-bold text-secondary-dark mb-4">Accommodation</h2>
-                        
+
                         <div class="space-y-6">
                             <div class="flex items-start">
                                 <img src="/images/hotels/banda-aceh-hotel.jpg" alt="Grand Aceh Hotel" class="w-20 h-20 object-cover rounded-lg mr-4">
@@ -178,7 +178,7 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div class="flex items-start">
                                 <img src="/images/hotels/sabang-resort.jpg" alt="Sabang Beach Resort" class="w-20 h-20 object-cover rounded-lg mr-4">
                                 <div>
@@ -207,19 +207,19 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="mt-6 text-sm text-secondary">
                             <p>Room Type: Deluxe Double Room with Ocean View</p>
                             <p>Amenities: Free Wi-Fi, Breakfast included, Air conditioning, Private bathroom</p>
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Traveler Information -->
                 <div class="bg-white rounded-xl shadow-sm overflow-hidden">
                     <div class="p-6">
                         <h2 class="text-xl font-bold text-secondary-dark mb-4">Traveler Information</h2>
-                        
+
                         <div class="space-y-4">
                             <div>
                                 <h3 class="font-bold text-secondary-dark">Lead Traveler</h3>
@@ -242,7 +242,7 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
                             @if(($booking->person_count ?? 1) > 1)
                             <div class="border-t border-gray-200 pt-4">
                                 <h3 class="font-bold text-secondary-dark">Additional Travelers</h3>
@@ -253,7 +253,7 @@
                             </div>
                             @endif
                         </div>
-                        
+
                         <div class="mt-6 border-t border-gray-200 pt-4">
                             <h3 class="font-bold text-secondary-dark mb-2">Special Requests</h3>
                             @if($booking->special_requests)
@@ -265,14 +265,14 @@
                     </div>
                 </div>
             </div>
-            
+
             <!-- Sidebar -->
             <div class="space-y-6">
                 <!-- Payment Information -->
                 <div class="bg-white rounded-xl shadow-sm overflow-hidden">
                     <div class="p-6">
                         <h2 class="text-xl font-bold text-secondary-dark mb-4">Payment Information</h2>
-                        
+
                         <div class="space-y-4">
                             <div class="flex justify-between">
                                 <span class="text-secondary">Payment Status</span>
@@ -297,19 +297,19 @@
                                     {{ $statusText }}
                                 </span>
                             </div>
-                            
+
                             <div class="flex justify-between">
                                 <span class="text-secondary">Payment Method</span>
                                 <span class="text-secondary-dark font-medium">{{ $booking->payment->payment_method ?? 'Midtrans Payment Gateway' }}</span>
                             </div>
-                            
+
                             @if($booking->payment && $booking->payment->transaction_id)
                             <div class="flex justify-between">
                                 <span class="text-secondary">Transaction ID</span>
                                 <span class="text-secondary-dark font-medium">{{ $booking->payment->transaction_id }}</span>
                             </div>
                             @endif
-                            
+
                             <div class="flex justify-between">
                                 <span class="text-secondary">Payment Date</span>
                                 <span class="text-secondary-dark font-medium">
@@ -317,7 +317,7 @@
                                 </span>
                             </div>
                         </div>
-                        
+
                         <div class="mt-6 border-t border-gray-200 pt-4">
                             <div class="flex justify-between mb-2">
                                 <span class="text-secondary">Package Price ({{ $booking->person_count ?? 1 }} {{ ($booking->person_count ?? 1) > 1 ? 'People' : 'Person' }})</span>
@@ -340,7 +340,7 @@
                                 <span>Rp {{ number_format((float)($booking->total_price ?? 0), 0, ',', '.') }}</span>
                             </div>
                         </div>
-                        
+
                         <div class="mt-6">
                             @if($booking->payment && $booking->payment->isPaid())
                                 <a href="{{ route('payment.invoice', $booking->payment->id) }}" class="text-primary hover:text-primary-dark font-medium flex items-center">
@@ -360,30 +360,30 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Cancellation Policy -->
                 <div class="bg-white rounded-xl shadow-sm overflow-hidden">
                     <div class="p-6">
                         <h2 class="text-xl font-bold text-secondary-dark mb-4">Cancellation Policy</h2>
-                        
+
                         <div class="space-y-3 text-secondary text-sm">
                             <p>• Free cancellation up to 30 days before departure</p>
                             <p>• 50% refund for cancellations 15-29 days before departure</p>
                             <p>• 25% refund for cancellations 7-14 days before departure</p>
                             <p>• No refund for cancellations less than 7 days before departure</p>
                         </div>
-                        
+
                         <div class="mt-4">
                             <a href="#" class="text-primary hover:text-primary-dark font-medium">View Full Policy</a>
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Need Help -->
                 <div class="bg-white rounded-xl shadow-sm overflow-hidden">
                     <div class="p-6">
                         <h2 class="text-xl font-bold text-secondary-dark mb-4">Need Help?</h2>
-                        
+
                         <div class="space-y-4">
                             <div class="flex items-start">
                                 <svg class="w-5 h-5 text-primary mt-0.5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -395,7 +395,7 @@
                                     <p class="text-secondary text-sm">Available 24/7</p>
                                 </div>
                             </div>
-                            
+
                             <div class="flex items-start">
                                 <svg class="w-5 h-5 text-primary mt-0.5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
@@ -406,7 +406,7 @@
                                     <p class="text-secondary text-sm">Response within 24 hours</p>
                                 </div>
                             </div>
-                            
+
                             <div class="flex items-start">
                                 <svg class="w-5 h-5 text-primary mt-0.5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
@@ -418,7 +418,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="mt-6">
                             <a href="{{ route('contact') }}" class="w-full bg-primary hover:bg-primary-dark text-white font-bold py-2 px-4 rounded-md transition duration-300 flex items-center justify-center">
                                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -431,7 +431,7 @@
                 </div>
             </div>
         </div>
-        
+
         <!-- Actions -->
         <div class="mt-8 flex flex-wrap gap-4">
             <a href="{{ route('user-bookings') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 text-secondary bg-white rounded-md hover:bg-gray-50 transition duration-150 text-sm font-medium">
@@ -446,12 +446,14 @@
                 </svg>
                 FAQ
             </a>
+            {{-- <!-- IMPORTANT: DO NOT DELETE - Write Review Button -->
             <a href="#" class="inline-flex items-center px-4 py-2 border border-primary text-primary bg-white rounded-md hover:bg-primary hover:text-white transition duration-150 text-sm font-medium">
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                 </svg>
                 Write a Review
-            </a>
+            </a> --}}
+            <!-- End Write Review Button -->
         </div>
     </div>
 </div>

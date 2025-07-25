@@ -55,14 +55,16 @@
             </ul>
         @endif
 
-        @if($package->reviewCount > 0)
+        {{-- @if($package->reviewCount > 0)
+            <!-- IMPORTANT: DO NOT DELETE - Package Rating Section -->
             <div class="flex items-center mb-3 xs:mb-4 sm:mb-6">
                 <div class="flex items-center">
                     <i class="fas fa-star text-yellow-400 mr-1"></i>
                     <span class="text-secondary-dark font-medium text-2xs xs:text-sm sm:text-base">{{ number_format((float)$package->averageRating, 1) }} ({{ $package->reviewCount }})</span>
                 </div>
             </div>
-        @endif
+            <!-- End Package Rating Section -->
+        @endif --}}
 
         <div class="flex flex-col xs:flex-row justify-between items-stretch xs:items-center gap-2 xs:gap-3">
             <a href="{{ route('travel-package-detail', $package->slug) }}" class="text-primary font-semibold hover:text-primary-dark text-2xs xs:text-sm sm:text-base transition duration-200 text-center xs:text-left">View Details</a>

@@ -11,10 +11,10 @@
         <div class="absolute inset-0 bg-secondary-dark opacity-70"></div>
         <div class="relative z-10 w-full mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 sm:mb-6 animate-fade-in leading-tight">
-                Discover Banyak Islands Paradise
+                Discover PT Sumatra Tour Travel Paradise
             </h1>
             <p class="text-lg sm:text-xl md:text-2xl text-white/90 mb-6 sm:mb-8 max-w-4xl mx-auto animate-fade-in animation-delay-300 leading-relaxed">
-                Escape to the pristine beauty of Banyak Islands and Aceh Singkil. Experience untouched coral reefs, crystal-clear waters, and secluded beaches where time stands still. Your tropical paradise adventure awaits in Indonesia's best-kept secret.
+                Escape to the pristine beauty with PT Sumatra Tour Travel and Aceh Singkil. Experience untouched coral reefs, crystal-clear waters, and secluded beaches where time stands still. Your tropical paradise adventure awaits in Indonesia's best-kept secret.
             </p>
             <div class="max-w-3xl mx-auto animate-fade-in animation-delay-600">
                 <p class="text-base sm:text-lg md:text-xl text-white font-medium italic">
@@ -28,10 +28,10 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-8 sm:mb-10 md:mb-12">
                 <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-primary-dark mb-3 sm:mb-4 animate-on-scroll">
-                    Banyak Islands Travel Packages
+                    PT Sumatra Tour Travel Packages
                 </h2>
                 <p class="text-lg sm:text-xl md:text-2xl text-secondary-dark max-w-3xl mx-auto animate-on-scroll animation-delay-300 leading-relaxed">
-                    Discover the magic of Banyak Islands and Aceh Singkil with our exclusive island-hopping adventures and marine experiences
+                    Discover the magic with PT Sumatra Tour Travel and Aceh Singkil with our exclusive island-hopping adventures and marine experiences
                 </p>
             </div>
 
@@ -54,7 +54,7 @@
                         <div class="relative">
                             <img
                                 src="https://images.unsplash.com/photo-1518548419970-58e3b4079ab2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
-                                alt="Banyak Islands Explorer"
+                                alt="PT Sumatra Tour Travel Explorer"
                                 class="w-full h-48 sm:h-52 md:h-56 lg:h-64 object-cover"
                             >
                             <div class="absolute top-3 sm:top-4 right-3 sm:right-4 bg-primary text-white text-xs sm:text-sm font-bold px-2 sm:px-3 py-1 rounded-full">
@@ -63,20 +63,22 @@
                         </div>
                         <div class="p-4 sm:p-5 md:p-6">
                             <h3 class="text-lg sm:text-xl font-bold text-secondary-dark mb-2">
-                                Banyak Islands Explorer
+                                PT Sumatra Tour Travel Explorer
                             </h3>
                             <div class="flex items-center mb-3 sm:mb-4">
                                 <i class="fas fa-map-marker-alt text-primary mr-2"></i>
-                                <span class="text-secondary text-sm sm:text-base">Banyak Islands, Aceh</span>
+                                <span class="text-secondary text-sm sm:text-base">PT Sumatra Tour Travel, Aceh</span>
                             </div>
                             <p class="text-secondary mb-3 sm:mb-4 line-clamp-3 text-sm sm:text-base">
-                                Discover the pristine beaches and vibrant marine life of the Banyak Islands. This package includes island hopping, snorkeling, and cultural experiences with local communities.
+                                Discover the pristine beaches and vibrant marine life with PT Sumatra Tour Travel. This package includes island hopping, snorkeling, and cultural experiences with local communities.
                             </p>
                             <div class="flex items-center justify-between mb-3 sm:mb-4">
+                                <!-- IMPORTANT: DO NOT DELETE - Package Rating -->
                                 <div class="flex items-center">
                                     <i class="fas fa-star text-yellow-400 mr-1"></i>
                                     <span class="text-secondary-dark font-medium text-sm sm:text-base">4.8 (24)</span>
                                 </div>
+                                <!-- End Package Rating -->
                                 <div class="text-primary-dark font-bold text-sm sm:text-base">
                                     Rp 5.500.000
                                 </div>
@@ -114,10 +116,12 @@
                                 Ride the legendary waves of Nias Island, home to some of the world's best surf breaks. This package includes accommodation, surf lessons, equipment rental, and cultural excursions.
                             </p>
                             <div class="flex items-center justify-between mb-3 sm:mb-4">
+                                <!-- IMPORTANT: DO NOT DELETE - Package Rating -->
                                 <div class="flex items-center">
                                     <i class="fas fa-star text-yellow-400 mr-1"></i>
                                     <span class="text-secondary-dark font-medium text-sm sm:text-base">4.9 (36)</span>
                                 </div>
+                                <!-- End Package Rating -->
                                 <div class="text-primary-dark font-bold text-sm sm:text-base">
                                     Rp 8.750.000
                                 </div>
@@ -155,10 +159,12 @@
                                 Immerse yourself in the rich Batak culture while exploring the world's largest volcanic lake. This tour includes traditional village visits, cultural performances, and scenic boat rides.
                             </p>
                             <div class="flex items-center justify-between mb-3 sm:mb-4">
+                                <!-- IMPORTANT: DO NOT DELETE - Package Rating -->
                                 <div class="flex items-center">
                                     <i class="fas fa-star text-yellow-400 mr-1"></i>
                                     <span class="text-secondary-dark font-medium text-sm sm:text-base">4.7 (19)</span>
                                 </div>
+                                <!-- End Package Rating -->
                                 <div class="text-primary-dark font-bold text-sm sm:text-base">
                                     Rp 3.950.000
                                 </div>
@@ -196,10 +202,12 @@
                                 Experience world-class surfing at the legendary Mentawai Islands. This all-inclusive package features beachfront accommodation, daily boat trips to premium surf spots, and professional guides.
                             </p>
                             <div class="flex items-center justify-between mb-4">
+                                <!-- IMPORTANT: DO NOT DELETE - Package Rating -->
                                 <div class="flex items-center">
                                     <i class="fas fa-star text-yellow-400 mr-1"></i>
                                     <span class="text-secondary-dark font-medium">4.9 (42)</span>
                                 </div>
+                                <!-- End Package Rating -->
                                 <div class="text-primary-dark font-bold">
                                     Rp 12.500.000
                                 </div>
@@ -237,10 +245,12 @@
                                 Explore the rich history and unique culture of Aceh. Visit the iconic Baiturrahman Grand Mosque, tsunami memorials, traditional markets, and enjoy authentic Acehnese cuisine.
                             </p>
                             <div class="flex items-center justify-between mb-3 sm:mb-4">
+                                <!-- IMPORTANT: DO NOT DELETE - Package Rating -->
                                 <div class="flex items-center">
                                     <i class="fas fa-star text-yellow-400 mr-1"></i>
                                     <span class="text-secondary-dark font-medium text-sm sm:text-base">4.6 (15)</span>
                                 </div>
+                                <!-- End Package Rating -->
                                 <div class="text-primary-dark font-bold text-sm sm:text-base">
                                     Rp 2.750.000
                                 </div>
@@ -278,10 +288,12 @@
                                 Trek through the lush rainforests of Gunung Leuser National Park in search of orangutans, elephants, and other endangered wildlife. Includes guided hikes, river tubing, and jungle camping.
                             </p>
                             <div class="flex items-center justify-between mb-3 sm:mb-4">
+                                <!-- IMPORTANT: DO NOT DELETE - Package Rating -->
                                 <div class="flex items-center">
                                     <i class="fas fa-star text-yellow-400 mr-1"></i>
                                     <span class="text-secondary-dark font-medium text-sm sm:text-base">4.8 (31)</span>
                                 </div>
+                                <!-- End Package Rating -->
                                 <div class="text-primary-dark font-bold text-sm sm:text-base">
                                     Rp 7.250.000
                                 </div>
@@ -332,10 +344,10 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-8 sm:mb-10 md:mb-12">
                 <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-primary-dark mb-3 sm:mb-4 animate-on-scroll">
-                    Banyak Islands Highlights
+                    PT Sumatra Tour Travel Highlights
                 </h2>
                 <p class="text-lg sm:text-xl md:text-2xl text-secondary-dark max-w-3xl mx-auto animate-on-scroll animation-delay-300 leading-relaxed">
-                    Explore the most spectacular spots in Banyak Islands and Aceh Singkil region
+                    Explore the most spectacular spots with PT Sumatra Tour Travel and Aceh Singkil region
                 </p>
             </div>
 
@@ -344,7 +356,7 @@
                 <div class="relative rounded-lg overflow-hidden h-64 sm:h-72 md:h-80 group animate-on-scroll">
                     <img
                         src="https://images.unsplash.com/photo-1518548419970-58e3b4079ab2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
-                        alt="Banyak Islands"
+                        alt="PT Sumatra Tour Travel"
                         class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                     >
                     <div class="absolute inset-0 bg-gradient-to-t from-secondary-dark to-transparent opacity-70"></div>
@@ -403,7 +415,10 @@
         </div>
     </section>
 
-    <!-- Testimonials Section -->
+    <!-- ========================================= -->
+    <!-- IMPORTANT: DO NOT DELETE - TESTIMONIALS SECTION START -->
+    <!-- This section contains customer testimonials and ratings -->
+    <!-- ========================================= -->
     <section id="testimonials" class="py-12 sm:py-16 md:py-20 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-8 sm:mb-10 md:mb-12">
@@ -429,6 +444,7 @@
                             <p class="text-xs sm:text-sm text-secondary-dark">Adventure Traveler</p>
                         </div>
                     </div>
+                    <!-- IMPORTANT: DO NOT DELETE - Testimonial Rating -->
                     <div class="flex mb-3 sm:mb-4">
                         <i class="fas fa-star text-yellow-400 text-sm"></i>
                         <i class="fas fa-star text-yellow-400 text-sm"></i>
@@ -436,10 +452,11 @@
                         <i class="fas fa-star text-yellow-400 text-sm"></i>
                         <i class="fas fa-star text-yellow-400 text-sm"></i>
                     </div>
+                    <!-- End Testimonial Rating -->
                     <p class="text-secondary-dark italic text-sm sm:text-base leading-relaxed mb-3 sm:mb-4">
                         "Pulau Banyak is truly a hidden paradise! The snorkeling at Tailana Island was phenomenal, and the turtle watching at Bangkaru was a once-in-a-lifetime experience. Pure magic!"
                     </p>
-                    <p class="text-primary font-medium text-sm sm:text-base">Banyak Islands Explorer</p>
+                    <p class="text-primary font-medium text-sm sm:text-base">PT Sumatra Tour Travel Explorer</p>
                 </div>
 
                 <!-- Testimonial 2 -->
@@ -463,7 +480,7 @@
                         <i class="fas fa-star text-yellow-400 text-sm"></i>
                     </div>
                     <p class="text-secondary-dark italic text-sm sm:text-base leading-relaxed mb-3 sm:mb-4">
-                        "The island-hopping adventure from Aceh Singkil to Banyak Islands was beyond amazing! Each island had its own unique charm, and the marine life diversity was absolutely stunning. Highly recommended!"
+                        "The island-hopping adventure from Aceh Singkil with PT Sumatra Tour Travel was beyond amazing! Each island had its own unique charm, and the marine life diversity was absolutely stunning. Highly recommended!"
                     </p>
                     <p class="text-primary font-medium text-sm sm:text-base">Aceh Singkil Island Hopping</p>
                 </div>
@@ -481,6 +498,7 @@
                             <p class="text-xs sm:text-sm text-secondary-dark">Cultural Explorer</p>
                         </div>
                     </div>
+                    <!-- IMPORTANT: DO NOT DELETE - Testimonial Rating -->
                     <div class="flex mb-3 sm:mb-4">
                         <i class="fas fa-star text-yellow-400 text-sm"></i>
                         <i class="fas fa-star text-yellow-400 text-sm"></i>
@@ -488,6 +506,7 @@
                         <i class="fas fa-star text-yellow-400 text-sm"></i>
                         <i class="fas fa-star-half-alt text-yellow-400 text-sm"></i>
                     </div>
+                    <!-- End Testimonial Rating -->
                     <p class="text-secondary-dark italic text-sm sm:text-base leading-relaxed mb-3 sm:mb-4">
                         "The combination of pristine nature and local Acehnese culture in Singkil region was incredible. The mangrove tours and traditional fishing village visits gave us authentic insights into local life."
                     </p>
@@ -496,4 +515,7 @@
             </div>
         </div>
     </section>
+    <!-- ========================================= -->
+    <!-- IMPORTANT: DO NOT DELETE - TESTIMONIALS SECTION END -->
+    <!-- ========================================= -->
 @endsection
