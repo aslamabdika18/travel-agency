@@ -7,6 +7,8 @@ use App\Http\Controllers\BookingController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PublicTravelPackageController;
 use App\Http\Controllers\RefundController;
+use App\Http\Controllers\RecommendationController;
+use App\Http\Controllers\Api\CategoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -47,6 +49,22 @@ Route::prefix('travel-packages')->group(function () {
     Route::get('/slug/{slug}', [PublicTravelPackageController::class, 'showBySlug']); // Get travel package by slug
     Route::post('/{id}/calculate-price', [PublicTravelPackageController::class, 'calculatePrice'])->where('id', '[0-9]+'); // Calculate price by ID
     Route::post('/calculate-price/{slug}', [PublicTravelPackageController::class, 'calculatePriceBySlug']); // Calculate price by slug
+});
+
+// Public Category Routes (tidak memerlukan authentication)
+Route::prefix('categories')->group(function () {
+    Route::get('/', [CategoryController::class, 'index']); // Get all categories
+    Route::get('/{category}', [CategoryController::class, 'show']); // Get specific category
+    Route::get('/{category}/travel-packages', [CategoryController::class, 'travelPackages']); // Get travel packages by category
+});
+
+// Public Recommendation Routes
+Route::prefix('recommendations')->group(function () {
+    Route::get('/homepage', [RecommendationController::class, 'getHomepageRecommendations']); // Get homepage recommendations
+    Route::get('/trending', [RecommendationController::class, 'getTrendingPackages']); // Get trending packages
+    Route::get('/similar/{packageId}', [RecommendationController::class, 'getSimilarPackages'])->where('packageId', '[0-9]+'); // Get similar packages
+    Route::get('/category/{categoryId}', [RecommendationController::class, 'getRecommendationsByCategory'])->where('categoryId', '[0-9]+'); // Get recommendations by category
+    Route::get('/price-range', [RecommendationController::class, 'getRecommendationsByPriceRange']); // Get recommendations by price range
 });
 
 // Public Payment Routes (for webhook notifications and status checks)
@@ -95,4 +113,16 @@ Route::middleware('auth:web')->group(function () {
         Route::get('/eligible-bookings', [RefundController::class, 'getEligibleBookings']); // Get bookings eligible for refund
         Route::get('/history', [RefundController::class, 'getRefundHistory']); // Get refund history
     });
+
+    // Personalized Recommendation routes (requires authentication)
+    Route::prefix('recommendations')->group(function () {
+        Route::get('/personalized', [RecommendationController::class, 'getPersonalizedRecommendations']); // Get personalized recommendations
+        Route::get('/explanation', [RecommendationController::class, 'getRecommendationExplanation']); // Get recommendation explanation
+    });
+});
+
+// TF-IDF Demo Routes (public access)
+Route::prefix('tf-idf-demo')->group(function () {
+    Route::get('/packages', [RecommendationController::class, 'getDemoPackages']); // Get packages for demo
+    Route::get('/analyze/{id}', [RecommendationController::class, 'analyzeTfIdf'])->where('id', '[0-9]+'); // Analyze TF-IDF for package
 });

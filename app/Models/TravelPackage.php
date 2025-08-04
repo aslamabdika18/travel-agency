@@ -24,7 +24,9 @@ class TravelPackage extends Model implements HasMedia
         'additional_person_price',
         'capacity',
         'duration',
-        'tax_percentage'
+        'tax_percentage',
+        'category_id',
+        'is_active'
     ];
 
     protected $casts = [
@@ -33,6 +35,7 @@ class TravelPackage extends Model implements HasMedia
         'base_person_count' => 'integer',
         'capacity' => 'integer',
         'tax_percentage' => 'decimal:2',
+        'is_active' => 'boolean',
     ];
 
     protected $attributes = [
@@ -102,6 +105,14 @@ class TravelPackage extends Model implements HasMedia
     public function bookings()
     {
         return $this->hasMany(Booking::class);
+    }
+
+    /**
+     * Get the category that owns the travel package.
+     */
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
     }
 
     /**
@@ -352,5 +363,42 @@ class TravelPackage extends Model implements HasMedia
                 'medium' => $media->getUrl('medium'),
             ];
         })->toArray();
+    }
+
+    /**
+     * Get images attribute (accessor)
+     * Returns all images from both gallery and thumbnail collections
+     */
+    public function getImagesAttribute()
+    {
+        $galleryImages = $this->getMedia('gallery');
+        $thumbnailImages = $this->getMedia('thumbnail');
+        
+        return $galleryImages->merge($thumbnailImages);
+    }
+
+    /**
+     * Get all images as a collection (compatibility method)
+     * Use this instead of relationship when you need all images
+     */
+    public function getAllImages()
+    {
+        return $this->images;
+    }
+
+    /**
+     * Get gallery images only
+     */
+    public function getGalleryImages()
+    {
+        return $this->getMedia('gallery');
+    }
+
+    /**
+     * Get thumbnail images only
+     */
+    public function getThumbnailImages()
+    {
+        return $this->getMedia('thumbnail');
     }
 }

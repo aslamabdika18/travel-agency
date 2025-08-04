@@ -124,6 +124,8 @@
                     class="text-secondary-dark font-medium hover:text-primary whitespace-nowrap px-2 py-2 text-xs sm:text-sm md:text-base">Gallery</a>
                 <a href="#reviews"
                     class="text-secondary-dark font-medium hover:text-primary whitespace-nowrap px-2 py-2 text-xs sm:text-sm md:text-base">Reviews</a>
+                <a href="#recommendations"
+                    class="text-secondary-dark font-medium hover:text-primary whitespace-nowrap px-2 py-2 text-xs sm:text-sm md:text-base">Recommendations</a>
                 <a href="#booking"
                     class="text-secondary-dark font-medium hover:text-primary whitespace-nowrap px-2 py-2 text-xs sm:text-sm md:text-base">Booking</a>
             </div>
@@ -667,6 +669,13 @@
     <!-- ========================================= -->
     <!-- IMPORTANT: DO NOT DELETE - REVIEWS SECTION END -->
     <!-- ========================================= -->
+
+    <!-- Recommendations Section -->
+    <section id="recommendations" class="py-8 sm:py-12 md:py-16 bg-neutral">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div id="recommendation-section"></div>
+        </div>
+    </section>
 
     <!-- Booking Section -->
     <section id="booking" class="py-8 sm:py-12 md:py-16 bg-neutral-light">
@@ -1268,6 +1277,58 @@
         img.lazy.loaded {
             opacity: 1;
         }
+
+        /* Recommendation System Styles */
+        .recommendation-container {
+            margin: 2rem 0;
+        }
+
+        .tab-button {
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .tab-button.active {
+            background-color: #3B82F6;
+            color: white;
+        }
+
+        .tab-button:not(.active) {
+            color: #6B7280;
+        }
+
+        .tab-button:not(.active):hover {
+            color: #3B82F6;
+        }
+
+        .line-clamp-2 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease;
+        }
+
+        .animate-on-scroll.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .animate-spin {
+            animation: spin 1s linear infinite;
+        }
     </style>
 @endpush
 
@@ -1284,10 +1345,21 @@
             additionalPersonPrice: {{ $travelPackage->additional_person_price ?? 0 }},
             taxPercentage: {{ $travelPackage->tax_percentage ?? 0 }}
         };
+        
+        // Data untuk sistem rekomendasi
+        window.travelPackageConfig = {
+            ...window.travelPackageConfig,
+            packageId: {{ $travelPackage->id ?? 'null' }},
+            currentUser: @auth {{ auth()->id() }} @else null @endauth
+        };
     </script>
 
     <!-- Travel Package Detail JavaScript -->
-    @vite(['resources/js/travel-package-config.js', 'resources/js/travel-package-detail.js'])
+    @vite([
+        'resources/js/travel-package-config.js', 
+        'resources/js/travel-package-detail.js',
+        'resources/js/recommendations.js'
+    ])
 
     <!-- All JavaScript functionality has been moved to external files -->
 @endpush

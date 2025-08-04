@@ -4,7 +4,7 @@
 
 @section('content')
     <!-- Hero Section -->
-    <section id="home" class="hero-section relative h-screen flex items-center justify-center text-center text-white" style="background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80'); background-size: cover; background-position: center; background-repeat: no-repeat;" loading="lazy">
+    <section id="home" class="hero-section relative h-screen flex items-center justify-center text-center text-white" style="background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('{{ asset('images/hero (1).jpg') }}'); background-size: cover; background-position: center; background-repeat: no-repeat;" loading="lazy">
         <!-- Overlay gradient -->
         <div class="absolute inset-0 bg-black opacity-40"></div>
         <!-- Main content -->
@@ -27,6 +27,10 @@
             </a>
         </div>
     </section>
+
+    <!-- Trending Recommendations Section -->
+    <div id="homepage-recommendations"></div>
+
     <!-- About Section -->
     <section id="about" class="py-6 sm:py-10 md:py-14 lg:py-16 bg-neutral">
         <div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -280,4 +284,6 @@
 @push('scripts')
 <!-- Home Page JavaScript -->
 @vite('resources/js/home.js')
+<!-- Homepage Recommendations JavaScript -->
+@vite('resources/js/homepage-recommendations.js')
 @endpush

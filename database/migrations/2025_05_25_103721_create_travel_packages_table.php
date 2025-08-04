@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('travel_packages', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('category_id')->constrained('categories')->cascadeOnDelete();
             $table->string('name');
             $table->string('slug')->unique();
             $table->text('description');
@@ -22,6 +23,7 @@ return new class extends Migration
             $table->unsignedInteger('capacity');
             $table->string('duration');
             $table->decimal('tax_percentage', 5, 2)->default(11.00); // Default 11% tax
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
             $table->softDeletes();
         });

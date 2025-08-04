@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\TravelPackageResource\Pages;
 use App\Filament\Resources\TravelPackageResource\RelationManagers;
 use App\Models\TravelPackage;
+use App\Models\Category;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -82,6 +83,26 @@ class TravelPackageResource extends Resource
                                     ->label('Duration')
                                     ->formatStateUsing(fn (?string $state): ?string => $state ? strtoupper($state) : null)
                                     ->mutateDehydratedStateUsing(fn (?string $state): ?string => $state ? strtoupper($state) : null),
+                                Forms\Components\Select::make('category_id')
+                                    ->label('Category')
+                                    ->options(Category::all()->pluck('name', 'id'))
+                                    ->required()
+                                    ->searchable()
+                                    ->preload()
+                                    ->createOptionForm([
+                                        Forms\Components\TextInput::make('name')
+                                            ->required()
+                                            ->maxLength(255)
+                                            ->label('Category Name'),
+                                        Forms\Components\Textarea::make('description')
+                                            ->required()
+                                            ->rows(3)
+                                            ->label('Description'),
+                                    ])
+                                    ->createOptionUsing(function (array $data): int {
+                                        return Category::create($data)->getKey();
+                                    })
+                                    ->helperText('Select a category or create a new one'),
                             ])
                             ->columnSpan(['lg' => 1]),
                         Forms\Components\Section::make('Media')
@@ -221,6 +242,12 @@ class TravelPackageResource extends Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make('duration')
                     ->searchable(),
+                Tables\Columns\TextColumn::make('category.name')
+                    ->label('Category')
+                    ->searchable()
+                    ->sortable()
+                    ->badge()
+                    ->color('primary'),
                 Tables\Columns\SpatieMediaLibraryImageColumn::make('thumbnail')
                     ->collection('thumbnail'),
                 Tables\Columns\TextColumn::make('created_at')
@@ -237,6 +264,11 @@ class TravelPackageResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
+                Tables\Filters\SelectFilter::make('category')
+                    ->relationship('category', 'name')
+                    ->searchable()
+                    ->preload()
+                    ->label('Category'),
                 Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([

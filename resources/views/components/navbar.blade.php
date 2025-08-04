@@ -30,6 +30,11 @@
                     Contact
                     <span class="absolute bottom-0 left-1/2 w-0 h-[2px] bg-primary transition-all duration-300 ease-out transform -translate-x-1/2 group-hover:w-full {{ request()->routeIs('contact') ? 'w-full' : '' }}"></span>
                 </a>
+
+                <a href="{{ route('tf-idf-demo') }}" class="navbar-link relative hover:text-primary px-2 lg:px-3 py-2 text-sm lg:text-base font-medium transition-all duration-200 group rounded-md hover:bg-neutral-light/50 {{ request()->routeIs('tf-idf-demo') ? 'text-primary' : '' }}">
+                    <i class="fas fa-brain mr-1"></i> TF-IDF Demo
+                    <span class="absolute bottom-0 left-1/2 w-0 h-[2px] bg-primary transition-all duration-300 ease-out transform -translate-x-1/2 group-hover:w-full {{ request()->routeIs('tf-idf-demo') ? 'w-full' : '' }}"></span>
+                </a>
             </div>
 
             <!-- User Menu / Login Button -->
@@ -107,6 +112,12 @@
                 <a href="{{ route('contact') }}" class="text-secondary-dark hover:text-primary py-2.5 px-3 text-sm font-medium flex items-center rounded-md transition-all duration-200 hover:bg-neutral-light {{ request()->routeIs('contact') ? 'text-primary bg-neutral-light' : '' }}">
                     <i class="fas fa-envelope mr-3 w-5 text-center"></i> Contact
                     @if(request()->routeIs('contact'))
+                        <span class="ml-2 w-1.5 h-1.5 rounded-full bg-primary"></span>
+                    @endif
+                </a>
+                <a href="{{ route('tf-idf-demo') }}" class="text-secondary-dark hover:text-primary py-2.5 px-3 text-sm font-medium flex items-center rounded-md transition-all duration-200 hover:bg-neutral-light {{ request()->routeIs('tf-idf-demo') ? 'text-primary bg-neutral-light' : '' }}">
+                    <i class="fas fa-brain mr-3 w-5 text-center"></i> TF-IDF Demo
+                    @if(request()->routeIs('tf-idf-demo'))
                         <span class="ml-2 w-1.5 h-1.5 rounded-full bg-primary"></span>
                     @endif
                 </a>

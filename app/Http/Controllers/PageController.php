@@ -579,4 +579,12 @@ class PageController extends Controller
                 ->with('toast_error', 'Terjadi kesalahan saat mengunduh invoice.');
         }
     }
+
+    /**
+     * Menampilkan halaman demo TF-IDF
+     */
+    public function tfIdfDemo()
+    {
+        return view('tf-idf-demo');
+    }
 }

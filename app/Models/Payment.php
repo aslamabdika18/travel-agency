@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Carbon\Carbon;
+use App\Models\User;
 
 class Payment extends Model
 {
@@ -44,6 +45,21 @@ class Payment extends Model
     public function booking()
     {
         return $this->belongsTo(Booking::class);
+    }
+
+    /**
+     * Get the user that owns the payment through booking.
+     */
+    public function user()
+    {
+        return $this->hasOneThrough(
+            User::class,
+            Booking::class,
+            'id', // Foreign key on bookings table
+            'id', // Foreign key on users table
+            'booking_id', // Local key on payments table
+            'user_id' // Local key on bookings table
+        );
     }
 
     /**

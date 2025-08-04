@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
         // Run SuperAdminSeeder first to create roles and permissions
         $this->call([
             SuperAdminSeeder::class,
+            CategorySeeder::class,
             TravelPackageSeeder::class,
             UserSeeder::class,
         ]);

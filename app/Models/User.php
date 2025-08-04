@@ -13,6 +13,9 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
+use App\Models\Booking;
+use App\Models\Review;
+use App\Models\Payment;
 
 class User extends Authenticatable implements FilamentUser, MustVerifyEmail, HasMedia
 {
@@ -116,6 +119,30 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail, Has
     public function sendEmailVerificationNotification()
     {
         $this->notify(new EmailVerificationNotification);
+    }
+
+    /**
+     * Get the bookings for the user.
+     */
+    public function bookings()
+    {
+        return $this->hasMany(Booking::class);
+    }
+
+    /**
+     * Get the reviews for the user.
+     */
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
+
+    /**
+     * Get the payments for the user.
+     */
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
     }
 
     /**

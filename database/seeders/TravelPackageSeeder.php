@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\TravelPackage;
+use App\Models\Category;
 use App\Models\Itinerary;
 use App\Models\TravelInclude;
 use App\Models\TravelExclude;
@@ -16,6 +17,14 @@ class TravelPackageSeeder extends Seeder
      */
     public function run(): void
     {
+        // Get categories
+        $adventureCategory = Category::where('name', 'Adventure')->first();
+        $culturalCategory = Category::where('name', 'Cultural')->first();
+        $ecoTourismCategory = Category::where('name', 'Eco-Tourism')->first();
+        $photographyCategory = Category::where('name', 'Photography')->first();
+        $beachIslandCategory = Category::where('name', 'Beach & Island')->first();
+        $culinaryCategory = Category::where('name', 'Culinary')->first();
+
         $travelPackages = [
             [
                 'name' => 'PT Sumatra Tour Travel Paradise Explorer',
@@ -25,7 +34,8 @@ class TravelPackageSeeder extends Seeder
                 'additional_person_price' => 750000,
                 'capacity' => 12,
                 'duration' => '4 Days 3 Nights',
-                'tax_percentage' => 10.00
+                'tax_percentage' => 10.00,
+                'category_id' => $beachIslandCategory->id
             ],
             [
                 'name' => 'Panjang Island Hopping Adventure',
@@ -35,7 +45,8 @@ class TravelPackageSeeder extends Seeder
                 'additional_person_price' => 850000,
                 'capacity' => 10,
                 'duration' => '3 Days 2 Nights',
-                'tax_percentage' => 11.00
+                'tax_percentage' => 11.00,
+                'category_id' => $adventureCategory->id
             ],
             [
                 'name' => 'Nibung Bay Turtle Conservation',
@@ -45,7 +56,8 @@ class TravelPackageSeeder extends Seeder
                 'additional_person_price' => 650000,
                 'capacity' => 8,
                 'duration' => '3 Days 2 Nights',
-                'tax_percentage' => 10.50
+                'tax_percentage' => 10.50,
+                'category_id' => $ecoTourismCategory->id
             ],
             [
                 'name' => 'Tuangku Island Diving Adventure',
@@ -55,7 +67,8 @@ class TravelPackageSeeder extends Seeder
                 'additional_person_price' => 950000,
                 'capacity' => 8,
                 'duration' => '3 Days 2 Nights',
-                'tax_percentage' => 12.00
+                'tax_percentage' => 12.00,
+                'category_id' => $adventureCategory->id
             ],
             [
                 'name' => 'Aceh Singkil Cultural Heritage',
@@ -65,7 +78,8 @@ class TravelPackageSeeder extends Seeder
                 'additional_person_price' => 550000,
                 'capacity' => 12,
                 'duration' => '2 Days 1 Night',
-                'tax_percentage' => 9.50
+                'tax_percentage' => 9.50,
+                'category_id' => $culturalCategory->id
             ],
             [
                 'name' => 'Bangkaru Island Eco-Tourism',
@@ -75,7 +89,8 @@ class TravelPackageSeeder extends Seeder
                 'additional_person_price' => 900000,
                 'capacity' => 6,
                 'duration' => '4 Days 3 Nights',
-                'tax_percentage' => 11.50
+                'tax_percentage' => 11.50,
+                'category_id' => $ecoTourismCategory->id
             ],
             [
                 'name' => 'Aceh Singkil Mangrove Exploration',
@@ -85,7 +100,8 @@ class TravelPackageSeeder extends Seeder
                 'additional_person_price' => 600000,
                 'capacity' => 10,
                 'duration' => '2 Days 1 Night',
-                'tax_percentage' => 9.00
+                'tax_percentage' => 9.00,
+                'category_id' => $ecoTourismCategory->id
             ],
             [
                 'name' => 'PT Sumatra Tour Travel Photography Tour',
@@ -95,7 +111,8 @@ class TravelPackageSeeder extends Seeder
                 'additional_person_price' => 1000000,
                 'capacity' => 6,
                 'duration' => '4 Days 3 Nights',
-                'tax_percentage' => 12.50
+                'tax_percentage' => 12.50,
+                'category_id' => $photographyCategory->id
             ],
             [
                 'name' => 'Traditional Boat Building Singkil',
@@ -105,7 +122,8 @@ class TravelPackageSeeder extends Seeder
                 'additional_person_price' => 575000,
                 'capacity' => 8,
                 'duration' => '3 Days 2 Nights',
-                'tax_percentage' => 10.25
+                'tax_percentage' => 10.25,
+                'category_id' => $culturalCategory->id
             ],
             [
                 'name' => 'Kenduri Laut Tradition Experience',
@@ -115,7 +133,8 @@ class TravelPackageSeeder extends Seeder
                 'additional_person_price' => 500000,
                 'capacity' => 15,
                 'duration' => '2 Days 1 Night',
-                'tax_percentage' => 9.00
+                'tax_percentage' => 9.00,
+                'category_id' => $culturalCategory->id
             ],
             [
                 'name' => 'PT Sumatra Tour Travel Sunrise & Sunset Tour',
@@ -125,7 +144,8 @@ class TravelPackageSeeder extends Seeder
                 'additional_person_price' => 700000,
                 'capacity' => 10,
                 'duration' => '3 Days 2 Nights',
-                'tax_percentage' => 10.00
+                'tax_percentage' => 10.00,
+                'category_id' => $photographyCategory->id
             ],
             [
                 'name' => 'Aceh Singkil Culinary & Market Tour',
@@ -135,7 +155,8 @@ class TravelPackageSeeder extends Seeder
                 'additional_person_price' => 400000,
                 'capacity' => 12,
                 'duration' => '1 Day',
-                'tax_percentage' => 8.00
+                'tax_percentage' => 8.00,
+                'category_id' => $culinaryCategory->id
             ]
         ];
 

@@ -18,8 +18,10 @@ export default defineConfig({
                 'resources/js/login-routes.js',
                 'resources/js/filament-app.js',
                 'resources/js/home.js',
+                'resources/js/homepage-recommendations.js',
                 'resources/js/terms.js',
-                'resources/js/contact.js'
+                'resources/js/contact.js',
+                'resources/js/tf-idf-demo.js'
             ],
             refresh: true,
         }),
